@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+if ! bundle exec rubocop --parallel; then
+  echo "Rubocop offences were found. Your commit will not pass the CI."
+  echo "The commit was aborted, but if you really want to commit anyway run: git commit --no-verify -m 'Commit message'"
+  exit 1
+fi
+
+if ! bundle exec rails_best_practices .; then
+  echo "Rails Best Practces offences were found. Your commit will not pass the CI."
+  echo "The commit was aborted, but if you really want to commit anyway run: git commit --no-verify -m 'Commit message'"
+  exit 1
+fi
+
+if ! reek; then
+  echo "Reek offences were found. Your commit will not pass the CI."
+  echo "The commit was aborted, but if you really want to commit anyway run: git commit --no-verify -m 'Commit message'"
+  exit 1
+fi
