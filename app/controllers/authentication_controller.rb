@@ -1,4 +1,3 @@
-require 'byebug'
 class AuthenticationController< ApplicationController
 
     def login
