@@ -30,8 +30,8 @@ ActiveRecord::Schema.define(version: 2020_09_23_234059) do
     t.string "name"
     t.string "picture"
     t.string "email"
-    t.boolean "is_admin"
-    t.boolean "is_active"
+    t.boolean "is_admin", default: false
+    t.boolean "is_active", default: true
     t.json "tokens"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
