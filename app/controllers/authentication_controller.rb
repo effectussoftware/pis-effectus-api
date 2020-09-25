@@ -1,5 +1,6 @@
+require "byebug"
 class AuthenticationController< ApplicationController
-
+  before_action :authenticate_user!,only: [:authenticate_test]
     def login
         payload = GoogleValidationTokenService.validate_token(params[:token])
         if payload
@@ -16,6 +17,13 @@ class AuthenticationController< ApplicationController
         render json:{error: 'Invalid Token'} , status: :unauthorized
       end
     end
+
+    def authenticate_test
+      user= User.first()
+      byebug
+      render json:{stuatus: 'ok'} , status: :ok
+    end
+    
     
 
     private
