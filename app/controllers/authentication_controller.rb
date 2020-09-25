@@ -2,7 +2,7 @@
 class AuthenticationController< ApplicationController
   before_action :authenticate_user!,only: [:authenticate_test]
     def login
-        payload = validate_token(params[:token])
+        payload = GoogleValidationTokenService.validate_token(params[:token])
         if payload
           # update token, generate updated auth headers for response
           user_to_create = payload
