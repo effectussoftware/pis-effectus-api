@@ -1,7 +1,7 @@
 class AuthenticationController< ApplicationController
 
     def login
-        payload = GoogleValidationTokenService.validate_token(params[:token])
+        payload = validate_token(params[:token])
         if payload
           # update token, generate updated auth headers for response
           user_to_create = payload
@@ -32,13 +32,18 @@ class AuthenticationController< ApplicationController
       hash_user
     end
 
+    def validate_token(token)
+      validator = GoogleIDToken::Validator.new
+      begin
+          @payload = validator.check(token, ENV['GOOGLE_CLIENT_ID'])            
+        rescue GoogleIDToken::ValidationError => e
+          false
+        end
+    end
 
     def generate_random_password(user)
       password = SecureRandom.urlsafe_base64(nil, false)
       user['password'] = password
       user['password_confirmation'] = password
     end
-    
-    
-    
 end
