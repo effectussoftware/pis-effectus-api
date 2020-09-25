@@ -6,6 +6,5 @@ class GoogleValidationTokenService
           rescue GoogleIDToken::ValidationError => e
             false
           end
-    
     end
 end

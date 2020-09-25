@@ -1,11 +1,10 @@
-require "byebug"
+
 class AuthenticationController< ApplicationController
   before_action :authenticate_user!,only: [:authenticate_test]
     def login
-        payload = validate_token(params[:token])
-        if payload
+      user_to_create = GoogleValidationTokenService.validate_token(params[:token])
+        if user_to_create
           # update token, generate updated auth headers for response
-          user_to_create = payload
           generate_random_password(user_to_create)
           user = User.where(email: payload["email"])
             .first_or_initialize(create_params(user_to_create))
@@ -19,13 +18,10 @@ class AuthenticationController< ApplicationController
     end
 
     def authenticate_test
-      user= User.first()
-      byebug
+      user = User.first()
       render json:{stuatus: 'ok'} , status: :ok
     end
     
-    
-
     private
     def create_params(user)
       hash_user = {
@@ -37,17 +33,8 @@ class AuthenticationController< ApplicationController
         is_active: true,
         is_admin: false
       }
-      hash_user
     end
 
-    def validate_token(token)
-      validator = GoogleIDToken::Validator.new
-      begin
-          @payload = validator.check(token, ENV['GOOGLE_CLIENT_ID'])            
-        rescue GoogleIDToken::ValidationError => e
-          false
-        end
-    end
 
     def generate_random_password(user)
       password = SecureRandom.urlsafe_base64(nil, false)
