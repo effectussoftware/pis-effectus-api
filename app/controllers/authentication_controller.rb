@@ -1,5 +1,6 @@
 class AuthenticationController< ApplicationController
   before_action :authenticate_user!,only: [:authenticate_test]
+
     def login
       user_from_google = GoogleValidationTokenService.validate_token(params[:token])
         if user_from_google
