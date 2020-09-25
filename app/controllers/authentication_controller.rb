@@ -38,7 +38,4 @@ class AuthenticationController< ApplicationController
       user['password'] = password
       user['password_confirmation'] = password
     end
-    
-    
-    
 end
