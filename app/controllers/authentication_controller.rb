@@ -2,7 +2,7 @@
 class AuthenticationController< ApplicationController
   before_action :authenticate_user!,only: [:authenticate_test]
     def login
-      user_to_create = GoogleValidationTokenService.validate_token(params[:token])
+      user_to_create = GoogleValidationTokenService.validate_token(params[:id_token])
         if user_to_create
           # update token, generate updated auth headers for response
           generate_random_password(user_to_create)
@@ -12,9 +12,9 @@ class AuthenticationController< ApplicationController
           # update response with the header that will be required by the next request
           response.headers.merge!(new_auth_header)
           render json: user, status: :ok        
-      else
-        render json:{error: 'Invalid Token'} , status: :unauthorized
-      end
+        else
+          render json:{error: 'Invalid Token'} , status: :unauthorized
+        end
     end
 
     def authenticate_test
