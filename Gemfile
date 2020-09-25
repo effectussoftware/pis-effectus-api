@@ -19,7 +19,7 @@ gem 'devise', '~> 4.7.2'
 gem 'devise_token_auth', '~> 1.1.3'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
-
+gem 'google-id-token', git: 'https://github.com/google/google-id-token.git'
 gem 'oj', '~> 3.10.13'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors', '~> 1.1.1'
@@ -33,7 +33,6 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 6.1.0'
   gem 'faker', '~> 1.9'
   gem 'active_model_serializers', '~> 0.10.8'
-  gem 'google-id-token', git: 'https://github.com/google/google-id-token.git'
 
 
 end
