@@ -1,6 +1,4 @@
 class GoogleValidationTokenService
-    
-
     def self.validate_token(token)
         validator = GoogleIDToken::Validator.new
         begin
@@ -10,5 +8,4 @@ class GoogleValidationTokenService
           end
     
     end
-    
 end
