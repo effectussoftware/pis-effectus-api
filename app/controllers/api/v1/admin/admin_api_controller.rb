@@ -6,9 +6,11 @@ module Api
       class AdminApiController < Api::V1::ApiController
         before_action :authenticate_admin!
 
+        alias current_admin current_api_v1_user
+
         def authenticate_admin!
-          if current_api_v1_user && current_api_v1_user['is_active'] &&
-             current_api_v1_user['is_admin']
+          if current_admin && current_admin['is_active'] &&
+             current_admin['is_admin']
             true
           else
             raise ::UnauthorizedException
