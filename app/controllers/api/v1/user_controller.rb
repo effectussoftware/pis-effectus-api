@@ -30,13 +30,5 @@ class Api::V1::UserController < ApplicationController
     def update_params
         params.require(:user).permit(:is_admin,:is_active)
     end
-
-    # def authenticate_admin!
-    #     if current_user && current_user["is_admin"]
-    #         true
-    #     else
-    #         render json:{error:"Unauthorized"}, status: :unauthorized
-    #     end
-    # end
     
 end

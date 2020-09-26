@@ -4,7 +4,6 @@ class Api::V1::AuthenticationController < ApplicationController
       user_from_google = GoogleValidationTokenService.validate_token(params[:token])
         if user_from_google
           # update token, generate updated auth headers for response
-          generate_random_password(user_from_google)
           user = User.where(email: user_from_google["email"])
             .first_or_initialize(create_params(user_from_google))
           new_auth_header = user.create_new_auth_token()
@@ -21,15 +20,8 @@ class Api::V1::AuthenticationController < ApplicationController
       hash_user = {
         name: user['name'],
         email: user['email'],
-        picture: user['picture'],
-        password: user['password'],
-        password_confirmation: user['password_confirmation']
+        picture: user['picture']
       }
     end
 
-    def generate_random_password(user)
-      password = SecureRandom.urlsafe_base64(nil, false)
-      user['password'] = password
-      user['password_confirmation'] = password
-    end
 end
