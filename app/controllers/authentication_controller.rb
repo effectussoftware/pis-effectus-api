@@ -12,7 +12,8 @@ class AuthenticationController< ApplicationController
           new_auth_header = user.create_new_auth_token()
           # update response with the header that will be required by the next request
           response.headers.merge!(new_auth_header)
-          render json: user, status: :ok        
+          response.headers.merge!({'uid' => user.uid})
+          render json: user, status: :ok
       else
         render json:{error: 'Invalid Token'} , status: :unauthorized
       end
@@ -22,7 +23,7 @@ class AuthenticationController< ApplicationController
       user = User.first()
       render json:{stuatus: 'ok'} , status: :ok
     end
-    
+
     private
     def create_params(user)
       hash_user = {
