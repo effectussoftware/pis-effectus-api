@@ -1,5 +1,5 @@
-require "byebug"
-class UserController< ApplicationController
+class Api::V1::UserController < ApplicationController
+    include Secure
     before_action :authenticate_admin!
 
     rescue_from Exception do |e|
@@ -31,12 +31,12 @@ class UserController< ApplicationController
         params.require(:user).permit(:is_admin,:is_active)
     end
 
-    def authenticate_admin!
-        if current_user && current_user["is_admin"]
-            true
-        else
-            render json:{error:"Unauthorized"}, status: :unauthorized
-        end
-    end
+    # def authenticate_admin!
+    #     if current_user && current_user["is_admin"]
+    #         true
+    #     else
+    #         render json:{error:"Unauthorized"}, status: :unauthorized
+    #     end
+    # end
     
 end

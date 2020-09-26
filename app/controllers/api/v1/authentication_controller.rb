@@ -1,5 +1,4 @@
-class AuthenticationController< ApplicationController
-  before_action :authenticate_user!,only: [:authenticate_test]
+class Api::V1::AuthenticationController < ApplicationController
 
     def login
       user_from_google = GoogleValidationTokenService.validate_token(params[:token])
@@ -17,10 +16,6 @@ class AuthenticationController< ApplicationController
       end
     end
 
-    def authenticate_test
-      render json:{stuatus: 'ok'} , status: :ok
-    end
-    
     private
     def create_params(user)
       hash_user = {
