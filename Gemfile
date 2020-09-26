@@ -18,8 +18,10 @@ gem 'puma', '~> 4.1'
 
 gem 'devise', '~> 4.7.2'
 gem 'devise_token_auth', '~> 1.1.3'
-# Reduces boot times through caching; required in config/boot.rb
+# Reduces boot times through caching; required in config/boot.rb, for some reason it requires pry
 gem 'bootsnap', '>= 1.4.2', require: false
+gem 'pry-rails', '~> 0.3.9'
+
 gem 'google-id-token', git: 'https://github.com/google/google-id-token.git'
 gem 'oj', '~> 3.10.13'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
@@ -28,10 +30,12 @@ gem 'rack-cors', '~> 1.1.1'
 gem 'jbuilder'
 gem 'listen', '~> 3.2'
 
+# Push notifications
+gem 'fcm'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
-  gem 'pry-rails', '~> 0.3.9'
   gem 'rubocop', '~> 0.90.0', require: false
 
   gem 'factory_bot_rails', '~> 6.1.0'
