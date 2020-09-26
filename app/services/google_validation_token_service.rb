@@ -8,3 +8,4 @@ class GoogleValidationTokenService
           end
     end
 end
+
