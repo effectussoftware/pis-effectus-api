@@ -7,7 +7,8 @@ module Api
         before_action :authenticate_admin!
 
         def authenticate_admin!
-          if current_api_v1_user && current_api_v1_user['is_active'] && current_api_v1_user['is_admin']
+          if current_api_v1_user && current_api_v1_user['is_active'] &&
+             current_api_v1_user['is_admin']
             true
           else
             raise ::UnauthorizedException
