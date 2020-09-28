@@ -1,7 +1,5 @@
-class Api::V1::UserController < ApplicationController
-    include Secure
-    before_action :authenticate_admin!
-
+class Api::V1::Admin::UserController < Api::V1::Admin::AdminApiController
+   
     rescue_from Exception do |e|
         render json: {error: e.message}, status: 500
     end
