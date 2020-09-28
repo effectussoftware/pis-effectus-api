@@ -31,9 +31,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 4.0.1'
   gem 'factory_bot_rails', '~> 6.1.0'
   gem 'faker', '~> 1.9'
-  gem 'active_model_serializers', '~> 0.10.8'
-
-
+  gem 'jbuilder'
 end
 
 group :development do
@@ -44,7 +42,6 @@ group :development do
   gem 'rails_best_practices', '~> 1.19.4'
   gem 'reek', '~> 5.5'
   gem 'bullet', '~> 6.1.0'
-
 end
 
 group :test do

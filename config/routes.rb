@@ -5,7 +5,7 @@ Rails.application.routes.draw do
       mount_devise_token_auth_for 'User', at: 'auth'
       post '/auth/login', to: 'authentication#login'
       namespace :admin do
-        resources :user , only:[:index,:show,:update]
+        resources :user , only: %i[index show update]
       end
     end
   end
