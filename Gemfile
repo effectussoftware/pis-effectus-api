@@ -22,6 +22,8 @@ gem 'oj', '~> 3.10.13'
 gem 'rack-cors', '~> 1.1.1'
 
 gem 'listen', '~> 3.2'
+gem 'jbuilder'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -31,7 +33,6 @@ group :development, :test do
   gem 'rspec-rails', '~> 4.0.1'
   gem 'factory_bot_rails', '~> 6.1.0'
   gem 'faker', '~> 1.9'
-  gem 'jbuilder'
 end
 
 group :development do
