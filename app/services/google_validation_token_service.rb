@@ -6,7 +6,7 @@ class GoogleValidationTokenService
     begin
         @payload = validator.check(token, ENV['GOOGLE_CLIENT_ID'])
     rescue GoogleIDToken::ValidationError => _
-      false
+       raise ::UnauthorizedException, 'Invalid Google Token'
     end
   end
 end

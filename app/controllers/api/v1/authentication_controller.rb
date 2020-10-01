@@ -6,15 +6,12 @@ module Api
       def login
         if user_from_google = GoogleValidationTokenService.validate_token(params[:token])
           # update token, generate updated auth headers for response
-          user = User.where(email: user_from_google['email'])
+          @user = User.where(email: user_from_google['email'])
                      .first_or_create!(create_params(user_from_google))
-          new_auth_header = user.create_new_auth_token
+          new_auth_header = @user.create_new_auth_token
           # update response with the header that will be required by the next request
           response.headers.merge!(new_auth_header)
-          response.headers.merge!({ 'uid' => user.uid })
-          render json: user, status: :ok
-        else
-          raise ::UnauthorizedException, 'Invalid Google Token'
+          response.headers.merge!({ 'uid' => @user.uid })
         end
       end
 

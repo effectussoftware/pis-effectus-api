@@ -13,7 +13,7 @@ module Api
           render json: { error: e.message }, status: :unathorized
         end
         rescue_from Exception do |e|
-          render json: { error: e.message }, status: 500
+          render json: { error: Rails.env.production? ? 'Unkown error' : e.message }, status: 500
         end
       end
     end
