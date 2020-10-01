@@ -12,9 +12,6 @@ gem 'dotenv-rails', groups: [:development, :test]
 
 # Use Puma as the app server
 gem 'puma', '~> 4.1'
-
-# gem 'exception_hunter', '~> 0.4'
-
 gem 'devise', '~> 4.7.2'
 gem 'devise_token_auth', '~> 1.1.3'
 # Reduces boot times through caching; required in config/boot.rb
@@ -34,9 +31,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 4.0.1'
   gem 'factory_bot_rails', '~> 6.1.0'
   gem 'faker', '~> 1.9'
-  gem 'active_model_serializers', '~> 0.10.8'
-
-
+  gem 'jbuilder'
 end
 
 group :development do
@@ -47,7 +42,6 @@ group :development do
   gem 'rails_best_practices', '~> 1.19.4'
   gem 'reek', '~> 5.5'
   gem 'bullet', '~> 6.1.0'
-
 end
 
 group :test do
