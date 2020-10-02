@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# rubocop:disable Metrics/BlockLength
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -56,7 +59,6 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-
   config.after_initialize do
     Bullet.enable = true
     Bullet.bullet_logger = true
@@ -64,3 +66,4 @@ Rails.application.configure do
     Bullet.rails_logger = true
   end
 end
+# rubocop:enable Metrics/BlockLength

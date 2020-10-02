@@ -1,0 +1,13 @@
+AllCops:
+  Exclude:
+    - 'db/schema.rb'
+    - 'db/migrate/20200923234059_devise_token_auth_create_users.rb'
+    - 'bin/*'
+  NewCops: enable
+Metrics/BlockLength:
+  Exclude:
+    - 'Rakefile'
+    - '**/*.rake'
+    - 'spec/**/*.rb'
+Style/Documentation:
+  Enabled: false

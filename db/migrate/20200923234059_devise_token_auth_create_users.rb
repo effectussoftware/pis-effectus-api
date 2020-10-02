@@ -1,17 +1,18 @@
+# frozen_string_literal: true
+
 class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.0]
   def change
-    
     create_table(:users) do |t|
       ## Required
-      t.string :provider, :null => false, :default => "email"
-      t.string :uid, :null => false, :default => ""
+      t.string :provider, null: false, default: 'email'
+      t.string :uid, null: false, default: ''
 
       ## User Info
       t.string :name
       t.string :picture
       t.string :email
-      t.boolean :is_admin,:default => false
-      t.boolean :is_active,:default => true
+      t.boolean :is_admin, default: false
+      t.boolean :is_active, default: true
 
       ## Tokens
       t.json :tokens

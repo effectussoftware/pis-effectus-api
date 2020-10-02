@@ -29,7 +29,6 @@ RSpec.describe 'Post endpoint', type: :request do
       context 'with authorization' do
         it 'get all users' do
           get api_v1_admin_users_path, headers: auth_headers
-          debugger
           expect(response).to have_http_status(200)
           users = Oj.load(response.body)
           expect(users.size).to eq(2)

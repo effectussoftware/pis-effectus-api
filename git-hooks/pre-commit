@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if ! bundle exec rubocop --parallel; then
+if ! bundle exec rubocop  -D -E -S -c .rubocop.yml; then
   echo "Rubocop offences were found. Your commit will not pass the CI."
   echo "The commit was aborted, but if you really want to commit anyway run: git commit --no-verify -m 'Commit message'"
   exit 1
