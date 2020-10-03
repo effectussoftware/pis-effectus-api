@@ -10,10 +10,14 @@ module Api
         # update token, generate updated auth headers for response
         @user = User.where(email: user_from_google['email'])
                     .first_or_create!(create_params(user_from_google))
-        new_auth_header = @user.create_new_auth_token
-        # update response with the header that will be required by the next request
-        response.headers.merge!(new_auth_header)
-        response.headers.merge!({ 'uid' => @user.uid })
+        if @user["is_active"]
+          new_auth_header = @user.create_new_auth_token
+          # update response with the header that will be required by the next request
+          response.headers.merge!(new_auth_header)
+          response.headers.merge!({ 'uid' => @user.uid })
+        else
+          raise ::UnauthorizedException, 'Invalid User'
+        end
       end
 
       private
