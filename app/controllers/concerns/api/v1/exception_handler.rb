@@ -6,16 +6,16 @@ module Api
       extend ActiveSupport::Concern
 
       included do
+        rescue_from Exception do |e|
+          render json: { error: Rails.env.production? ? 'Unkown error' : e.message }, status: 500
+        end
+
         rescue_from ActiveRecord::RecordNotFound do |e|
           render json: { error: e.message }, status: :not_found
         end
 
         rescue_from ::UnauthorizedException do |e|
-          render json: { error: e.message }, status: :unathorized
-        end
-
-        rescue_from Exception do |e|
-          render json: { error: Rails.env.production? ? 'Unkown error' : e.message }, status: 500
+          render json: { error: e.message }, status: :unauthorized
         end
       end
     end
