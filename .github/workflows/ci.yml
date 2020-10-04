@@ -47,9 +47,9 @@ jobs:
           POSTGRES_USERNAME: postgres
           POSTGRES_PASSWORD: postgres
 
-      - name: Run Code Coverage
-        run: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
-          ./cc-test-reporter before-build
-          ./cc-test-reporter after-build
+      
+      - name: Code Climate Test Reporter
+        uses: aktions/codeclimate-test-reporter@v1
+        with:
+            codeclimate-test-reporter-id: ${{ secrets.CC_TEST_REPORTER_ID }}
+            command: after-build --coverage-input-type simplecov
