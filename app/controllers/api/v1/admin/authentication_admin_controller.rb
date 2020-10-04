@@ -9,7 +9,7 @@ module Api
           user_from_google = GoogleValidationTokenService.validate_token(params[:token])
 
           # Rise exception if user doesn't exist or if it isn't admin
-          raise ::UnauthorizedException unless (@user = User.find_by(email: user_from_google['email'], is_admin: true))
+          raise ::UnauthorizedException unless (@user = User.find_by(email: user_from_google['email'], is_admin: true , is_active: true))
 
           new_auth_header = @user.create_new_auth_token
           # update response with the header that will be required by the next request
