@@ -18,6 +18,12 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7.0
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
 
       - name: Install dependent libraries
         run: sudo apt-get install libpq-dev
@@ -25,6 +31,7 @@ jobs:
       - name: Bundle install
         run: |
           gem install bundler
+          bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
       - name: Setup Database
@@ -51,5 +58,5 @@ jobs:
       - name: Code Climate Test Reporter
         uses: aktions/codeclimate-test-reporter@v1
         with:
-            codeclimate-test-reporter-id: ${{ secrets.CC_TEST_REPORTER_ID }}
-            command: after-build --coverage-input-type simplecov
+          codeclimate-test-reporter-id: ${{ secrets.CC_TEST_REPORTER_ID }}
+          command: after-build
