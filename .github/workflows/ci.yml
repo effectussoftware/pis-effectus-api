@@ -39,9 +39,17 @@ jobs:
 
       - name: Run RSpec
         run: |
+          bundle exec rails_best_practices
           bundle exec rubocop
           COVERAGE=true bundle exec rspec  --require rails_helper
         env:
           RAILS_ENV: test
           POSTGRES_USERNAME: postgres
           POSTGRES_PASSWORD: postgres
+
+      - name: Run Code Coverage
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          ./cc-test-reporter before-build
+          ./cc-test-reporter after-build

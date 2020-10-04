@@ -33,3 +33,6 @@
 
 # Mac
 .DS_Storeq
+
+#coverage
+coverage
