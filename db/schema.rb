@@ -29,8 +29,8 @@ ActiveRecord::Schema.define(version: 2020_10_06_204203) do
   create_table "user_events", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "event_id", null: false
-    t.boolean "attend"
-    t.boolean "confirmation"
+    t.boolean "attend", default: false
+    t.boolean "confirmation", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["event_id"], name: "index_user_events_on_event_id"

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       post '/auth/login', to: 'authentication#login'
       namespace :admin do
         resources :users, only: %i[index show update]
+        resources :events, only: %i[index create show update]
         post '/auth/login', to: 'authentication_admin#login'
       end
     end

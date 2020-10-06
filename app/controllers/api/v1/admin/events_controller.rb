@@ -5,22 +5,44 @@ module Api
     module Admin
       class EventsController < Api::V1::Admin::AdminApiController
         def index
-          @users = User.all
+          @events = Event.all
+        end
+
+        def create
+          ActiveRecord::Base.transaction do
+            @event = Event.create!(create_params)
+            UserEvent.create!(create_user_event)
+          end
         end
 
         def show
-          @user = User.find(params[:id])
+          @event = Event.find(params[:id])
         end
 
         def update
-          @user = User.find(params[:id])
-          @user.update!(update_params)
+          @event = Event.find(params[:id])
+          @event.update!(create_params)
         end
 
         private
 
+        def create_params
+          params.require(:event).permit(:name, :address, :date, :start_time, :cost, :duration)
+        end
+
         def update_params
-          params.require(:user).permit(:is_admin, :is_active)
+          params.require(:event).permite(:name, :address, :date, :start_time, :cost, :duration)
+        end
+
+        def create_user_event
+          event_user = []
+          params[:users].each do |user|
+            event_user.push({
+                              user_id: user[:id],
+                              event_id: @event.id
+                            })
+          end
+          event_user
         end
       end
     end
