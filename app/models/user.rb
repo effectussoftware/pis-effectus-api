@@ -5,4 +5,5 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :rememberable, :trackable
   include DeviseTokenAuth::Concerns::User
+  has_many :user_event
 end
