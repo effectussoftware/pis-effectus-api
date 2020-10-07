@@ -11,6 +11,7 @@ module Api
         def create
           ActiveRecord::Base.transaction do
             @event = Event.create!(create_params)
+
             UserEvent.create!(create_user_event)
           end
         end
@@ -36,6 +37,8 @@ module Api
 
         def create_user_event
           event_user = []
+          raise StandardError, 'users are required' unless params[:users]&.size&.positive?
+
           params[:users].each do |user|
             event_user.push({
                               user_id: user[:id],
