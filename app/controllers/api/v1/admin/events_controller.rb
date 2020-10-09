@@ -10,9 +10,8 @@ module Api
 
         def create
           ActiveRecord::Base.transaction do
-            @event = Event.create!(create_params)
-
-            UserEvent.create!(create_user_event)
+            @event = Event.create!(event_params)
+            Invite.create!(create_invite)
           end
         end
 
@@ -22,20 +21,16 @@ module Api
 
         def update
           @event = Event.find(params[:id])
-          @event.update!(create_params)
+          @event.update!(event_params)
         end
 
         private
 
-        def create_params
+        def event_params
           params.require(:event).permit(:name, :address, :date, :start_time, :cost, :duration)
         end
 
-        def update_params
-          params.require(:event).permite(:name, :address, :date, :start_time, :cost, :duration)
-        end
-
-        def create_user_event
+        def create_invite
           event_user = []
           raise StandardError, 'users are required' unless params[:users]&.size&.positive?
 

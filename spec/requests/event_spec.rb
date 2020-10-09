@@ -7,7 +7,7 @@ RSpec.describe 'Event endpoint', type: :request do
   let!(:user) { create(:user) }
   let!(:event) { create(:event) }
   let!(:auth_headers) { admin.create_new_auth_token }
-  let!(:user_event) { create(:user_event, user: user, event: event) }
+  let!(:invite) { create(:invite, user: user, event: event) }
   let!(:event_to_create_with_user) do
     {
       'event' =>
@@ -30,9 +30,23 @@ RSpec.describe 'Event endpoint', type: :request do
       'event' =>
         {
           'name' => 'evento_testing',
-          'address' => 'testing_address333',
+          'address' => 'testing_address',
           'date' => '2020-09-02T00:00:00.000Z',
           'cost' => 200,
+          'start_time' => '2020-10-07T13:28:06.419Z',
+          'duration' => '2020-10-07T01:00:00.000Z'
+
+        }
+    }
+  end
+  let!(:event_to_update) do
+    {
+      'event' =>
+        {
+          'name' => 'evento_update',
+          'address' => 'evento_update',
+          'date' => '2020-09-02T00:00:00.000Z',
+          'cost' => 500,
           'start_time' => '2020-10-07T13:28:06.419Z',
           'duration' => '2020-10-07T01:00:00.000Z'
 
@@ -45,8 +59,9 @@ RSpec.describe 'Event endpoint', type: :request do
         get api_v1_admin_events_path, headers: auth_headers
         expect(response).to have_http_status(200)
         events_response = Oj.load(response.body)['events']
-        expect(events_response[0].except('user_event')).to include(event.as_json.except('updated_at', 'created_at'))
-        expect(events_response[0]['user_event']).to include(user_event.as_json)
+
+        expect(events_response[0].except('users')).to include(event.as_json.except('updated_at', 'created_at'))
+        expect(events_response[0]['users'][0]['id']).to eq(invite.as_json['user_id'])
       end
     end
   end
@@ -56,8 +71,8 @@ RSpec.describe 'Event endpoint', type: :request do
         get api_v1_admin_event_path(event.id), headers: auth_headers
         expect(response).to have_http_status(200)
         events_response = Oj.load(response.body)['event']
-        expect(events_response.except('user_event')).to include(event.as_json.except('updated_at', 'created_at'))
-        expect(events_response['user_event']).to include(user_event.as_json)
+        expect(events_response.except('users')).to include(event.as_json.except('updated_at', 'created_at'))
+        expect(events_response['users'][0]['id']).to eq(invite.as_json['user_id'])
       end
       it 'return not_found' do
         highest_id = Event.last.id + 1
@@ -72,13 +87,28 @@ RSpec.describe 'Event endpoint', type: :request do
         post api_v1_admin_events_path, params: event_to_create_with_user, headers: auth_headers
         expect(response).to have_http_status(200)
         events_response = Oj.load(response.body)['event']
-        expect(events_response.except('user_event')).to include(event_to_create_with_user['event'])
+        expect(events_response.except('invite')).to include(event_to_create_with_user['event'])
       end
     end
     context 'create event without user' do
       it 'return error' do
         post api_v1_admin_events_path, params: event_to_create_without_user, headers: auth_headers
         expect(response).to have_http_status(500)
+      end
+    end
+  end
+  describe 'PUT /api/v1/admin/events/:id' do
+    context 'update the event' do
+      it 'return the event with the respected id' do
+        put api_v1_admin_event_path(event.id), params: event_to_update, headers: auth_headers
+        expect(response).to have_http_status(200)
+        event_response = Oj.load(response.body)['event']
+        expect(event_response['id']).to eq(event.id)
+      end
+      it 'return not_found' do
+        highest_id = Event.last.id + 1
+        put api_v1_admin_event_path(highest_id), params: event_to_update, headers: auth_headers
+        expect(response).to have_http_status(404)
       end
     end
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :user_event do
+  factory :invite do
     user { nil }
     event { nil }
     attend { false }
