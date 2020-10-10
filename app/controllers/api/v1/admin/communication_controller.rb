@@ -8,21 +8,14 @@ module Api
 
         def create
           @communication = Communication.create!(communication_params)
-          render json: @communications, status: :created
         end
 
         def index
           @communications = Communication.all
-          render json: @communications, status: :ok
         end
 
         def update
           @communication.update!(communication_params)
-          render json: @communication, status: :ok
-        end
-
-        def show
-          render json: @communication, status: :ok
         end
 
         def destroy
