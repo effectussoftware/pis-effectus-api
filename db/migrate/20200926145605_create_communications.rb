@@ -5,7 +5,7 @@ class CreateCommunications < ActiveRecord::Migration[6.0]
     create_table :communications do |t|
       t.text :title
       t.text :text
-      t.boolean :published
+      t.boolean :published, default: false
 
       t.timestamps
     end
