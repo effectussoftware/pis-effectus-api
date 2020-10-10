@@ -5,10 +5,11 @@ class CreateEvents < ActiveRecord::Migration[6.0]
     create_table :events do |t|
       t.string :name
       t.string :address
-      t.datetime :date
       t.timestamp :start_time
-      t.integer :cost
-      t.timestamp :duration
+      t.timestamp :end_time
+      t.integer :cost, default: 0
+      t.timestamp :updated_event_at
+      t.boolean :cancelled, default: false
 
       t.timestamps
     end

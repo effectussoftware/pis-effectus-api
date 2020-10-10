@@ -4,9 +4,9 @@ FactoryBot.define do
   factory :event do
     name { Faker::Lorem.sentence }
     address { Faker::Address.street_address }
-    date { Faker::Date.forward.to_s }
-    start_time { '20:00:00' }
+    
+    start_time { Faker::Date.forward.to_s }
+    end_time { Faker::Date.forward.to_s }
     cost { Faker::Number.number(5) }
-    duration { '01:30:00' }
   end
 end

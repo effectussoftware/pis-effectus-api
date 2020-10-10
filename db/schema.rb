@@ -18,10 +18,11 @@ ActiveRecord::Schema.define(version: 2020_10_09_021853) do
   create_table "events", force: :cascade do |t|
     t.string "name"
     t.string "address"
-    t.datetime "date"
     t.datetime "start_time"
-    t.integer "cost"
-    t.datetime "duration"
+    t.datetime "end_time"
+    t.integer "cost", default: 0
+    t.datetime "updated_event_at"
+    t.boolean "cancelled", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -31,6 +32,7 @@ ActiveRecord::Schema.define(version: 2020_10_09_021853) do
     t.bigint "event_id", null: false
     t.boolean "attend"
     t.boolean "confirmation"
+    t.datetime "changed_last_seen"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["event_id"], name: "index_invites_on_event_id"

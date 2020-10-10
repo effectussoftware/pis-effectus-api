@@ -11,7 +11,7 @@ module Api
         def create
           ActiveRecord::Base.transaction do
             @event = Event.create!(event_params)
-            Invite.create!(create_invite)
+            @event.user_ids = params[:user_ids]
           end
         end
 
@@ -21,26 +21,17 @@ module Api
 
         def update
           @event = Event.find(params[:id])
+          users_invited = @event.user_ids
           @event.update!(event_params)
+          users_to_add = params[:user_ids] - users_invited
+          raise StandardError, "you can't remove a invited person" unless (users_invited - params[:user_ids]).empty?
+          @event.user_ids = users_invited + users_to_add unless users_to_add.empty?
         end
 
         private
 
         def event_params
-          params.require(:event).permit(:name, :address, :date, :start_time, :cost, :duration)
-        end
-
-        def create_invite
-          event_user = []
-          raise StandardError, 'users are required' unless params[:users]&.size&.positive?
-
-          params[:users].each do |user|
-            event_user.push({
-                              user_id: user[:id],
-                              event_id: @event.id
-                            })
-          end
-          event_user
+          params.require(:event).permit(:name, :address, :start_time, :end_time, :cost)
         end
       end
     end
