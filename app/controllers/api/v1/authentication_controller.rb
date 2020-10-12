@@ -3,6 +3,7 @@
 module Api
   module V1
     class AuthenticationController < Api::V1::ApiController
+      skip_before_action :authenticate_api_v1_user!
       def login
         setup_google_user
         new_auth_header = @user.create_new_auth_token
