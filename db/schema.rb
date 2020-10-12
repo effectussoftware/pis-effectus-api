@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 2020_10_09_021853) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "invites", force: :cascade do |t|
+  create_table "invitations", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "event_id", null: false
     t.boolean "attend"
@@ -35,8 +35,8 @@ ActiveRecord::Schema.define(version: 2020_10_09_021853) do
     t.datetime "changed_last_seen"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["event_id"], name: "index_invites_on_event_id"
-    t.index ["user_id"], name: "index_invites_on_user_id"
+    t.index ["event_id"], name: "index_invitations_on_event_id"
+    t.index ["user_id"], name: "index_invitations_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -65,6 +65,6 @@ ActiveRecord::Schema.define(version: 2020_10_09_021853) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
-  add_foreign_key "invites", "events"
-  add_foreign_key "invites", "users"
+  add_foreign_key "invitations", "events"
+  add_foreign_key "invitations", "users"
 end

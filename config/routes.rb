@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       mount_devise_token_auth_for 'User', at: 'auth'
       post '/auth/login', to: 'authentication#login'
+      resources :events, only: %i[update show]
       namespace :admin do
         resources :users, only: %i[index show update]
         resources :events, only: %i[index create show update]

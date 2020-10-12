@@ -7,7 +7,7 @@ RSpec.describe 'Event endpoint', type: :request do
   let!(:user) { create(:user) }
   let!(:event) { create(:event) }
   let!(:auth_headers) { admin.create_new_auth_token }
-  let!(:invite) { create(:invite, user: user, event: event) }
+  let!(:invitation) { create(:invitation, user: user, event: event) }
   let!(:event_to_create_with_user) do
     {
       'event' =>
@@ -61,7 +61,7 @@ RSpec.describe 'Event endpoint', type: :request do
         events_response = Oj.load(response.body)['events']
 
         expect(events_response[0].except('users')).to include(event.as_json.except('updated_at', 'created_at'))
-        expect(events_response[0]['users'][0]['id']).to eq(invite.as_json['user_id'])
+        expect(events_response[0]['users'][0]['id']).to eq(invitation.as_json['user_id'])
       end
     end
   end
@@ -72,7 +72,7 @@ RSpec.describe 'Event endpoint', type: :request do
         expect(response).to have_http_status(200)
         events_response = Oj.load(response.body)['event']
         expect(events_response.except('users')).to include(event.as_json.except('updated_at', 'created_at'))
-        expect(events_response['users'][0]['id']).to eq(invite.as_json['user_id'])
+        expect(events_response['users'][0]['id']).to eq(invitation.as_json['user_id'])
       end
       it 'return not_found' do
         highest_id = Event.last.id + 1
@@ -87,7 +87,7 @@ RSpec.describe 'Event endpoint', type: :request do
         post api_v1_admin_events_path, params: event_to_create_with_user, headers: auth_headers
         expect(response).to have_http_status(200)
         events_response = Oj.load(response.body)['event']
-        expect(events_response.except('invite')).to include(event_to_create_with_user['event'])
+        expect(events_response.except('invitation')).to include(event_to_create_with_user['event'])
       end
     end
     context 'create event without user' do

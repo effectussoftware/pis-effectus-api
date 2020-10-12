@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Invite < ApplicationRecord
+class Invitation < ApplicationRecord
   belongs_to :user
   belongs_to :event
 end

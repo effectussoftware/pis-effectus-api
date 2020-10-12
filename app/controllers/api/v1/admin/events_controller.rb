@@ -25,13 +25,14 @@ module Api
           @event.update!(event_params)
           users_to_add = params[:user_ids] - users_invited
           raise StandardError, "you can't remove a invited person" unless (users_invited - params[:user_ids]).empty?
+
           @event.user_ids = users_invited + users_to_add unless users_to_add.empty?
         end
 
         private
 
         def event_params
-          params.require(:event).permit(:name, :address, :start_time, :end_time, :cost)
+          params.require(:event).permit(:name, :address, :start_time, :end_time, :cost, :cancelled)
         end
       end
     end
