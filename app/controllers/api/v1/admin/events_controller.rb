@@ -11,6 +11,8 @@ module Api
         def create
           ActiveRecord::Base.transaction do
             @event = Event.create!(event_params)
+            raise StandardError, 'user_ids are required' unless params[:user_ids] && !params[:user_ids].empty?
+
             @event.user_ids = params[:user_ids]
           end
         end
