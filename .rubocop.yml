@@ -3,14 +3,16 @@ AllCops:
     - 'db/schema.rb'
     - 'db/migrate/20200923234059_devise_token_auth_create_users.rb'
     - 'bin/*'
-    - 'app/views/api/v1/admin/events/_event.json.jbuilder'
   NewCops: enable
 Metrics/BlockLength:
   Exclude:
     - 'Rakefile'
     - '**/*.rake'
     - 'spec/**/*.rb'
-    - 'app/views/api/v1/**/**/*.jbuilder'
+Layout/LineLength:
+  Exclude:
+    - 'app/views/api/v1/**/*.json.jbuilder'
+    - 'app/views/api/v1/**/**/*.json.jbuilder'
 Style/Documentation:
   Enabled: false
 
