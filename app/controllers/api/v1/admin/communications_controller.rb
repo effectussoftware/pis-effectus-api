@@ -3,7 +3,7 @@
 module Api
   module V1
     module Admin
-      class CommunicationController < Api::V1::Admin::AdminApiController
+      class CommunicationsController < Api::V1::Admin::AdminApiController
         before_action :set_communication, only: %i[show update destroy]
 
         def create
