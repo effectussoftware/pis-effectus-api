@@ -24,15 +24,20 @@ module Api
         def update
           @event = Event.find(params[:id])
           users_invited = @event.user_ids
+          @event.user_ids = calculate_list_of_users(users_invited)
           @event.update!(event_params)
           @event.updated_event_at = Time.now
-          users_to_add = params[:user_ids] - users_invited
-          raise StandardError, "you can't remove a invited person" unless (users_invited - params[:user_ids]).empty?
-
-          @event.user_ids = users_invited + users_to_add unless users_to_add.empty?
         end
 
         private
+
+        def calculate_list_of_users(users_invited)
+          users_to_add = params[:user_ids] - users_invited
+          raise StandardError, "you can't remove a invited person" unless (users_invited - params[:user_ids]).empty?
+
+          users = users_invited + users_to_add unless users_to_add.empty?
+          users
+        end
 
         def event_params
           params.require(:event).permit(:name, :address, :start_time, :end_time, :cost, :cancelled)
