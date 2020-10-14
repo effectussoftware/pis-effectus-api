@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 2020_10_09_021853) do
     t.bigint "user_id", null: false
     t.bigint "event_id", null: false
     t.boolean "attend"
-    t.boolean "confirmation"
+    t.boolean "confirmation", default: false
     t.datetime "changed_last_seen"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

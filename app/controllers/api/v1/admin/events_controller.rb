@@ -25,6 +25,7 @@ module Api
           @event = Event.find(params[:id])
           users_invited = @event.user_ids
           @event.update!(event_params)
+          @event.updated_event_at = Time.now
           users_to_add = params[:user_ids] - users_invited
           raise StandardError, "you can't remove a invited person" unless (users_invited - params[:user_ids]).empty?
 

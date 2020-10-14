@@ -6,7 +6,7 @@ class CreateInvitations < ActiveRecord::Migration[6.0]
       t.references :user, null: false, foreign_key: true
       t.references :event, null: false, foreign_key: true
       t.boolean :attend
-      t.boolean :confirmation
+      t.boolean :confirmation, default: false
       t.timestamp :changed_last_seen
 
       t.timestamps
