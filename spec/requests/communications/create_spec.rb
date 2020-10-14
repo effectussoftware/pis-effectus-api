@@ -22,54 +22,30 @@ RSpec.describe 'Communications', type: :request do
         data = { 'communication': { 'title': 'Lala', 'text': 'Lele', 'published': true } }
         post '/api/v1/admin/communications', headers: auth_headers, params: data
         expect(response).to have_http_status 200
-        response_body = Oj.load(response.body)
-        entity = response_body['data']
         created_communication = Communication.first
-        # The returned object is in the db
-        expect(entity['id']).to eq created_communication.id
-        expect(entity['title']).to eq created_communication.title
-        expect(entity['text']).to eq created_communication.text
-        expect(entity['published']).to eq created_communication.published
-        # The returned object is what I sent
-        sent_communication = data[:communication]
-        expect(entity['title']).to eq sent_communication[:title]
-        expect(entity['text']).to eq sent_communication[:text]
-        expect(entity['published']).to eq sent_communication[:published]
+        expect(created_communication.title).to eq 'Lala'
+        expect(created_communication.text).to eq 'Lele'
+        expect(created_communication.published).to eq true
       end
 
       it 'creates a communication when no text is sent' do
         data = { 'communication': { 'title': 'Lala', 'published': true } }
         post '/api/v1/admin/communications', headers: auth_headers, params: data
         expect(response).to have_http_status 200
-        response_body = Oj.load(response.body)
-        entity = response_body['data']
         created_communication = Communication.first
-        # The returned object is in the db
-        expect(entity['id']).to eq created_communication.id
-        expect(entity['title']).to eq created_communication.title
-        expect(entity['published']).to eq created_communication.published
+        expect(created_communication.title).to eq 'Lala'
+        expect(created_communication.published).to eq true
         expect(created_communication.text).to eq nil
-        # The returned object is what I sent
-        sent_communication = data[:communication]
-        expect(entity['title']).to eq sent_communication[:title]
-        expect(entity['published']).to eq sent_communication[:published]
       end
 
       it 'sets published to false if nothing is sent' do
         data = { 'communication': { 'title': 'Lala' } }
         post '/api/v1/admin/communications', headers: auth_headers, params: data
         expect(response).to have_http_status 200
-        response_body = Oj.load(response.body)
-        entity = response_body['data']
         created_communication = Communication.first
-        # The returned object is in the db
-        expect(entity['id']).to eq created_communication.id
-        expect(entity['title']).to eq created_communication.title
-        expect(created_communication.published).to eq false
+        expect(created_communication.title).to eq 'Lala'
         expect(created_communication.text).to eq nil
-        # The returned object is what I sent
-        sent_communication = data[:communication]
-        expect(entity['title']).to eq sent_communication[:title]
+        expect(created_communication.published).to eq false
       end
 
       it 'fails if no title is sent' do
