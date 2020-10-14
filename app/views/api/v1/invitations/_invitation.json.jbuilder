@@ -5,4 +5,3 @@ unless local_assigns[:without_event].present? && without_event
   json.partial! 'api/v1/events/event', event: invitation.event
 end
 json.attend invitation.attend
-json.confirmation invitation.confirmation
