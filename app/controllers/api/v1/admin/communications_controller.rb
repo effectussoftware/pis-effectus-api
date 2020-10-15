@@ -3,11 +3,12 @@
 module Api
   module V1
     module Admin
-      class CommunicationController < Api::V1::Admin::AdminApiController
+      class CommunicationsController < Api::V1::Admin::AdminApiController
         before_action :set_communication, only: %i[show update destroy]
 
         def create
           @communication = Communication.create!(communication_params)
+          render :show
         end
 
         def index
@@ -16,6 +17,7 @@ module Api
 
         def update
           @communication.update!(communication_params)
+          render :show
         end
 
         def destroy

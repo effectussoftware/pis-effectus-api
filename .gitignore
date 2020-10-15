@@ -32,4 +32,7 @@
 .env.*
 
 # Mac
-.DS_Storeq
+.DS_Store
+
+#coverage
+coverage/
