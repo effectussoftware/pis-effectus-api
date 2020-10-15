@@ -3,7 +3,9 @@
 module Api
   module V1
     module Admin
-      class AuthenticationAdminController < Api::V1::ApiController
+      class AuthenticationAdminController < Api::V1::Admin::AdminApiController
+        skip_before_action :authenticate_admin!
+
         def login
           # Rises UnauthorizedException if token isn't valid
           user_from_google = GoogleValidationTokenService.validate_token(params[:token])
