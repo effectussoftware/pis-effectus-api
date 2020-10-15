@@ -5,6 +5,6 @@ json.extract! communication,
               :title,
               :text,
               :published,
-              :recurrent_at,
+              :recurrent_on,
               :created_at,
               :updated_at

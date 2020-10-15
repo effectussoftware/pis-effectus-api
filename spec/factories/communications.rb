@@ -2,8 +2,9 @@
 
 FactoryBot.define do
   factory :communication do
-    title { 'MyText' }
-    text { 'MyText' }
-    published { '' }
+    title { Faker::Lorem.word }
+    text { Faker::Lorem.sentence }
+    published { Faker::Boolean.boolean }
+    recurrent_on { nil }
   end
 end
