@@ -8,6 +8,7 @@ module Api
 
         def create
           @communication = Communication.create!(communication_params)
+          render :show
         end
 
         def index
@@ -16,6 +17,7 @@ module Api
 
         def update
           @communication.update!(communication_params)
+          render :show
         end
 
         def destroy

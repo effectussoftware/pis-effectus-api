@@ -21,7 +21,7 @@ RSpec.describe 'Communications', type: :request do
       it 'creates a communication with all the params set' do
         data = { 'communication': { 'title': 'Lala', 'text': 'Lele', 'published': true } }
         post '/api/v1/admin/communications', headers: auth_headers, params: data
-        expect(response).to have_http_status 204
+        expect(response).to have_http_status 200
         created_communication = Communication.first
         expect(created_communication.title).to eq 'Lala'
         expect(created_communication.text).to eq 'Lele'
@@ -31,7 +31,7 @@ RSpec.describe 'Communications', type: :request do
       it 'creates a communication when no text is sent' do
         data = { 'communication': { 'title': 'Lala', 'published': true } }
         post '/api/v1/admin/communications', headers: auth_headers, params: data
-        expect(response).to have_http_status 204
+        expect(response).to have_http_status 200
         created_communication = Communication.first
         expect(created_communication.title).to eq 'Lala'
         expect(created_communication.published).to eq true
@@ -41,7 +41,7 @@ RSpec.describe 'Communications', type: :request do
       it 'sets published to false if nothing is sent' do
         data = { 'communication': { 'title': 'Lala' } }
         post '/api/v1/admin/communications', headers: auth_headers, params: data
-        expect(response).to have_http_status 204
+        expect(response).to have_http_status 200
         created_communication = Communication.first
         expect(created_communication.title).to eq 'Lala'
         expect(created_communication.text).to eq nil

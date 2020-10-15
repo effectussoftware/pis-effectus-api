@@ -24,7 +24,7 @@ RSpec.describe 'Communications', type: :request do
       it 'updates a communication title' do
         data = { 'communication': { 'title': 'Lala' } }
         put "/api/v1/admin/communications/#{communication.id}", headers: auth_headers, params: data
-        expect(response).to have_http_status 204
+        expect(response).to have_http_status 200
         bd_communication = Communication.first
         expect(bd_communication.title).to eq 'Lala'
       end
@@ -32,7 +32,7 @@ RSpec.describe 'Communications', type: :request do
       it 'updates a communication text' do
         data = { 'communication': { 'text': 'Lala' } }
         put "/api/v1/admin/communications/#{communication.id}", headers: auth_headers, params: data
-        expect(response).to have_http_status 204
+        expect(response).to have_http_status 200
         bd_communication = Communication.first
         expect(bd_communication.text).to eq 'Lala'
       end
@@ -40,7 +40,7 @@ RSpec.describe 'Communications', type: :request do
       it 'updates a communication published' do
         data = { 'communication': { 'published': false } }
         put "/api/v1/admin/communications/#{communication.id}", headers: auth_headers, params: data
-        expect(response).to have_http_status 204
+        expect(response).to have_http_status 200
         bd_communication = Communication.first
         expect(bd_communication.published).to eq false
       end
