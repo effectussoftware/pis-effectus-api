@@ -4,6 +4,7 @@ module Api
   module V1
     module Admin
       class AdminApiController < Api::V1::ApiController
+        skip_before_action :authenticate_api_v1_user!
         before_action :authenticate_admin!
 
         def authenticate_admin!
