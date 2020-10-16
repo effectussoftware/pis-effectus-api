@@ -62,3 +62,7 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+
+gem 'pagy', '~> 3.8'
+
+gem 'pagy_cursor', '~> 0.2.0'
