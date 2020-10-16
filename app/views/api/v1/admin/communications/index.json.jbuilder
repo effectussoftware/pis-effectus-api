@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
-json.communications @communications do |communication|
-  json.partial 'communication', obj: communication
+json.communications do
+  json.partial! 'communication', collection: @communications, as: :communication
 end

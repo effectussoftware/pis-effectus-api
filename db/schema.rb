@@ -24,6 +24,30 @@ ActiveRecord::Schema.define(version: 2020_10_15_220149) do
     t.date "recurrent_on"
   end
 
+  create_table "events", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.integer "cost", default: 0
+    t.datetime "updated_event_at"
+    t.boolean "cancelled", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "invitations", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "event_id", null: false
+    t.boolean "attend"
+    t.boolean "confirmation", default: false
+    t.datetime "changed_last_seen"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["event_id"], name: "index_invitations_on_event_id"
+    t.index ["user_id"], name: "index_invitations_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
@@ -39,4 +63,6 @@ ActiveRecord::Schema.define(version: 2020_10_15_220149) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "invitations", "events"
+  add_foreign_key "invitations", "users"
 end
