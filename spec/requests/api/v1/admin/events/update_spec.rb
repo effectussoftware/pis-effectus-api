@@ -9,9 +9,7 @@ RSpec.describe 'Event update endpoint', type: :request do
 
   let!(:auth_headers) { admin.create_new_auth_token }
 
-
   let!(:event) { create(:event) }
-
 
   let!(:event_data_update) do
     {
@@ -27,8 +25,6 @@ RSpec.describe 'Event update endpoint', type: :request do
       'user_ids' => [user.id]
     }
   end
-
-
 
   describe 'PUT /api/v1/admin/events/:id' do
     context 'update the event' do
@@ -48,5 +44,4 @@ RSpec.describe 'Event update endpoint', type: :request do
       end
     end
   end
-
 end

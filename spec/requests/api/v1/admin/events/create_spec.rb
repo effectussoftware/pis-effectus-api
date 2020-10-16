@@ -9,7 +9,6 @@ RSpec.describe 'Event create endpoint', type: :request do
 
   let!(:auth_headers) { admin.create_new_auth_token }
 
-
   let!(:event_to_create_with_user) do
     {
       'event' =>

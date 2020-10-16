@@ -3,24 +3,21 @@
 require 'rails_helper'
 
 RSpec.describe 'Event  update endpoint', type: :request do
-  let!(:admin) { create(:admin) }
-
   let!(:user) { create(:user) }
+  let!(:user_not_invited) { create(:user) }
 
   let!(:event) { create(:event) }
 
   let!(:auth_headers_user) { user.create_new_auth_token }
+  let!(:auth_headers_user_not_invited) { user_not_invited.create_new_auth_token }
 
   let!(:invitation) { create(:invitation, user: user, event: event) }
-
-  let!(:auth_headers) { admin.create_new_auth_token }
 
   let!(:invitation_update_attend_mobile) do
     {
       'attend' => false
     }
   end
-
 
   describe 'update value for attend' do
     context 'PUT /api/v1/events/:id with the current user invited' do
@@ -34,7 +31,7 @@ RSpec.describe 'Event  update endpoint', type: :request do
 
     context 'PUT /api/v1/events/:id with the current user not invited' do
       it 'returns not found' do
-        put api_v1_event_path(event.id), headers: auth_headers
+        put api_v1_event_path(event.id), headers: auth_headers_user_not_invited
         expect(response).to have_http_status(404)
       end
     end
