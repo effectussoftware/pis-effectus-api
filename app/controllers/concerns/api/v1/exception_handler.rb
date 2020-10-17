@@ -17,6 +17,10 @@ module Api
         rescue_from ::UnauthorizedException do |e|
           render json: { error: e.message }, status: :unauthorized
         end
+
+        rescue_from ActionController::BadRequest do |e|
+          render json: { error: e.message }, status: :bad_request
+        end
       end
     end
   end
