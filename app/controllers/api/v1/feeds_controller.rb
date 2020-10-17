@@ -24,7 +24,7 @@ module Api
     class FeedsController < Api::V1::ApiController
       def index
         start = params[:start] ? Time.parse(params[:start]) : Time.now
-        communications = communication_not_recurrent
+        communications = communication_not_recurrent(start)
         communications += communication_recurrent(start)
         communications = communications.sort_by(&:updated_at).reverse[0..9]
         @feeds = communications.map do |communication|
@@ -43,8 +43,12 @@ module Api
           .order(updated_at: :desc).limit(10)
       end
 
-      def communication_not_recurrent
-        Communication.where(published: true, recurrent_on: nil).order(updated_at: :desc).limit(10)
+      def communication_not_recurrent(start_time)
+        Communication
+          .where('communications.updated_at < ? AND
+                  communications.published = true AND
+                  communications.recurrent_on is NULL', start_time)
+          .order(updated_at: :desc).limit(10)
       end
     end
   end
