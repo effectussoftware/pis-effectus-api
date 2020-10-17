@@ -6,15 +6,7 @@ RSpec.describe 'Feeds', type: :request do
   # authorization
   let!(:user) { create(:user) }
   let!(:auth_headers) { user.create_new_auth_token }
-  let!(:headers) do
-    {
-      'uid' => auth_headers[:uid],
-      'access-token' => auth_headers['access-token'],
-      'client' => auth_headers[:client]
-    }
 
-    # database population
-  end
   let!(:communication) { create_list(:communication, 200) }
 
   describe 'GET api/v1/feed' do

@@ -8,15 +8,7 @@ RSpec.describe 'Communications', type: :request do
   let!(:user) { create(:user) }
   let!(:auth_headers) { admin.create_new_auth_token }
   let!(:user_auth_headers) { user.create_new_auth_token }
-  let!(:headers) do
-    {
-      'uid' => auth_headers[:uid],
-      'access-token' => auth_headers['access-token'],
-      'client' => auth_headers[:client]
-    }
 
-    # database population
-  end
   let!(:communication) { create(:communication, published: false) }
   let!(:communication_published) { create(:communication, published: true) }
 
@@ -41,7 +33,7 @@ RSpec.describe 'Communications', type: :request do
       it 'updates a communication published' do
         data = { 'communication': { 'published': false } }
         put "/api/v1/admin/communications/#{communication_published.id}", headers: auth_headers, params: data
-        expect(response).to have_http_status 500
+        expect(response).to have_http_status 400
       end
     end
 
