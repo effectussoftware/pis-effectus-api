@@ -10,15 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_10_174919) do
+ActiveRecord::Schema.define(version: 2020_10_11_182729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "review_action_items", force: :cascade do |t|
+    t.text "description"
+    t.integer "type"
+    t.bigint "user_id", null: false
+    t.bigint "review_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["review_id"], name: "index_review_action_items_on_review_id"
+    t.index ["user_id"], name: "index_review_action_items_on_user_id"
+  end
+
   create_table "reviews", force: :cascade do |t|
     t.bigint "reviewer_id", null: false
     t.bigint "user_id", null: false
-    t.text "output"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["reviewer_id"], name: "index_reviews_on_reviewer_id"
@@ -40,6 +50,8 @@ ActiveRecord::Schema.define(version: 2020_10_10_174919) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "review_action_items", "reviews"
+  add_foreign_key "review_action_items", "users"
   add_foreign_key "reviews", "users"
   add_foreign_key "reviews", "users", column: "reviewer_id"
 end
