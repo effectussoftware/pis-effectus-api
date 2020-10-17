@@ -3,4 +3,5 @@
 json.extract! feed,
               :title,
               :text,
-              :type
+              :type,
+              :updated_at
