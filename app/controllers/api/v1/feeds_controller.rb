@@ -1,16 +1,18 @@
 # frozen_string_literal: true
 
 class Feed
-  attr_reader :type, :text, :title, :updated_at
+  attr_reader :id, :type, :text, :title, :updated_at
 
   def self.from_communication(communication)
-    new(title: communication.title,
+    new(id: communication.id,
+        title: communication.title,
         text: communication.text,
         type: 'communication',
         updated_at: communication.updated_at)
   end
 
   def initialize(args)
+    @id =  args[:id]
     @title = args[:title]
     @text = args[:text]
     @type = args[:type]
