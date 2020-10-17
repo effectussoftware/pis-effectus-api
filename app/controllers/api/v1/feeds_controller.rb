@@ -14,29 +14,14 @@ module Api
       private
 
       def communication_recurrent(start_time, with_include)
-        query = if with_include
-                  '(extract(month from recurrent_on) < ?) OR
-          (extract(month from recurrent_on)= ? AND extract(day from recurrent_on) <= ?)'
-                else
-                  '(extract(month from recurrent_on) < ?) OR
-          (extract(month from recurrent_on)= ? AND extract(day from recurrent_on) < ?)'
-                end
+
         Communication
           .select('id,title,text,recurrent_on AS updated_at')
-          .where(query, start_time.month, start_time.month, start_time.day).order(updated_at: :desc).limit(10)
+          .recurrent_from_date(start_time, with_include).order(updated_at: :desc).limit(10)
       end
 
       def communication_not_recurrent(start_time, with_include)
-        query = if with_include
-                  'communications.updated_at <= ? AND
-                  communications.published = true AND
-                  communications.recurrent_on is NULL'
-                else
-                  'communications.updated_at < ? AND
-                 communications.published = true AND
-                 communications.recurrent_on is NULL'
-                end
-        Communication.where(query, start_time).order(updated_at: :desc).limit(10)
+        Communication.not_recurrent_from_date(start_time, with_include).order(updated_at: :desc).limit(10)
       end
 
       def create_feed(communications)
