@@ -24,73 +24,68 @@ RSpec.describe 'Post endpoint', type: :request do
   end
 
   describe 'GET /api/v1/admin/reviews' do
-    context 'return all reviews' do
-      context 'with authorization' do
-        it 'get all reviews' do
-          get api_v1_admin_reviews_path, headers: auth_headers
-          expect(response).to have_http_status(200)
-          response_body = Oj.load(response.body)
-          expect(response_body['reviews'].size).to eq(1)
-        end
+    context 'with authorization' do
+      it 'should get all reviews' do
+        get api_v1_admin_reviews_path, headers: auth_headers
+        expect(response).to have_http_status(200)
+        response_body = Oj.load(response.body)
+        expect(response_body['reviews'].size).to eq(1)
       end
+    end
 
-      context 'with no authorization' do
-        it 'return unauthorized' do
-          get api_v1_admin_reviews_path
-          expect(response).to have_http_status(401)
-        end
+    context 'with no authorization' do
+      it 'should return unauthorized' do
+        get api_v1_admin_reviews_path
+        expect(response).to have_http_status(401)
       end
     end
   end
 
   describe 'GET /api/v1/admin/reviews/:id' do
-    context 'return the review with id :id' do
-      context 'with authorization' do
-        it 'get review by id' do
-          get "/api/v1/admin/reviews/#{review.id}", headers: auth_headers
-          expect(response).to have_http_status(200)
-          response_review = Oj.load(response.body)
-          expect(response_review['review']['id']).to eq(review['id'])
-        end
-        it 'error: no review with id highest_id + 1 ' do
-          highest_id = Review.last.id
-          get "/api/v1/admin/reviews/#{highest_id + 1}", headers: auth_headers
-          expect(response).to have_http_status(404)
-        end
+    context 'with authorization' do
+      it 'should get review by id' do
+        get "/api/v1/admin/reviews/#{review.id}", headers: auth_headers
+        expect(response).to have_http_status(200)
+        response_review = Oj.load(response.body)
+        expect(response_review['review']['id']).to eq(review['id'])
       end
-      context 'with no authorization' do
-        it 'return unauthorized' do
-          get "/api/v1/admin/reviews/#{review.id}"
-          expect(response).to have_http_status(401)
-        end
+      it 'should return error: no review with id highest_id + 1 ' do
+        highest_id = Review.last.id
+        get "/api/v1/admin/reviews/#{highest_id + 1}", headers: auth_headers
+        expect(response).to have_http_status(404)
+      end
+    end
+    
+    context 'with no authorization' do
+      it 'return unauthorized' do
+        get "/api/v1/admin/reviews/#{review.id}"
+        expect(response).to have_http_status(401)
       end
     end
   end
 
   describe 'PUT /api/v1/admin/reviews/:id' do
-    context 'update the review with id :id' do
-      context 'with authorization' do
-        it 'update review by id' do
-          put "/api/v1/admin/review/#{review.id}", params: update_params, headers: auth_headers
-          expect(response).to have_http_status(200)
-          response_review = Oj.load(response.body)
-          expect(response_review['review']['id']).to eq(review['id'])
-          review.reload
-          expect(response_review['review']['output']).to eq('Segui asi!')
-          expect(review.output).to eq('Segui asi!')
-        end
-        it 'error: no review with id highest id + 1 ' do
-          highest_id = Review.last.id
-          put "/api/v1/admin/reviews/#{highest_id + 1}", params: update_params.to_json, headers: auth_headers
-          expect(response).to have_http_status(404)
-        end
+    context 'with authorization' do
+      it 'update review by id' do
+        put "/api/v1/admin/review/#{review.id}", params: update_params, headers: auth_headers
+        expect(response).to have_http_status(200)
+        response_review = Oj.load(response.body)
+        expect(response_review['review']['id']).to eq(review['id'])
+        review.reload
+        expect(response_review['review']['output']).to eq('Segui asi!')
+        expect(review.output).to eq('Segui asi!')
       end
+      it 'error: no review with id highest id + 1 ' do
+        highest_id = Review.last.id
+        put "/api/v1/admin/reviews/#{highest_id + 1}", params: update_params.to_json, headers: auth_headers
+        expect(response).to have_http_status(404)
+      end
+    end
 
-      context 'with no authorization' do
-        it 'return unauthorized' do
-          put "/api/v1/admin/reviews/#{review.id}"
-          expect(response).to have_http_status(401)
-        end
+    context 'with no authorization' do
+      it 'return unauthorized' do
+        put "/api/v1/admin/reviews/#{review.id}"
+        expect(response).to have_http_status(401)
       end
     end
   end

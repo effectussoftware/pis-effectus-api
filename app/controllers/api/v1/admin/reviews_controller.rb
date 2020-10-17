@@ -35,7 +35,7 @@ module Api
         private
 
         def update_params
-          params.require(:review).permit(:output)
+          params.require(:review).permit(:completed, :review_action_item)
         end
 
         def review_params

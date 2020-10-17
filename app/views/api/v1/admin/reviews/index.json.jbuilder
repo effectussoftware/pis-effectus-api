@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-json.users do
-  json.partial! 'user', collection: @users, as: :user
+json.reviews do
+  json.partial! 'review', collection: @reviews, as: :review
 end
