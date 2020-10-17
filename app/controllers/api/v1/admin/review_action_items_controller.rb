@@ -14,12 +14,6 @@ module Api
         end
 
         def create
-          action_items = params[:review_action_item]
-
-          review_action_items = action_items.map { |item| ReviewActionItem.create!(item) }
-
-          params[:review_action_item] = review_action_items
-
           @review = Review.create!(review_params)
         end
 
@@ -39,7 +33,7 @@ module Api
         end
 
         def review_params
-          params.require(:review).permit(:review_action_item, :user, :reviewer)
+          params.require(:review).permit(:output, :user, :reviewer)
         end
       end
     end
