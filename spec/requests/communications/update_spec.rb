@@ -17,7 +17,9 @@ RSpec.describe 'Communications', type: :request do
 
     # database population
   end
-  let!(:communication) { create(:communication) }
+  let!(:communication) { create(:communication,published: false) }
+  let!(:communication_published) { create(:communication,published: true) }
+
 
   describe 'PUT api/v1/admin/communication/:id' do
     context 'with authorization' do
@@ -39,10 +41,8 @@ RSpec.describe 'Communications', type: :request do
 
       it 'updates a communication published' do
         data = { 'communication': { 'published': false } }
-        put "/api/v1/admin/communications/#{communication.id}", headers: auth_headers, params: data
-        expect(response).to have_http_status 200
-        bd_communication = Communication.first
-        expect(bd_communication.published).to eq false
+        put "/api/v1/admin/communications/#{communication_published.id}", headers: auth_headers, params: data
+        expect(response).to have_http_status 500
       end
     end
 
