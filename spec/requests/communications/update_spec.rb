@@ -17,9 +17,8 @@ RSpec.describe 'Communications', type: :request do
 
     # database population
   end
-  let!(:communication) { create(:communication,published: false) }
-  let!(:communication_published) { create(:communication,published: true) }
-
+  let!(:communication) { create(:communication, published: false) }
+  let!(:communication_published) { create(:communication, published: true) }
 
   describe 'PUT api/v1/admin/communication/:id' do
     context 'with authorization' do
