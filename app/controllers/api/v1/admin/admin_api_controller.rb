@@ -9,6 +9,8 @@ module Api
 
         alias current_admin current_api_v1_user
 
+        include Pagy::Backend
+
         def authenticate_admin!
           if current_admin && current_admin['is_active'] &&
              current_admin['is_admin']
