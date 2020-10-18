@@ -23,6 +23,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 gem 'google-id-token', git: 'https://github.com/google/google-id-token.git'
 gem 'oj', '~> 3.10.13'
+
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors', '~> 1.1.1'
 
@@ -64,5 +65,4 @@ end
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 gem 'pagy', '~> 3.8'
-
 gem 'pagy_cursor', '~> 0.2.0'
