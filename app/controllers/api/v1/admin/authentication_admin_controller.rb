@@ -11,7 +11,7 @@ module Api
           user_from_google = GoogleValidationTokenService.validate_token(params[:token])
 
           # Rise exception if user doesn't exist or if it isn't admin
-          unless (@user = User.find_by(email: user_from_google['email'], is_admin: true, is_active: true))
+          unless (@user = User.active.find_by(email: user_from_google['email'], is_admin: true))
             raise ::UnauthorizedException
           end
 
