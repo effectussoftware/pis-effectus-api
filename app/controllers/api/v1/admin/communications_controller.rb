@@ -31,7 +31,7 @@ module Api
         end
 
         def communication_params
-          params.require(:communication).permit(:title, :text, :published)
+          params.permit(:title, :text, :published, :image)
         end
       end
     end
