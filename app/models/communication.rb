@@ -5,6 +5,12 @@ class Communication < ApplicationRecord
 
   validates :title, presence: true
 
+  has_one_attached :image
+
+  def image_url
+    url_for(image)
+  end
+
   scope :not_recurrent_from_date, lambda { |start_time, with_include|
     query = if with_include
               'communications.updated_at <= ? AND
@@ -28,10 +34,4 @@ class Communication < ApplicationRecord
             end
     where(query, start_time.month, start_time.month, start_time.day)
   }
-
-  has_one_attached :image
-
-  def image_url
-    url_for(image)
-  end
 end
