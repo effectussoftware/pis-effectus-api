@@ -10,14 +10,10 @@ module Api
           @pagy, @communications = pagy(Communication.all, items: params[:per_page])
         end
 
-        def show
-          puts @communication.image
-          @communication
-        end
-        
+        def show; end
+
         def create
           @communication = Communication.create!(communication_params)
-          
           render :show
         end
 
