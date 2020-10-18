@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2020_10_17_163958) do
+=======
+ActiveRecord::Schema.define(version: 2020_10_15_220149) do
+>>>>>>> b6dabdecd85c1a47fe98ae84c18cc68c612c36df
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +38,14 @@ ActiveRecord::Schema.define(version: 2020_10_17_163958) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["reviewer_id"], name: "index_reviews_on_reviewer_id"
     t.index ["user_id"], name: "index_reviews_on_user_id"
+    
+  create_table "communications", force: :cascade do |t|
+    t.text "title"
+    t.text "text"
+    t.boolean "published", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.date "recurrent_on"
   end
 
   create_table "users", force: :cascade do |t|
