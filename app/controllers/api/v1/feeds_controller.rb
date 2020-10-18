@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api
   module V1
     class FeedsController < Api::V1::ApiController
@@ -14,7 +15,6 @@ module Api
       private
 
       def communication_recurrent(start_time, with_include)
-
         Communication
           .select('id,title,text,recurrent_on AS updated_at')
           .recurrent_from_date(start_time, with_include).order(updated_at: :desc).limit(10)
