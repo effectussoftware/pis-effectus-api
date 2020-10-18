@@ -67,6 +67,6 @@ Rails.application.configure do
   end
 
   # For remote images
-  Rails.application.routes.default_url_options = { host: 'http://localhost:3000' }
+  Rails.application.routes.default_url_options = { host: 'https://pis-effectus-backend-test.herokuapp.com' }
 end
 # rubocop:enable Metrics/BlockLength

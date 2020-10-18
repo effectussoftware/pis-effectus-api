@@ -10,10 +10,14 @@ module Api
           @pagy, @communications = pagy(Communication.all, items: params[:per_page])
         end
 
-        def show; end
-
+        def show
+          puts @communication.image
+          @communication
+        end
+        
         def create
           @communication = Communication.create!(communication_params)
+          
           render :show
         end
 
@@ -33,7 +37,7 @@ module Api
         end
 
         def communication_params
-          params.require(:communication).permit(:title, :text, :published, :image, :recurrent_on)
+          params.permit(:title, :text, :published, :image, :recurrent_on)
         end
       end
     end
