@@ -39,6 +39,4 @@ ActiveRecord::Schema.define(version: 2020_10_15_220149) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
-  add_foreign_key "invitations", "events"
-  add_foreign_key "invitations", "users"
 end
