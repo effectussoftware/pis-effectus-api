@@ -9,4 +9,4 @@ json.extract! communication,
               :created_at,
               :updated_at
 
-json.image communication.get_image_url()
+json.image communication.image_url

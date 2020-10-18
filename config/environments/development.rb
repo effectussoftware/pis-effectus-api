@@ -66,8 +66,6 @@ Rails.application.configure do
     Bullet.rails_logger = true
   end
   # For local images
-  Rails.application.routes.default_url_options = { host: "http://localhost:3000" }
-  
+  Rails.application.routes.default_url_options = { host: 'http://localhost:3000' }
 end
 # rubocop:enable Metrics/BlockLength
-
