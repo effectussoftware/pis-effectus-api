@@ -1,3 +1,5 @@
 # frozen_string_literal: true
 
-json.partial! 'communication', communication: @communication
+json.communication do
+  json.partial! 'communication', communication: @communication
+end

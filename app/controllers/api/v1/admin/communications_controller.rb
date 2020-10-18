@@ -7,7 +7,7 @@ module Api
         before_action :set_communication, only: %i[show update destroy]
 
         def index
-          @communications = Communication.all
+          @pagy, @communications = pagy(Communication.all)
         end
 
         def show; end
