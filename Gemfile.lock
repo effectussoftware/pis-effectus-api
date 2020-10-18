@@ -66,6 +66,8 @@ GEM
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     ast (2.4.1)
+    attach (1.1.2)
+      records_manipulator (>= 1.0, < 2.0)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
@@ -213,6 +215,7 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    records_manipulator (1.0.1)
     reek (5.6.0)
       codeclimate-engine-rb (~> 0.4.0)
       kwalify (~> 0.7.0)
@@ -291,6 +294,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  attach
   bootsnap (>= 1.4.2)
   bullet (~> 6.1.0)
   byebug

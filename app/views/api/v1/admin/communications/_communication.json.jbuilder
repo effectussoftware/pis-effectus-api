@@ -8,3 +8,5 @@ json.extract! communication,
               :recurrent_on,
               :created_at,
               :updated_at
+
+json.image communication.get_image_url()

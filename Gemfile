@@ -29,6 +29,9 @@ gem 'rack-cors', '~> 1.1.1'
 gem 'jbuilder'
 gem 'listen', '~> 3.2'
 
+# generate attanchment image
+gem 'attach'
+
 # Push notifications
 gem 'fcm'
 
