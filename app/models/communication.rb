@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Communication < ApplicationRecord
+  include Rails.application.routes.url_helpers
+
   validates :title, presence: true
 
   scope :not_recurrent_from_date, lambda { |start_time, with_include|
@@ -26,4 +28,10 @@ class Communication < ApplicationRecord
             end
     where(query, start_time.month, start_time.month, start_time.day)
   }
+
+  has_one_attached :image
+
+  def image_url
+    url_for(image)
+  end
 end

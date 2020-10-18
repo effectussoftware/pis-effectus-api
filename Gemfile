@@ -30,6 +30,9 @@ gem 'rack-cors', '~> 1.1.1'
 gem 'jbuilder'
 gem 'listen', '~> 3.2'
 
+# generate attanchment image
+gem 'attach'
+
 # Push notifications
 gem 'fcm'
 
@@ -64,5 +67,6 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
+gem 'aws-sdk-s3', '~> 1.83'
 gem 'pagy', '~> 3.8'
 gem 'pagy_cursor', '~> 0.2.0'

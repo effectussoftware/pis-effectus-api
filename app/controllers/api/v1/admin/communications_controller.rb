@@ -33,7 +33,7 @@ module Api
         end
 
         def communication_params
-          params.require(:communication).permit(:title, :text, :published, :recurrent_on)
+          params.require(:communication).permit(:title, :text, :published, :image, :recurrent_on)
         end
       end
     end
