@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class FeedsController < Api::V1::ApiController
+    class FeedController < Api::V1::ApiController
       def index
         start = params[:start] ? Time.parse(params[:start]) : Time.now
         with_include = params[:include] ? true : false

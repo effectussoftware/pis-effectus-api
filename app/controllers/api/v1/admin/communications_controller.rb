@@ -18,8 +18,6 @@ module Api
         end
 
         def update
-          raise ActionController::BadRequest, 'can not update a published communication' if @communication.published
-
           @communication.update!(communication_params)
           render :show
         end

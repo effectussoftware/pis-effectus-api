@@ -26,4 +26,9 @@ class Communication < ApplicationRecord
             end
     where(query, start_time.month, start_time.month, start_time.day)
   }
+
+  before_update do
+    raise ActionController::BadRequest, 'cannot update a published communication' if published
+    raise ActionController::BadRequest, 'cannot update a reccurrent communication' if recurrent_on
+  end
 end
