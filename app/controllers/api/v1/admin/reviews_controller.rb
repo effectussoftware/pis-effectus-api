@@ -14,13 +14,16 @@ module Api
         end
 
         def create
-          action_items = params[:review_action_item]
-
-          review_action_items = action_items.map { |item| ReviewActionItem.create!(item) }
-
-          params[:review_action_item] = review_action_items
-
-          @review = Review.create!(review_params)
+          ActiveRecord::Base.transaction do
+            @review = Review.create!(review_params.merge(reviewer_id: current_user.id))
+            review_action_items = params[:review_action_items].map do |item|
+              ReviewActionItem.create!(
+                create_review_action_item(item).merge(review_id: @review.id)
+              )
+            end
+            @review.review_action_item = review_action_items
+          end
+          render :show
         end
 
         def show
@@ -28,7 +31,7 @@ module Api
         end
 
         def update
-          @review = Review.find(params[:id])
+          @review = Review.find(params[:user_id])
           @review.update!(update_params)
         end
 
@@ -38,8 +41,12 @@ module Api
           params.require(:review).permit(:completed, :review_action_item)
         end
 
+        def create_review_action_item(item)
+          item.permit(:description, :type, :completed)
+        end
+
         def review_params
-          params.require(:review).permit(:review_action_item, :user, :reviewer)
+          params.require(:review).permit(:description, :review_action_item, :user_id)
         end
       end
     end

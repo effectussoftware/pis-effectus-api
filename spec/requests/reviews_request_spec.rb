@@ -55,7 +55,7 @@ RSpec.describe 'Post endpoint', type: :request do
         expect(response).to have_http_status(404)
       end
     end
-    
+
     context 'with no authorization' do
       it 'return unauthorized' do
         get "/api/v1/admin/reviews/#{review.id}"
