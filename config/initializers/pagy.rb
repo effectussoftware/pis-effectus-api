@@ -72,7 +72,9 @@ require 'pagy/extras/headers'
 # Support extra: Extra support for features like: incremental, infinite, auto-scroll pagination
 # See https://ddnexus.github.io/pagy/extras/support
 # require 'pagy/extras/support'
-
+# require 'pagy/extras/items'
+# Pagy::VARS[:items_param] = :items    # default
+# Pagy::VARS[:max_items]   = 100       # default
 
 # Overflow extra: Allow for easy handling of overflowing pages
 # See https://ddnexus.github.io/pagy/extras/overflow

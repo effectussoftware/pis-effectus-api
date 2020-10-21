@@ -30,7 +30,7 @@ RSpec.describe 'Communications', type: :request do
         expect(bd_communication.text).to eq 'Lala'
       end
 
-      it 'updates a communication published' do
+      it 'returns badrequest' do
         data = { 'communication': { 'published': false } }
         put "/api/v1/admin/communications/#{communication_published.id}", headers: auth_headers, params: data
         expect(response).to have_http_status 400

@@ -4,8 +4,8 @@ module Api
   module V1
     class FeedController < Api::V1::ApiController
       def index
-        start = params[:start] ? Time.parse(params[:start]) : Time.now
-        with_include = params[:include] ? true : false
+        start = params[:start] ? Time.parse(params[:start]) : Time.zone.now
+        with_include = params[:include] || false
         communications = communication_not_recurrent(start, with_include)
         communications += communication_recurrent(start, with_include)
         communications = communications.sort_by(&:updated_at).reverse[0..9]
