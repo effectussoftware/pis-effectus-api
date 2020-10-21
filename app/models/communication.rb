@@ -2,7 +2,7 @@
 
 class Communication < ApplicationRecord
   validates :title, presence: true
-
+  before_update :validate_update
   scope :not_recurrent_from_date, lambda { |start_time, with_include|
     query = if with_include
               'communications.updated_at <= ? AND
@@ -27,8 +27,11 @@ class Communication < ApplicationRecord
     where(query, start_time.month, start_time.month, start_time.day)
   }
 
-  before_update do
-    raise ActionController::BadRequest, 'cannot update a published communication' if published
-    raise ActionController::BadRequest, 'cannot update a reccurrent communication' if recurrent_on
+  private
+
+  def validate_update
+    communication = Communication.find(id)
+    raise ActionController::BadRequest, 'cannot update a published communication' if communication.published
+    raise ActionController::BadRequest, 'cannot update a reccurrent communication' if communication.recurrent_on
   end
 end
