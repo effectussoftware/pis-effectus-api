@@ -10,18 +10,13 @@ module Api
 
         def destroy
           @review = Review.find(params[:id])
-          @review.destroy
+          @review.destroy!
         end
 
         def create
           ActiveRecord::Base.transaction do
+            # With nested attributes automatically create the review_action_items
             @review = Review.create!(review_params.merge(reviewer_id: current_user.id))
-            review_action_items = params[:review_action_items].map do |item|
-              ReviewActionItem.create!(
-                create_review_action_item(item).merge(review_id: @review.id)
-              )
-            end
-            @review.review_action_item = review_action_items
           end
           render :show
         end
@@ -38,7 +33,7 @@ module Api
         private
 
         def update_params
-          params.require(:review).permit(:completed, :review_action_item)
+          params.require(:review).permit(:completed, :review_action_item_attributes)
         end
 
         def create_review_action_item(item)
@@ -46,7 +41,7 @@ module Api
         end
 
         def review_params
-          params.require(:review).permit(:description, :review_action_item, :user_id)
+          params.require(:review).permit(:description, :review_action_item_attributes, :user_id)
         end
       end
     end
