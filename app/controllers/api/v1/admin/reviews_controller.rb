@@ -10,7 +10,7 @@ module Api
 
         def destroy
           @review = Review.find(params[:id])
-          @review.destroy
+          @review.destroy!
         end
 
         def create
@@ -30,6 +30,7 @@ module Api
 
         private
 
+<<<<<<< HEAD
         def update_review_params
           params.require(:review)
                 .permit(:description,
@@ -41,6 +42,18 @@ module Api
                 .permit(:description,
                         :user_id,
                         review_action_items_attributes: %i[description completed commitment_owner])
+=======
+        def update_params
+          params.require(:review).permit(:completed, :review_action_item_attributes)
+        end
+
+        def create_review_action_item(item)
+          item.permit(:description, :type, :completed)
+        end
+
+        def review_params
+          params.require(:review).permit(:description, :review_action_item_attributes, :user_id)
+>>>>>>> Add nested attributes for review
         end
       end
     end

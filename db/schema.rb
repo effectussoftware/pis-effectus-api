@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 2020_10_17_163958) do
-=======
 ActiveRecord::Schema.define(version: 2020_10_15_220149) do
->>>>>>> create 1on1 updated
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
