@@ -3,7 +3,7 @@
 class Communication < ApplicationRecord
   validates :title, presence: true
   validate :cant_update_if_published
-  after_update :send_notification, if: :just_published
+  after_save :send_notification, if: :just_published
 
   private
 

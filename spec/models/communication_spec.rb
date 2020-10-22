@@ -15,8 +15,22 @@ RSpec.describe Communication, type: :model do
     end
   end
 
-  describe 'after updates' do
-    it 'sends notification once published' do
+  describe 'after saves' do
+    it 'sends notification if created published' do
+      Timecop.freeze
+      create_list(:user, 15)
+      create(:communication)
+      allow(User).to receive(:send_notification).and_return(true)
+      com = build(:communication, published: true)
+      expect(User).to receive(:send_notification)
+        .with(com.title,
+              com.text,
+              { id: Communication.last.id + 1, updated_at: Time.zone.now, type: com.class.to_s })
+      expect(com.save).to eq(true)
+      Timecop.return
+    end
+
+    it 'sends notification if updated to published' do
       Timecop.freeze
       create_list(:user, 15)
       com = create(:communication, published: false)
