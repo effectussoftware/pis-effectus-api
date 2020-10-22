@@ -22,8 +22,6 @@ RSpec.describe 'Communications', type: :request do
   let!(:communication) { create(:communication) }
 
   describe 'DELETE api/v1/admin/communication/:id' do
-    let(:communication) { create(:communication) }
-
     context 'with authorization' do
       it 'updates a communication' do
         delete "/api/v1/admin/communications/#{communication.id}", headers: auth_headers
