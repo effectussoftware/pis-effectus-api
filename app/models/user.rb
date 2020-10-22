@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
   include DeviseTokenAuth::Concerns::User
   alias devise_create_token create_token
 
+  scope :active, -> { where(is_active: true) }
+
   def create_token(client: nil, lifespan: nil, cost: nil, **token_extras)
     push_notification_token = tokens[client].try(:[], 'push_notification_token')
     token = devise_create_token(**{ client: client, lifespan: lifespan, cost: cost }.merge(token_extras))
