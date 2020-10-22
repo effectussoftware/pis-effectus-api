@@ -17,7 +17,7 @@ RSpec.describe Communication, type: :model do
 
   describe 'after saves' do
     it 'sends notification if created published' do
-      Timecop.freeze
+      Timecop.freeze(Time.zone.local(2020))
       create_list(:user, 15)
       create(:communication)
       allow(User).to receive(:send_notification).and_return(true)
@@ -31,7 +31,7 @@ RSpec.describe Communication, type: :model do
     end
 
     it 'sends notification if updated to published' do
-      Timecop.freeze
+      Timecop.freeze(Time.zone.local(2020))
       create_list(:user, 15)
       com = create(:communication, published: false)
       allow(User).to receive(:send_notification).and_return(true)
