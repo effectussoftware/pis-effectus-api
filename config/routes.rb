@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       post '/auth/login', to: 'authentication#login'
       namespace :admin do
         resources :users, only: %i[index show update]
+        resources :reviews, only: %i[index create show update destroy]
         post '/auth/login', to: 'authentication_admin#login'
         resources :communications
       end

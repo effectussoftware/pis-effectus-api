@@ -24,6 +24,27 @@ ActiveRecord::Schema.define(version: 2020_10_15_220149) do
     t.date "recurrent_on"
   end
 
+  create_table "review_action_items", force: :cascade do |t|
+    t.text "description"
+    t.string "commitment_owner"
+    t.boolean "completed"
+    t.bigint "review_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["review_id"], name: "index_review_action_items_on_review_id"
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.text "description"
+    t.text "tipo"
+    t.bigint "reviewer_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["reviewer_id"], name: "index_reviews_on_reviewer_id"
+    t.index ["user_id"], name: "index_reviews_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
@@ -39,4 +60,7 @@ ActiveRecord::Schema.define(version: 2020_10_15_220149) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "review_action_items", "reviews"
+  add_foreign_key "reviews", "users"
+  add_foreign_key "reviews", "users", column: "reviewer_id"
 end
