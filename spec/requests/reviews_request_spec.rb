@@ -67,7 +67,7 @@ RSpec.describe 'Post endpoint', type: :request do
   describe 'PUT /api/v1/admin/reviews/:id' do
     context 'with authorization' do
       it 'update review by id' do
-        put "/api/v1/admin/review/#{review.id}", params: update_params, headers: auth_headers
+        put "/api/v1/admin/reviews/#{review.id}", params: update_params, headers: auth_headers
         expect(response).to have_http_status(200)
         response_review = Oj.load(response.body)
         expect(response_review['review']['id']).to eq(review['id'])
