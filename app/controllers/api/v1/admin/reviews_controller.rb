@@ -10,7 +10,7 @@ module Api
 
         def destroy
           @review = Review.find(params[:id])
-          @review.destroy
+          @review.destroy!
         end
 
         def create
