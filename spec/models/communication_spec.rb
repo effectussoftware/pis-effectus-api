@@ -12,6 +12,14 @@ RSpec.describe Communication, type: :model do
       com = create(:communication, published: true)
       expect(com.update(title: 'new title')).to eq(false)
       expect(com.errors[:published]).to include("can't update communications once published")
+      expect(com.update(published: false)).to eq(false)
+    end
+
+    it "can't be updated if recurrent" do
+      com = create(:communication, recurrent_on: Time.zone.now)
+      expect(com.update(title: 'new title')).to eq(false)
+      expect(com.errors[:recurrent_on]).to include("can't update communications if recurrent")
+      expect(com.update(recurrent_on: nil)).to eq(false)
     end
   end
 

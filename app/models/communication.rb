@@ -3,12 +3,17 @@
 class Communication < ApplicationRecord
   validates :title, presence: true
   validate :cant_update_if_published
+  validate :cant_update_if_recurrent
   after_save :send_notification, if: :just_published
 
   private
 
   def cant_update_if_published
-    errors.add(:published, "can't update communications once published") if was_already_published
+    errors.add(:published, "can't update communications once published") if published_was
+  end
+
+  def cant_update_if_recurrent
+    errors.add(:recurrent_on, "can't update communications if recurrent") if recurrent_on_was
   end
 
   def send_notification
@@ -17,9 +22,5 @@ class Communication < ApplicationRecord
 
   def just_published
     saved_change_to_published? && published?
-  end
-
-  def was_already_published
-    (!published_changed? && published?) || (published_changed? && !published?)
   end
 end

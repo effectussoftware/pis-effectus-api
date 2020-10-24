@@ -79,6 +79,20 @@ RSpec.describe 'Communications', type: :request do
       end
     end
 
+    context 'with rrecurrent communication' do
+      let(:communication) { create(:communication, recurrent_on: Time.zone.now) }
+
+      it "can't be updated" do
+        data = { 'communication': { 'title': 'Lala' } }
+        communication_title = communication.title
+        put "/api/v1/admin/communications/#{communication.id}", headers: auth_headers, params: data
+        expect(response).to have_http_status 403
+        expect(Oj.load(response.body)['error']).to match("can't update communications if recurrent")
+        communication.reload
+        expect(communication.title).to eq(communication_title)
+      end
+    end
+
     context 'without authorization' do
       let(:communication) { create(:communication) }
 
