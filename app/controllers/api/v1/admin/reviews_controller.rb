@@ -14,7 +14,6 @@ module Api
         end
 
         def create
-          debugger
           @review = Review.create!(create_review_params.merge(reviewer_id: current_user.id))
           render :show
         end
