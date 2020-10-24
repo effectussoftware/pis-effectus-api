@@ -51,7 +51,7 @@ RSpec.describe 'Communications', type: :request do
       it 'fails if no title is sent' do
         data = { 'communication': { 'text': 'Lele', 'published': true } }
         post '/api/v1/admin/communications', headers: auth_headers, params: data
-        expect(response).to have_http_status 403  
+        expect(response).to have_http_status 403
         # TODO: ESTO DEBERIA DEVOLVER 400 Y NO ROMPER EL SERVER
       end
     end
