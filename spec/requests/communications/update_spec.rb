@@ -13,7 +13,6 @@ RSpec.describe 'Communications', type: :request do
   let!(:communication) { create(:communication, published: false) }
   let!(:communication_published) { create(:communication, published: true) }
 
-
   describe 'PUT api/v1/admin/communication/:id' do
     context 'with unpublished communication' do
       let(:communication) { create(:communication, published: false) }
