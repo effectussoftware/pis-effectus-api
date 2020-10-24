@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :review do
-    title { Faker::Name.name }
-    description { Faker::Lorem.word }
+    title { Faker::Lorem.word }
+    comments { Faker::Lorem.sentence }
     reviewer { association :user }
     user { association :user }
   end

@@ -6,7 +6,8 @@ class CreateReviewActionItems < ActiveRecord::Migration[6.0]
       t.text :description
       t.string :commitment_owner
       t.boolean :completed
-      t.references :review, null: false, foreign_key: true
+      t.integer :reviewer_review_id, foreign_key: true
+      t.integer :user_review_id, foreign_key: true
 
       t.timestamps
     end

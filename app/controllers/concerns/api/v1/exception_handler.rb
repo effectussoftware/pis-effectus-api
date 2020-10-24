@@ -7,6 +7,7 @@ module Api
 
       included do
         rescue_from Exception do |e|
+          debugger
           render json: { error: Rails.env.production? ? 'Unkown error' : e.message }, status: 500
         end
 

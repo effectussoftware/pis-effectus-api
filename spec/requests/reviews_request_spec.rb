@@ -14,12 +14,15 @@ RSpec.describe 'Post endpoint', type: :request do
       'client' => auth_headers[:client]
     }
   end
-  let!(:update_params) do
+  let!(:update_review_params) do
     {
       'review' =>
-            {
-              'output' => 'Segui asi!'
-            }
+        {
+          'comments': 'nuevos comentarios de la 1o1',
+          'user_action_items': [
+            { 'completed': false, 'description': 'se compromete a usar menos el celular' }
+          ],
+        }
     }
   end
 
@@ -29,7 +32,7 @@ RSpec.describe 'Post endpoint', type: :request do
         get api_v1_admin_reviews_path, headers: auth_headers
         expect(response).to have_http_status(200)
         response_body = Oj.load(response.body)
-        expect(response_body['reviews'].size).to eq(1)
+        expect(response_body['reviews'].size).to eq(Review.all.count)
       end
     end
 
@@ -47,8 +50,9 @@ RSpec.describe 'Post endpoint', type: :request do
         get "/api/v1/admin/reviews/#{review.id}", headers: auth_headers
         expect(response).to have_http_status(200)
         response_review = Oj.load(response.body)
-        expect(response_review['review']['id']).to eq(review['id'])
+        expect(response_review['review']['id']).to eq(review.id)
       end
+
       it 'should return error: no review with id highest_id + 1 ' do
         highest_id = Review.last.id
         get "/api/v1/admin/reviews/#{highest_id + 1}", headers: auth_headers
@@ -66,18 +70,23 @@ RSpec.describe 'Post endpoint', type: :request do
 
   describe 'PUT /api/v1/admin/reviews/:id' do
     context 'with authorization' do
-      it 'update review by id' do
-        put "/api/v1/admin/reviews/#{review.id}", params: update_params, headers: auth_headers
+      it 'updates review by id' do
+        put "/api/v1/admin/reviews/#{review.id}", params: update_review_params, headers: auth_headers
         expect(response).to have_http_status(200)
         response_review = Oj.load(response.body)
-        expect(response_review['review']['id']).to eq(review['id'])
         review.reload
-        expect(response_review['review']['output']).to eq('Segui asi!')
-        expect(review.output).to eq('Segui asi!')
+        expect(response_review['review']['title']).to eq(review.title)
+        expect(response_review['review']['comments']).to eq(review.comments)
+        
+        # compare action items
+        debugger
+        response_action_items = response_review['review']['user_action_items'].concat(response_review['review']['reviewer_action_items'])
+        expect(response_action_items).to match_array(review.review_action_items)
       end
+      
       it 'error: no review with id highest id + 1 ' do
         highest_id = Review.last.id
-        put "/api/v1/admin/reviews/#{highest_id + 1}", params: update_params.to_json, headers: auth_headers
+        put "/api/v1/admin/reviews/#{highest_id + 1}", params: update_review_params, headers: auth_headers
         expect(response).to have_http_status(404)
       end
     end

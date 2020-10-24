@@ -3,5 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe ReviewActionItem, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'validations' do
+    it 'validates presence of required fields' do
+      should validate_presence_of(:description)
+    end
+  end
 end
