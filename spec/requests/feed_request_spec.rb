@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Feeds', type: :request do
+RSpec.describe 'Feed', type: :request do
   # authorization
   let!(:user) { create(:user) }
   let!(:auth_headers) { user.create_new_auth_token }
