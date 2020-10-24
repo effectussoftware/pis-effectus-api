@@ -2,8 +2,8 @@
 
 module Api
   module V1
-    class FeedController < Api::V1::ApiController
-      def index
+    class FeedsController < Api::V1::ApiController
+      def show
         start = params[:start] ? Time.parse(params[:start]) : Time.zone.now
         with_include = params[:include] || false
         communications = communication_not_recurrent(start, with_include)
