@@ -16,6 +16,10 @@ RSpec.describe 'Communications', type: :request do
     }
   end
 
+  before(:each) do
+    allow_any_instance_of(Communication).to receive(:send_notification).and_return(true)
+  end
+
   describe 'POST api/v1/admin/communications' do
     context 'with authorization' do
       it 'creates a communication with all the params set' do
@@ -51,10 +55,17 @@ RSpec.describe 'Communications', type: :request do
       it 'fails if no title is sent' do
         data = { 'communication': { 'text': 'Lele', 'published': true } }
         post '/api/v1/admin/communications', headers: auth_headers, params: data
-        expect(response).to have_http_status 500
-        # TODO: ESTO DEBERIA DEVOLVER 400 Y NO ROMPER EL SERVER
+        expect(response).to have_http_status 403
+      end
+
+      it 'Sends a notification to all users' do
+        data = { 'communication': { 'title': 'Lala', 'text': 'Lele', 'published': true } }
+        expect_any_instance_of(Communication).to receive(:send_notification)
+        post '/api/v1/admin/communications', headers: auth_headers, params: data
+        expect(response).to have_http_status 200
       end
     end
+
     context 'without authorization' do
       it 'returns unauthorized' do
         data = { 'communication': { 'title': 'Lala', 'text': 'Lele', 'published': true } }

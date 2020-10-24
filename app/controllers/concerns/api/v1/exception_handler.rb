@@ -21,6 +21,10 @@ module Api
         rescue_from ActionController::BadRequest do |e|
           render json: { error: e.message }, status: :bad_request
         end
+
+        rescue_from ActiveRecord::RecordInvalid do |e|
+          render json: { error: e.message }, status: :forbidden
+        end
       end
     end
   end
