@@ -22,6 +22,9 @@ RSpec.describe 'Post endpoint', type: :request do
           'user_action_items': [
             { 'completed': false, 'description': 'se compromete a usar menos el celular' }
           ],
+          'reviewer_action_items': [
+            { 'completed': false, 'description': 'se compromete a usar menos el celular' }
+          ]
         }
     }
   end

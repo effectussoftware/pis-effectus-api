@@ -10,4 +10,5 @@ class ReviewActionItem < ApplicationRecord
   def review
     reviewer_review || user_review
   end
+
 end

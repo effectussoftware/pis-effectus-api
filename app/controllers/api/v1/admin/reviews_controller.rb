@@ -14,6 +14,7 @@ module Api
         end
 
         def create
+          debugger
           @review = Review.create!(create_review_params.merge(reviewer_id: current_user.id))
           render :show
         end
@@ -30,30 +31,22 @@ module Api
 
         private
 
-<<<<<<< HEAD
         def update_review_params
           params.require(:review)
                 .permit(:description,
-                        review_action_items_attributes: %i[id description completed commitment_owner])
+                        user_action_items_attributes: %i[id description completed commitment_owner],
+                        reviewer_action_items_attributes: %i[id description completed commitment_owner]
+                      )
         end
 
         def create_review_params
           params.require(:review)
-                .permit(:description,
+                .permit(:title,
+                        :description,
                         :user_id,
-                        review_action_items_attributes: %i[description completed commitment_owner])
-=======
-        def update_params
-          params.require(:review).permit(:completed, :review_action_item_attributes)
-        end
-
-        def create_review_action_item(item)
-          item.permit(:description, :type, :completed)
-        end
-
-        def review_params
-          params.require(:review).permit(:description, :review_action_item_attributes, :user_id)
->>>>>>> Add nested attributes for review
+                        user_action_items_attributes: %i[id description completed commitment_owner],
+                        reviewer_action_items_attributes: %i[id description completed commitment_owner]
+                      )
         end
       end
     end
