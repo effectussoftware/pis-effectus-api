@@ -39,7 +39,7 @@ module Api
         private
 
         def communication_params
-          params.require(:communication).permit(:title, :text, :published)
+          params.require(:communication).permit(:title, :text, :published, :recurrent_on)
         end
 
         def sort_communications

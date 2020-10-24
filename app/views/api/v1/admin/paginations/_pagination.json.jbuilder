@@ -3,4 +3,5 @@
 json.extract! pagination,
               :prev,
               :next,
-              :last
+              :last,
+              :count

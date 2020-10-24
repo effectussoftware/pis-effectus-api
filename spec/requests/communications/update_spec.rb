@@ -10,14 +10,8 @@ RSpec.describe 'Communications', type: :request do
   let!(:auth_headers) { admin.create_new_auth_token }
 
   let!(:user_auth_headers) { user.create_new_auth_token }
-
-  let!(:headers) do
-    {
-      'uid' => auth_headers[:uid],
-      'access-token' => auth_headers['access-token'],
-      'client' => auth_headers[:client]
-    }
-  end
+  let!(:communication) { create(:communication, published: false) }
+  let!(:communication_published) { create(:communication, published: true) }
 
   describe 'PUT api/v1/admin/communication/:id' do
     context 'with unpublished communication' do
@@ -67,7 +61,6 @@ RSpec.describe 'Communications', type: :request do
 
     context 'with published communication' do
       let(:communication) { create(:communication, published: true) }
-
       it "can't be updated" do
         data = { 'communication': { 'title': 'Lala' } }
         communication_title = communication.title

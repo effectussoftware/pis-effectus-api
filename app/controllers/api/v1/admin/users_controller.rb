@@ -5,7 +5,7 @@ module Api
     module Admin
       class UsersController < Api::V1::Admin::AdminApiController
         def index
-          @pagy, @users = pagy(User.all)
+          @pagy, @users = pagy(User.all, items: params[:per_page])
         end
 
         def show

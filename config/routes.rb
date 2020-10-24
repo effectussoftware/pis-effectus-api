@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       resources :device_registrations, only: %i[create]
       mount_devise_token_auth_for 'User', at: 'auth'
       post '/auth/login', to: 'authentication#login'
+      resources :feed, only: %i[index]
       namespace :admin do
         resources :users, only: %i[index show update]
         post '/auth/login', to: 'authentication_admin#login'
