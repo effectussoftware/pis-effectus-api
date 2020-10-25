@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Feed
-  attr_reader :id, :type, :text, :title, :updated_at
+  attr_reader :id, :type, :text, :title, :updated_at, :image
 
   def self.from_communication(communication)
     image = communication.image.attached? ? communication.image_url : nil
