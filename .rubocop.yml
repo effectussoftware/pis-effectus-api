@@ -2,6 +2,7 @@ AllCops:
   Exclude:
     - 'db/schema.rb'
     - 'db/migrate/20200923234059_devise_token_auth_create_users.rb'
+    - 'db/migrate/20201025184026_create_active_storage_tables.active_storage.rb'
     - 'bin/*'
     - 'config/initializers/pagy.rb'
   NewCops: enable
