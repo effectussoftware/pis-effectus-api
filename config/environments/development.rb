@@ -65,5 +65,8 @@ Rails.application.configure do
     Bullet.console = true
     Bullet.rails_logger = true
   end
+
+  Rails.application.routes.default_url_options = { host: ENV['DEFAULT_URL'] }
+
 end
 # rubocop:enable Metrics/BlockLength

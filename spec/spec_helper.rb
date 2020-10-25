@@ -99,4 +99,7 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
   # rubocop:enable Style/BlockComments
+  config.before do
+    Aws.config.update(stub_responses: true)
+  end
 end

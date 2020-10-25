@@ -14,11 +14,13 @@ module Api
 
         def create
           @communication = Communication.create!(communication_params)
+          handle_attachments
           render :show
         end
 
         def update
           @communication.update!(communication_params)
+          handle_attachments
           render :show
         end
 
@@ -32,6 +34,12 @@ module Api
 
         def communication_params
           params.require(:communication).permit(:title, :text, :published)
+        end
+
+        def handle_attachments
+          if params[:image]
+            @communication.image.attach(data: params[:image])
+          end
         end
       end
     end
