@@ -35,6 +35,11 @@ class Communication < ApplicationRecord
     where(query, start_time.month, start_time.month, start_time.day)
   }
 
+
+  def image_url
+    url_for image
+  end
+
   private
 
   def cant_update_if_published
@@ -51,9 +56,5 @@ class Communication < ApplicationRecord
 
   def just_published
     saved_change_to_published? && published?
-  end
-
-  def image_url
-    url_for image
   end
 end
