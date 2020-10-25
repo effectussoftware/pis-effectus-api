@@ -7,7 +7,13 @@ module Api
         before_action :set_communication, only: %i[show update destroy]
 
         def index
-          @communications = Communication.all
+          @communications = if params[:published]
+                              Communication.where(published: params[:published])
+                            else
+                              Communication.all
+                            end
+          @communications = sort_communications if params[:sort]
+          @pagy, @communications = pagy(@communications, items: params[:per_page])
         end
 
         def show; end
@@ -32,8 +38,20 @@ module Api
           @communication = Communication.find(params[:id])
         end
 
+        private
+
         def communication_params
-          params.require(:communication).permit(:title, :text, :published)
+          params.require(:communication).permit(:title, :text, :published, :recurrent_on)
+        end
+
+        def sort_communications
+          sort = Oj.load(params[:sort])
+          order_sort = if sort[1]
+                         "#{sort[0]} #{sort[1]}"
+                       else
+                         sort[0]
+                       end
+          @communications.order(order_sort)
         end
 
         def handle_attachments

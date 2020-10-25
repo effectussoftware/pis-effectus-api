@@ -3,20 +3,22 @@
 require 'rails_helper'
 
 RSpec.describe 'Communications', type: :request do
-  # authorization
   let!(:admin) { create(:admin) }
+
   let!(:user) { create(:user) }
+
   let!(:auth_headers) { admin.create_new_auth_token }
+
   let!(:user_auth_headers) { user.create_new_auth_token }
+
   let!(:headers) do
     {
       'uid' => auth_headers[:uid],
       'access-token' => auth_headers['access-token'],
       'client' => auth_headers[:client]
     }
-
-    # database population
   end
+
   let!(:communication) { create(:communication) }
 
   describe 'DELETE api/v1/admin/communication/:id' do
