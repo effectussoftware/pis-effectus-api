@@ -11,6 +11,8 @@ class Communication < ApplicationRecord
   validate :cant_update_if_recurrent
   after_save :send_notification, if: :just_published
 
+  scope :published, -> { where(published: true) }
+
   scope :not_recurrent_from_date, lambda { |start_time, with_include|
     query = if with_include
               'communications.updated_at <= ? AND
