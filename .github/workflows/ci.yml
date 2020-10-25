@@ -36,6 +36,7 @@ jobs:
           RAILS_ENV: test
           POSTGRES_USERNAME: postgres
           POSTGRES_PASSWORD: postgres
+          DEFAULT_URL: http://example.com
 
       - name: Run RSpec
         run: |
