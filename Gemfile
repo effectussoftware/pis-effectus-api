@@ -70,3 +70,5 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'aws-sdk-s3', '~> 1.83'
 gem 'pagy', '~> 3.8'
 gem 'pagy_cursor', '~> 0.2.0'
+
+gem "active_storage_base64", "~> 1.1"

@@ -2,10 +2,11 @@
 
 class Communication < ApplicationRecord
   include Rails.application.routes.url_helpers
+  include ActiveStorageSupport::SupportForBase64
 
   validates :title, presence: true
 
-  has_one_attached :image
+  has_one_base64_attached :image
 
   def image_url
     url_for(image)

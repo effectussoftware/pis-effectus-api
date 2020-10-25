@@ -14,13 +14,18 @@ module Api
 
         def create
           @communication = Communication.create!(communication_params)
+          if params[:image]
+            @communication.image.attach(data: params[:image])
+          end
           render :show
         end
 
         def update
           raise ActionController::BadRequest, 'can not update a published communication' if @communication.published
-
           @communication.update!(communication_params)
+          if params[:image]
+            @communication.image.attach(data: params[:image])
+          end
           render :show
         end
 
@@ -33,7 +38,7 @@ module Api
         end
 
         def communication_params
-          params.require(:communication).permit(:title, :text, :published, :image, :recurrent_on)
+          params.require(:communication).permit(:title, :text, :published, :recurrent_on)
         end
       end
     end
