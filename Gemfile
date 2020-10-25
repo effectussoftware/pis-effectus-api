@@ -33,7 +33,7 @@ gem 'listen', '~> 3.2'
 # Push notifications
 gem 'fcm'
 
-gem "aws-sdk-s3", require: false
+gem 'aws-sdk-s3', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -66,6 +66,8 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
-gem "active_storage_base64", "~> 1.1"
+gem 'active_storage_base64', '~> 1.1'
 gem 'pagy', '~> 3.8'
 gem 'pagy_cursor', '~> 0.2.0'
+
+gem "aws-sdk-rails", "~> 3.1"
