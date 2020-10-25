@@ -10,10 +10,6 @@ module Api
       def set_communication
         @communication = Communication.published.find(params[:id])
       end
-
-      def communication_params
-        params.require(:communication).permit(:title, :text, :published, :recurrent_on)
-      end
     end
   end
 end

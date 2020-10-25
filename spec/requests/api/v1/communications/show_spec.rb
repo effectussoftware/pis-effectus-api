@@ -14,9 +14,11 @@ RSpec.describe 'Communications show', type: :request do
         get "/api/v1/communications/#{communication.id}", headers: auth_headers
         expect(response).to have_http_status 200
         response_body = Oj.load(response.body)['communication']
-        expect(response_body['id']).to eq(communication.id)
-        expect(response_body['title']).to eq(communication.title)
-        expect(response_body['text']).to eq(communication.text)
+        serialized_communication = communication.as_json
+        expect(response_body['id']).to eq(serialized_communication['id'])
+        expect(response_body['title']).to eq(serialized_communication['title'])
+        expect(response_body['text']).to eq(serialized_communication['text'])
+        expect(response_body['updated_at']).to eq(serialized_communication['updated_at'])
       end
 
       it 'shows 404 if not published' do
