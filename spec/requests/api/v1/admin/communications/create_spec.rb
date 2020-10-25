@@ -25,7 +25,6 @@ RSpec.describe 'Communications', type: :request do
       it 'creates a communication with all the params set' do
         data = { 'communication': { 'title': 'Lala', 'text': 'Lele', 'published': true } }
         post '/api/v1/admin/communications', headers: auth_headers, params: data
-        debugger
         expect(response).to have_http_status 200
         created_communication = Communication.first
         expect(created_communication.title).to eq 'Lala'
