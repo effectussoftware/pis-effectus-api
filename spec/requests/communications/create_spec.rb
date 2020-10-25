@@ -52,17 +52,16 @@ RSpec.describe 'Communications', type: :request do
         expect(created_communication.published).to eq false
       end
 
-      fit 'attaches a file to a communication on creation' do
+      it 'attaches a file to a communication on creation' do
         data = { 'communication': { 'title': 'Lala', 'image': open_file_encoded('photo.jpg') } }
         post '/api/v1/admin/communications', headers: auth_headers, params: data
         print(response.body)
-        expect(1).to eq 1
-        #  expect(response).to have_http_status 200
-        #  created_communication = Communication.first
-        #  expect(created_communication.title).to eq 'Lala'
-        #  expect(created_communication.text).to eq nil
-        #  expect(created_communication.published).to eq false
-        #  expect(created_communication.image.attached?).to eq true
+        expect(response).to have_http_status 200
+        created_communication = Communication.first
+        expect(created_communication.title).to eq 'Lala'
+        expect(created_communication.text).to eq nil
+        expect(created_communication.published).to eq false
+        expect(created_communication.image.attached?).to eq true
       end
 
       it 'fails if no title is sent' do
