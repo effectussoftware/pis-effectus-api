@@ -27,7 +27,6 @@ RSpec.describe 'Post endpoint', type: :request do
         )
         expect(response_body['reviews']).to include(response_expected)
       end
-      
     end
 
     context 'with no authorization' do

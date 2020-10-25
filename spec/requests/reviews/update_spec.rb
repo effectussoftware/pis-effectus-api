@@ -11,12 +11,11 @@ RSpec.describe 'Post endpoint', type: :request do
 
   let!(:user_action_item) { create(:user_action_item, user_review_id: review.id) }
 
-  let(:update_params) do 
+  let(:update_params) do
     reviewer_action_item = review.reviewer_action_items.first.clone
     reviewer_action_item.description = 'updated reviewer description'
     updated_reviewer_action_items = [reviewer_action_item]
-
-    { 
+    {
       review: {
         title: 'new_title',
         comments: 'aaaa',
