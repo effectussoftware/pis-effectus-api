@@ -7,9 +7,9 @@ RSpec.describe 'Post endpoint', type: :request do
 
   let!(:review) { create(:review) }
 
-  let!(:review_action_item_effectus) { create(:review_action_item_effectus, review_id: review.id) }
+  let!(:reviewer_action_item) { create(:reviewer_action_item, reviewer_review_id: review.id) }
 
-  let!(:review_action_item_user) { create(:review_action_item_user, review_id: review.id) }
+  let!(:user_action_item) { create(:user_action_item, user_review_id: review.id) }
 
   let!(:auth_headers) { admin.create_new_auth_token }
 
@@ -19,11 +19,11 @@ RSpec.describe 'Post endpoint', type: :request do
         get api_v1_admin_review_path(review.id), headers: auth_headers
         expect(response).to have_http_status(200)
         response_body = Oj.load(response.body)
-        response_expected = review.as_json(only: %i[id description title reviewer_id user_id])
+        response_expected = review.as_json(only: %i[id comments title reviewer_id user_id])
         response_expected = response_expected.merge(
-          'user_action_items' => [review_action_item_user.as_json(only: %i[id description completed])]
+          'user_action_items' => [user_action_item.as_json(only: %i[id description completed])]
         ).merge(
-          'reviewer_action_items' => [review_action_item_effectus.as_json(only: %i[id description completed])]
+          'reviewer_action_items' => [reviewer_action_item.as_json(only: %i[id description completed])]
         )
         expect(response_body['review']).to eq(response_expected)
       end

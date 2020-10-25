@@ -15,7 +15,6 @@ module Api
 
         def create
           @review = Review.create!(create_review_params.merge(reviewer_id: current_user.id))
-          render :show
         end
 
         def show
@@ -25,26 +24,23 @@ module Api
         def update
           @review = Review.find(params[:id])
           @review.update!(update_review_params)
-          render :show
         end
 
         private
 
         def update_review_params
           params.require(:review)
-                .permit(:description,
-                        user_action_items_attributes: %i[id description completed commitment_owner],
-                        reviewer_action_items_attributes: %i[id description completed commitment_owner]
+                .permit(:title, :comments,
+                        user_action_items_attributes: %i[id description completed],
+                        reviewer_action_items_attributes: %i[id description completed]
                       )
         end
 
         def create_review_params
           params.require(:review)
-                .permit(:title,
-                        :description,
-                        :user_id,
-                        user_action_items_attributes: %i[id description completed commitment_owner],
-                        reviewer_action_items_attributes: %i[id description completed commitment_owner]
+                .permit(:title, :comments, :user_id,
+                        user_action_items_attributes: %i[description completed],
+                        reviewer_action_items_attributes: %i[description completed]
                       )
         end
       end

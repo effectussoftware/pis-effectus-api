@@ -26,7 +26,6 @@ ActiveRecord::Schema.define(version: 2020_10_15_220149) do
 
   create_table "review_action_items", force: :cascade do |t|
     t.text "description"
-    t.string "commitment_owner"
     t.boolean "completed"
     t.integer "reviewer_review_id"
     t.integer "user_review_id"
@@ -35,7 +34,7 @@ ActiveRecord::Schema.define(version: 2020_10_15_220149) do
   end
 
   create_table "reviews", force: :cascade do |t|
-    t.text "description"
+    t.text "comments"
     t.string "title"
     t.bigint "reviewer_id", null: false
     t.bigint "user_id", null: false

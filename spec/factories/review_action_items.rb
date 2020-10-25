@@ -1,14 +1,17 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :review_action_item do
+  factory :reviewer_action_item, class: 'ReviewActionItem' do
     description { Faker::Lorem.sentence }
     completed { Faker::Boolean.boolean }
-    commitment_owner { commitment_owner_function }
-    review { association :review }
+    reviewer_review_id { association :review }
+    user_review_id { nil }            
   end
 
-  def commitment_owner_function
-    Faker::Boolean.boolean ? 'user' : 'effectus'
+  factory :user_action_item, class: 'ReviewActionItem' do
+    description { Faker::Lorem.sentence }
+    completed { Faker::Boolean.boolean }
+    reviewer_review_id { nil }
+    user_review_id { association :review }            
   end
 end
