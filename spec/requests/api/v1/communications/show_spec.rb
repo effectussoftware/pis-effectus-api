@@ -18,12 +18,12 @@ RSpec.describe 'Communications show', type: :request do
         expect(response_body['title']).to eq(communication.title)
         expect(response_body['text']).to eq(communication.text)
       end
-      
+
       it 'shows 404 if not published' do
         get "/api/v1/communications/#{unpublished_communication.id}", headers: auth_headers
         expect(response).to have_http_status 404
       end
-      
+
       it 'shows 404 if it does not exist' do
         get "/api/v1/communications/#{communication.id + 1}", headers: auth_headers
         expect(response).to have_http_status 404
@@ -35,7 +35,7 @@ RSpec.describe 'Communications show', type: :request do
         get "/api/v1/communications/#{communication.id}"
         expect(response).to have_http_status 401
       end
-      
+
       it 'returns unauthorized if it does not exist' do
         get "/api/v1/communications/#{communication.id + 1}"
         expect(response).to have_http_status 401

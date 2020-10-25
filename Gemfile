@@ -70,4 +70,4 @@ gem 'active_storage_base64', '~> 1.1'
 gem 'pagy', '~> 3.8'
 gem 'pagy_cursor', '~> 0.2.0'
 
-gem "aws-sdk-rails", "~> 3.1"
+gem 'aws-sdk-rails', '~> 3.1'
