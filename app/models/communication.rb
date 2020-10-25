@@ -35,7 +35,6 @@ class Communication < ApplicationRecord
     where(query, start_time.month, start_time.month, start_time.day)
   }
 
-
   def image_url
     url_for image
   end

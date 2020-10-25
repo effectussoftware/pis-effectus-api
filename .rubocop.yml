@@ -1,6 +1,7 @@
 AllCops:
   Exclude:
-    - 'db/*'
+    - 'db/schema.rb'
+    - 'db/migrate/*'
     - 'bin/*'
     - 'config/initializers/pagy.rb'
   NewCops: enable

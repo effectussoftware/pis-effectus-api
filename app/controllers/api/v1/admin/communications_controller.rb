@@ -55,7 +55,7 @@ module Api
         end
 
         def handle_attachments
-          @communication.image.attach(data: params[:image]) if params[:image]
+          @communication.image.attach(data: params[:communication][:image]) if params[:communication][:image]
         end
       end
     end

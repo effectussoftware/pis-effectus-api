@@ -102,4 +102,14 @@ RSpec.configure do |config|
   config.before do
     Aws.config.update(stub_responses: true)
   end
+
+  config.filter_run_when_matching :focus
+
+  def open_file(file_name)
+    File.open("spec/fixtures/#{file_name}")
+  end
+
+  def open_file_encoded(file_name)
+    "data:image/jpeg;base64,#{Base64.encode64(open_file(file_name).read)}"
+  end
 end
