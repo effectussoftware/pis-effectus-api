@@ -28,13 +28,11 @@ class Communication < ApplicationRecord
   }
   scope :recurrent_from_date, lambda { |start_time, with_include|
     query = if with_include
-              '(extract(month from recurrent_on) < ?) OR
-       (extract(month from recurrent_on)= ? AND extract(day from recurrent_on) <= ?)'
+              "(extract(year from recurrent_on) < ?) OR to_char(recurrent_on, 'MMDDHHMISSMS') <= to_char(?::TIMESTAMP, 'MMDDHHMISSMS')"
             else
-              '(extract(month from recurrent_on) < ?) OR
-       (extract(month from recurrent_on)= ? AND extract(day from recurrent_on) < ?)'
+              "(extract(year from recurrent_on) < ?) OR to_char(recurrent_on, 'MMDDHHMISSMS') < to_char(?::TIMESTAMP, 'MMDDHHMISSMS')"
             end
-    where(query, start_time.month, start_time.month, start_time.day)
+    where(query, start_time.year, start_time)
   }
 
   def image_url
