@@ -28,9 +28,11 @@ class Communication < ApplicationRecord
   }
   scope :recurrent_from_date, lambda { |start_time, with_include|
     query = if with_include
-              "(extract(year from recurrent_on) < ?) OR to_char(recurrent_on, 'MMDDHHMISSMS') <= to_char(?::TIMESTAMP, 'MMDDHHMISSMS')"
+              "(extract(year from recurrent_on) < ?) OR
+               to_char(recurrent_on, 'MMDDHHMISSMS') <= to_char(?::TIMESTAMP, 'MMDDHHMISSMS')"
             else
-              "(extract(year from recurrent_on) < ?) OR to_char(recurrent_on, 'MMDDHHMISSMS') < to_char(?::TIMESTAMP, 'MMDDHHMISSMS')"
+              "(extract(year from recurrent_on) < ?) OR
+               to_char(recurrent_on, 'MMDDHHMISSMS') < to_char(?::TIMESTAMP, 'MMDDHHMISSMS')"
             end
     where(query, start_time.year, start_time)
   }
