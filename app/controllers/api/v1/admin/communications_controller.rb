@@ -19,8 +19,9 @@ module Api
         def show; end
 
         def create
-          @communication = Communication.create!(communication_params)
+          @communication = Communication.new(communication_params)
           handle_attachments
+          @communication.save!
           render :show
         end
 
