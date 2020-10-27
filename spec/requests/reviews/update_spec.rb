@@ -36,7 +36,7 @@ RSpec.describe 'Post endpoint', type: :request do
     context 'with authentication' do
       context 'with authorization' do
         it 'should update all fields' do
-          put "/api/v1/admin/reviews/#{review.id}", params: update_params, headers: auth_headers
+          put api_v1_admin_review_path(review), params: update_params, headers: auth_headers
           expect(response).to have_http_status 200
 
           review.reload
@@ -55,14 +55,14 @@ RSpec.describe 'Post endpoint', type: :request do
 
         it 'should show 404 if review does not exist' do
           highest_id = Review.last.id
-          put "/api/v1/admin/reviews/#{highest_id + 1}", params: update_params, headers: auth_headers
+          put api_v1_admin_review_path(highest_id + 1), params: update_params, headers: auth_headers
           expect(response).to have_http_status(404)
         end
       end
 
       context 'without authorization' do
         it 'should return unauthorized' do
-          put "/api/v1/admin/reviews/#{review.id}", headers: user_auth_headers
+          put api_v1_admin_review_path(review), headers: user_auth_headers
           expect(response).to have_http_status(401)
         end
       end
@@ -70,7 +70,7 @@ RSpec.describe 'Post endpoint', type: :request do
 
     context 'without authentication' do
       it 'should return unauthorized' do
-        put "/api/v1/admin/reviews/#{review.id}"
+        put api_v1_admin_review_path(review)
         expect(response).to have_http_status(401)
       end
     end

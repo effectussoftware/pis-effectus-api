@@ -16,7 +16,7 @@ RSpec.describe 'Post endpoint', type: :request do
   describe 'GET /api/v1/admin/review/:id' do
     context 'with authorization' do
       it 'should get one review by id' do
-        get api_v1_admin_review_path(review.id), headers: auth_headers
+        get api_v1_admin_review_path(review), headers: auth_headers
         expect(response).to have_http_status(200)
         response_body = Oj.load(response.body)
         response_expected = review.as_json(only: %i[id comments title reviewer_id user_id])
@@ -27,16 +27,16 @@ RSpec.describe 'Post endpoint', type: :request do
         )
         expect(response_body['review']).to eq(response_expected)
       end
-      it 'should return error: no review with id highest_id + 1 ' do
+      it 'should return error: no review with id highest_id + 1' do
         highest_id = Review.last.id
-        get "/api/v1/admin/reviews/#{highest_id + 1}", headers: auth_headers
+        get api_v1_admin_review_path(highest_id + 1), headers: auth_headers
         expect(response).to have_http_status(404)
       end
     end
 
     context 'with no authorization' do
       it 'return unauthorized' do
-        get "/api/v1/admin/reviews/#{review.id}"
+        get api_v1_admin_review_path(review)
         expect(response).to have_http_status(401)
       end
     end
