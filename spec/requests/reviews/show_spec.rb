@@ -18,14 +18,17 @@ RSpec.describe 'Post endpoint', type: :request do
       it 'should get one review by id' do
         get api_v1_admin_review_path(review), headers: auth_headers
         expect(response).to have_http_status(200)
+
         response_body = Oj.load(response.body)
+
         response_expected = review.as_json(only: %i[id comments title reviewer_id user_id])
         response_expected = response_expected.merge(
           'user_action_items' => [user_action_item.as_json(only: %i[id description completed])]
         ).merge(
           'reviewer_action_items' => [reviewer_action_item.as_json(only: %i[id description completed])]
         )
-        expect(response_body['review']).to eq(response_expected)
+
+        expect(response_body['review']).to include(response_expected)
       end
       it 'should return error: no review with id highest_id + 1' do
         highest_id = Review.last.id

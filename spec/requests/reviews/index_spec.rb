@@ -5,27 +5,38 @@ require 'rails_helper'
 RSpec.describe 'Post endpoint', type: :request do
   let!(:admin) { create(:admin) }
 
-  let!(:review) { create(:review) }
-
-  let!(:reviewer_action_item) { create(:reviewer_action_item, reviewer_review_id: review.id) }
-
-  let!(:user_action_item) { create(:user_action_item, user_review_id: review.id) }
+  let!(:reviews) { rand(1..10).times.map { create(:review_with_action_items) } }
 
   let!(:auth_headers) { admin.create_new_auth_token }
+
+  def action_item_to_json(item)
+    item.as_json(only: %i[id description completed])
+  end
+
+  def review_to_json(review)
+    rev = review.as_json(only: %i[id comments title reviewer_id user_id])
+
+    user_items = review.user_action_items.map { |x| action_item_to_json(x) }
+    reviewer_items = review.reviewer_action_items.map { |x| action_item_to_json(x) }
+
+    rev.merge(
+      'reviewer_action_items' => reviewer_items,
+      'user_action_items' => user_items
+    )
+  end
 
   describe 'GET /api/v1/admin/reviews' do
     context 'with authorization' do
       it 'should get all reviews' do
         get api_v1_admin_reviews_path, headers: auth_headers
         expect(response).to have_http_status(200)
+
         response_body = Oj.load(response.body)
-        response_expected = review.as_json(only: %i[id comments title reviewer_id user_id])
-        response_expected = response_expected.merge(
-          'user_action_items' => [user_action_item.as_json(only: %i[id description completed])]
-        ).merge(
-          'reviewer_action_items' => [reviewer_action_item.as_json(only: %i[id description completed])]
-        )
-        expect(response_body['reviews']).to include(response_expected)
+        reviews_response = response_body['reviews'].map { |item| item.except('created_at') }
+
+        response_expected = reviews.map { |review| review_to_json(review) }
+
+        expect(reviews_response).to include(*response_expected)
       end
     end
 

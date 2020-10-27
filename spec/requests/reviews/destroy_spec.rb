@@ -18,13 +18,13 @@ RSpec.describe 'Post endpoint', type: :request do
       context 'with authorization' do
         it 'should delete review' do
           delete api_v1_admin_review_path(review), headers: auth_headers
-          expect(response).to have_http_status 200
+          expect(response).to have_http_status 204
         end
 
         it 'should not delete if missing' do
           highest_id = Review.last.id
           delete api_v1_admin_review_path(highest_id + 1), headers: auth_headers
-          expect(response).to have_http_status 403
+          expect(response).to have_http_status 404
         end
       end
 
@@ -38,11 +38,9 @@ RSpec.describe 'Post endpoint', type: :request do
 
     context 'with no authentication' do
       it 'should return 401' do
-        delete api_v1_admin_reviews_path
+        delete api_v1_admin_review_path(review)
         expect(response).to have_http_status(401)
       end
     end
   end
-
-
 end
