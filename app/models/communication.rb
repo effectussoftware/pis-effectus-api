@@ -8,10 +8,11 @@ class Communication < ApplicationRecord
   has_one_base64_attached :image
 
   validate :cant_update_if_published
-  validate :cant_update_if_recurrent
   after_save :send_notification, if: :just_published
 
   scope :published, -> { where(published: true) }
+
+  scope :not_dummy, -> { where(dummy: false) }
 
   scope :not_recurrent_from_date, lambda { |start_time, with_include|
     query = if with_include
@@ -41,14 +42,18 @@ class Communication < ApplicationRecord
     url_for image
   end
 
+  def create_recurrent_dummy
+    return false if !recurrent_on
+
+    new_communication = self.dup
+    new_communication.image.attach(image.blob) if image.attached?
+    new_communication.update(recurrent_on: nil, dummy: true)
+  end
+
   private
 
   def cant_update_if_published
-    errors.add(:published, "can't update communications once published") if published_was
-  end
-
-  def cant_update_if_recurrent
-    errors.add(:recurrent_on, "can't update communications if recurrent") if recurrent_on_was
+    errors.add(:published, "can't update communications once published") if published_was && !recurrent_on_was
   end
 
   def send_notification
