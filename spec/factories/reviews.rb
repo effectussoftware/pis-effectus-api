@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :review do
     title { Faker::Lorem.word }
     comments { Faker::Lorem.sentence }
-    reviewer { association :user }
+    reviewer { association :admin }
     user { association :user }
 
     factory :review_with_action_items do

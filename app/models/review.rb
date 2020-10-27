@@ -4,7 +4,11 @@ class Review < ApplicationRecord
   belongs_to :reviewer, class_name: 'User'
   belongs_to :user
 
-  has_many :user_action_items, foreign_key: 'user_review_id', class_name: 'ReviewActionItem', dependent: :delete_all
+  has_many :user_action_items,
+           foreign_key: 'user_review_id',
+           class_name: 'ReviewActionItem',
+           dependent: :delete_all
+
   has_many :reviewer_action_items,
            foreign_key: 'reviewer_review_id',
            class_name: 'ReviewActionItem',
@@ -14,4 +18,10 @@ class Review < ApplicationRecord
   accepts_nested_attributes_for :reviewer_action_items
 
   validates :title, presence: true
+
+  validate  :cant_save_if_reviewer_is_not_admin
+
+  def cant_save_if_reviewer_is_not_admin
+    errors.add(:reviewer, 'the reviewer must be an admin') if !reviewer || !reviewer.is_admin
+  end
 end
