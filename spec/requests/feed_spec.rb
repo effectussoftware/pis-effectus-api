@@ -8,8 +8,8 @@ RSpec.describe 'Feed', type: :request do
   let!(:auth_headers) { user.create_new_auth_token }
 
   let!(:communications_not_reccurrent) { create_list(:communication, 5, published: true) }
-  let!(:communications_recurrent) { create_list(:communication_recurrent, 5) }
   let!(:reviews) { create_list(:review_with_action_items, 5, user_id: user.id) }
+  let!(:communication_recurrent_dummy) { create_list(:communication_recurrent_dummy, 5) }
 
   describe 'GET api/v1/feed' do
     context 'with authorization' do
@@ -26,10 +26,8 @@ RSpec.describe 'Feed', type: :request do
             updated_at: f['updated_at']
           }
         end
-
-        communications_recurrent = Communication.recurrent_from_date(Time.zone.now, false)
-        communications_recurrent.each { |iter| iter[:updated_at] = Time.zone.parse(iter[:recurrent_on].to_s) }
-        response_expected = communications_not_reccurrent + communications_recurrent + reviews
+        
+        response_expected = communications_not_reccurrent + communication_recurrent_dummy + reviews
         response_expected = response_expected.sort_by(&:updated_at)
                                              .reverse[0..9].as_json(only: %i[id text title comments updated_at])
 

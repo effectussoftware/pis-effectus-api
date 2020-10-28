@@ -8,9 +8,9 @@ module Api
 
         def index
           @communications = if params[:published]
-                              Communication.where(published: params[:published])
+                              communications.where(published: params[:published])
                             else
-                              Communication.all
+                              communications
                             end
           @communications = sort_communications if params[:sort]
           @pagy, @communications = pagy(@communications, items: params[:per_page])
@@ -19,7 +19,7 @@ module Api
         def show; end
 
         def create
-          @communication = Communication.new(communication_params)
+          @communication = communications.new(communication_params)
           handle_attachments
           @communication.save!
           render :show
@@ -35,11 +35,11 @@ module Api
           @communication.destroy
         end
 
-        def set_communication
-          @communication = Communication.find(params[:id])
-        end
-
         private
+
+        def set_communication
+          @communication = communications.find(params[:id])
+        end
 
         def communication_params
           params.require(:communication).permit(:title, :text, :published, :recurrent_on)
@@ -57,6 +57,10 @@ module Api
 
         def handle_attachments
           @communication.image.attach(data: params[:communication][:image]) if params[:communication][:image]
+        end
+
+        def communications
+          Communication.not_dummy
         end
       end
     end

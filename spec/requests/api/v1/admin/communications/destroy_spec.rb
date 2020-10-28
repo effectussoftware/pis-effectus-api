@@ -11,21 +11,18 @@ RSpec.describe 'Communications', type: :request do
 
   let!(:user_auth_headers) { user.create_new_auth_token }
 
-  let!(:headers) do
-    {
-      'uid' => auth_headers[:uid],
-      'access-token' => auth_headers['access-token'],
-      'client' => auth_headers[:client]
-    }
-  end
-
-  let!(:communication) { create(:communication) }
+  let!(:communication) { create(:communication, published: false) }
 
   describe 'DELETE api/v1/admin/communication/:id' do
     context 'with authorization' do
-      it 'updates a communication' do
+      it 'delete a communication' do
         delete "/api/v1/admin/communications/#{communication.id}", headers: auth_headers
         expect(response).to have_http_status 204
+      end
+
+      it 'returns not found' do
+        delete "/api/v1/admin/communications/#{Communication.last.id + 1}", headers: auth_headers
+        expect(response).to have_http_status 404
       end
     end
 

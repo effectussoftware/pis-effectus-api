@@ -33,6 +33,9 @@ gem 'listen', '~> 3.2'
 # Push notifications
 gem 'fcm'
 
+# Scheaduling jobs
+gem 'whenever', require: false
+
 gem 'aws-sdk-s3', require: false
 
 group :development, :test do
@@ -44,6 +47,7 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 6.1.0'
   gem 'faker', '~> 1.9'
   gem 'rspec-rails', '~> 4.0.1'
+  gem 'timecop', '~> 0.9.1'
 end
 
 group :development do
@@ -60,7 +64,6 @@ end
 group :test do
   gem 'database_cleaner', '~> 1.7'
   gem 'shoulda-matchers', '~> 3.1'
-  gem 'timecop', '~> 0.9.1'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
