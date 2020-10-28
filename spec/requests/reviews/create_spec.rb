@@ -19,11 +19,11 @@ RSpec.describe 'Post endpoint', type: :request do
         title: 'generic_review_title',
         comments: 'generic_review_comment',
         user_id: user.id,
-        reviewer_action_items: [
+        reviewer_action_items_attributes: [
           { description: 'a', completed: false },
           { description: 'b', completed: true }
         ],
-        user_action_items: [
+        user_action_items_attributes: [
           { description: 'd1', completed: true },
           { description: 'd-', completed: false }
         ]
@@ -36,11 +36,11 @@ RSpec.describe 'Post endpoint', type: :request do
       review: {
         comments: 'generic_review_comment',
         user_id: user.id,
-        reviewer_action_items: [
+        reviewer_action_items_attributes: [
           { description: 'a', completed: false },
           { description: 'b', completed: true }
         ],
-        user_action_items: [
+        user_action_items_attributes: [
           { description: 'd1', completed: true },
           { description: 'd-', completed: false }
         ]
@@ -60,8 +60,8 @@ RSpec.describe 'Post endpoint', type: :request do
           user_action_items = created_review_obj.user_action_items.as_json(only: %i[description completed])
 
           created_review = created_review_obj.as_json(only: %i[title comments user_id reviewer_id])
-          created_review['reviewer_action_items'] = reviewer_action_items
-          created_review['user_action_items'] = user_action_items
+          created_review['reviewer_action_items_attributes'] = reviewer_action_items
+          created_review['user_action_items_attributes'] = user_action_items
 
           expected_review = create_params[:review].as_json
           expected_review['reviewer_id'] = admin.id

@@ -20,10 +20,10 @@ RSpec.describe 'Post endpoint', type: :request do
         comments: 'different comment',
         user_id: review.user_id,
         reviewer_id: review.reviewer_id,
-        reviewer_action_items: [
+        reviewer_action_items_attributes: [
           { id: reviewer_action_item.id, description: 'new description', completed: !reviewer_action_item.completed }
         ],
-        user_action_items: review.user_action_items.as_json(only: %i[id description completed])
+        user_action_items_attributes: review.user_action_items.as_json(only: %i[id description completed])
       }
     }
   end
@@ -44,8 +44,8 @@ RSpec.describe 'Post endpoint', type: :request do
           user_action_items = review.user_action_items.as_json(only: %i[id description completed])
 
           updated_review = review.as_json(only: %i[title comments user_id reviewer_id])
-          updated_review['reviewer_action_items'] = reviewer_action_items
-          updated_review['user_action_items'] = user_action_items
+          updated_review['reviewer_action_items_attributes'] = reviewer_action_items
+          updated_review['user_action_items_attributes'] = user_action_items
 
           expected_review = update_params[:review].as_json
           expected_review['reviewer_id'] = admin.id
