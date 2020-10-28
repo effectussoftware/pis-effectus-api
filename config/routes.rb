@@ -14,7 +14,7 @@ Rails.application.routes.draw do
         resources :users, only: %i[index show update]
         resources :reviews, only: %i[index create show update destroy]
         post '/auth/login', to: 'authentication_admin#login'
-        resources :communications
+        resources :communications, only: %i[index create show update destroy]
       end
     end
   end

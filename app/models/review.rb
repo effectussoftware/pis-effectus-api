@@ -24,4 +24,14 @@ class Review < ApplicationRecord
   def cant_save_if_reviewer_is_not_admin
     errors.add(:reviewer, 'the reviewer must be an admin') if !reviewer || !reviewer.is_admin
   end
+
+  scope :from_date, lambda { |start_time, with_include, user_id|
+    query = if with_include
+              'reviews.updated_at <= ? and user_id = ?'
+            else
+              'reviews.updated_at < ? and user_id = ?'
+            end
+
+    where(query, start_time, user_id)
+  }
 end
