@@ -8,13 +8,6 @@ RSpec.describe 'Communications', type: :request do
   let!(:user) { create(:user) }
   let!(:auth_headers) { admin.create_new_auth_token }
   let!(:user_auth_headers) { user.create_new_auth_token }
-  let!(:headers) do
-    {
-      'uid' => auth_headers[:uid],
-      'access-token' => auth_headers['access-token'],
-      'client' => auth_headers[:client]
-    }
-  end
 
   before(:each) do
     allow_any_instance_of(Communication).to receive(:send_notification).and_return(true)
@@ -35,30 +28,28 @@ RSpec.describe 'Communications', type: :request do
       it 'creates a communication when no text is sent' do
         data = { 'communication': { 'title': 'Lala', 'published': true } }
         post '/api/v1/admin/communications', headers: auth_headers, params: data
-        expect(response).to have_http_status 200
+        expect(response).to have_http_status 403
         created_communication = Communication.first
-        expect(created_communication.title).to eq 'Lala'
-        expect(created_communication.published).to eq true
-        expect(created_communication.text).to eq nil
+        expect(created_communication).to eq nil
       end
 
       it 'sets published to false if nothing is sent' do
-        data = { 'communication': { 'title': 'Lala' } }
+        data = { 'communication': { 'title': 'Lala', 'text': 'Lele' } }
         post '/api/v1/admin/communications', headers: auth_headers, params: data
         expect(response).to have_http_status 200
         created_communication = Communication.first
         expect(created_communication.title).to eq 'Lala'
-        expect(created_communication.text).to eq nil
+        expect(created_communication.text).to eq 'Lele'
         expect(created_communication.published).to eq false
       end
 
       it 'attaches a file to a communication on creation' do
-        data = { 'communication': { 'title': 'Lala', 'image': open_file_encoded('photo.jpg') } }
+        data = { 'communication': { 'title': 'Lala', 'text': 'Lele', 'image': open_file_encoded('photo.jpg') } }
         post '/api/v1/admin/communications', headers: auth_headers, params: data
         expect(response).to have_http_status 200
         created_communication = Communication.first
         expect(created_communication.title).to eq 'Lala'
-        expect(created_communication.text).to eq nil
+        expect(created_communication.text).to eq 'Lele'
         expect(created_communication.published).to eq false
         expect(created_communication.image.attached?).to eq true
       end
@@ -74,6 +65,26 @@ RSpec.describe 'Communications', type: :request do
         expect_any_instance_of(Communication).to receive(:send_notification)
         post '/api/v1/admin/communications', headers: auth_headers, params: data
         expect(response).to have_http_status 200
+      end
+
+      it 'creates a communication with the field dummy false' do
+        data = { 'communication': { 'title': 'Lala', 'text': 'Lele', 'dummy': true, 'published': true } }
+        post '/api/v1/admin/communications', headers: auth_headers, params: data
+        created_communication = Communication.first
+        expect(created_communication.title).to eq 'Lala'
+        expect(created_communication.text).to eq 'Lele'
+        expect(created_communication.dummy).to eq false
+        expect(created_communication.published).to eq true
+      end
+
+      it 'creates a recurrent communication' do
+        data = { 'communication': { 'title': 'Lala', 'text': 'Lele',
+                                    'recurrent_on': '2020-10-28T19:18:36.662Z', 'published': true } }
+        post '/api/v1/admin/communications', headers: auth_headers, params: data
+        created_communication = Communication.first
+        expect(created_communication.title).to eq 'Lala'
+        expect(created_communication.text).to eq 'Lele'
+        expect(created_communication.recurrent_on).to eq '2020-10-28T19:18:36.662Z'
       end
     end
 
