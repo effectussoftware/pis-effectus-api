@@ -14,4 +14,13 @@ FactoryBot.define do
     published { Faker::Boolean.boolean }
     recurrent_on { Faker::Date.backward }
   end
+
+  factory :communication_recurrent_dummy, class: Communication do
+    title { Faker::Lorem.word }
+    text { Faker::Lorem.sentence }
+    published { true }
+    updated_at { Faker::Date.backward }
+    recurrent_on { nil }
+    dummy { true }
+  end
 end

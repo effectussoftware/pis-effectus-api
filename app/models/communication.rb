@@ -5,13 +5,16 @@ class Communication < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   validates :title, presence: true
+  validates :text, presence: true
   has_one_base64_attached :image
 
   validate :cant_update_if_published
-  validate :cant_update_if_recurrent
   after_save :send_notification, if: :just_published
+  before_destroy :cant_destroy_if_published_not_recurrent
 
   scope :published, -> { where(published: true) }
+
+  scope :not_dummy, -> { where(dummy: false) }
 
   scope :not_recurrent_from_date, lambda { |start_time, with_include|
     query = if with_include
@@ -26,29 +29,32 @@ class Communication < ApplicationRecord
 
     where(query, start_time)
   }
-  scope :recurrent_from_date, lambda { |start_time, with_include|
-    query = if with_include
-              '(extract(month from recurrent_on) < ?) OR
-       (extract(month from recurrent_on)= ? AND extract(day from recurrent_on) <= ?)'
-            else
-              '(extract(month from recurrent_on) < ?) OR
-       (extract(month from recurrent_on)= ? AND extract(day from recurrent_on) < ?)'
-            end
-    where(query, start_time.month, start_time.month, start_time.day)
+  scope :recurrent_from_date_hour, lambda { |requested_time|
+    where("to_char(recurrent_on, 'MMDDHH') = to_char(?::TIMESTAMP, 'MMDDHH')", requested_time)
   }
 
   def image_url
     url_for image
   end
 
+  def create_recurrent_dummy
+    return false if !recurrent_on || !published
+
+    new_communication = dup
+    new_communication.image.attach(image.blob) if image.attached?
+    new_communication.update(recurrent_on: nil, dummy: true)
+  end
+
   private
+
+  def cant_destroy_if_published_not_recurrent
+    # rubocop:disable Metrics/LineLength
+    throw ActiveRecord::RecordInvalid, "can't delete published non recurrent communications" if published_was && !recurrent_on_was
+    # rubocop:enable Metrics/LineLength
+  end
 
   def cant_update_if_published
     errors.add(:published, "can't update communications once published") if published_was
-  end
-
-  def cant_update_if_recurrent
-    errors.add(:recurrent_on, "can't update communications if recurrent") if recurrent_on_was
   end
 
   def send_notification

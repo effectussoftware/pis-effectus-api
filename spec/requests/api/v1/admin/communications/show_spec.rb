@@ -16,7 +16,10 @@ RSpec.describe 'Communications show', type: :request do
           get "/api/v1/admin/communications/#{communication.id}", headers: auth_headers
           expect(response).to have_http_status 200
           response_body = Oj.load(response.body)
-          expect(response_body['communication']).to eq(communication.as_json)
+          expect(response_body['communication']).to eq(communication
+          .as_json(
+            only: %i[id title text published recurrent_on created_at updated_at]
+          ))
         end
 
         it 'shows 404 if it does not exist' do
@@ -38,7 +41,7 @@ RSpec.describe 'Communications show', type: :request do
       end
     end
 
-    context 'without authentication' do
+    context 'without headers' do
       it 'returns unauthorized' do
         get "/api/v1/admin/communications/#{communication.id}"
         expect(response).to have_http_status 401
