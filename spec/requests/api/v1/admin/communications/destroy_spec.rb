@@ -11,7 +11,7 @@ RSpec.describe 'Communications', type: :request do
 
   let!(:user_auth_headers) { user.create_new_auth_token }
 
-  let!(:communication) { create(:communication) }
+  let!(:communication) { create(:communication, published: false) }
 
   describe 'DELETE api/v1/admin/communication/:id' do
     context 'with authorization' do

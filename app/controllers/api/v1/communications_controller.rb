@@ -5,6 +5,8 @@ module Api
     class CommunicationsController < Api::V1::ApiController
       before_action :set_communication, only: %i[show]
 
+      def show; end
+
       private
 
       def set_communication

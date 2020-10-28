@@ -10,6 +10,7 @@ class Communication < ApplicationRecord
 
   validate :cant_update_if_published
   after_save :send_notification, if: :just_published
+  before_destroy :cant_destroy_if_published_not_recurrent
 
   scope :published, -> { where(published: true) }
 
@@ -46,8 +47,14 @@ class Communication < ApplicationRecord
 
   private
 
+  def cant_destroy_if_published_not_recurrent
+    # rubocop:disable Metrics/LineLength
+    throw ActiveRecord::RecordInvalid, "can't delete published non recurrent communications" if published_was && !recurrent_on_was
+    # rubocop:enable Metrics/LineLength
+  end
+
   def cant_update_if_published
-    errors.add(:published, "can't update communications once published") if published_was && !recurrent_on_was
+    errors.add(:published, "can't update communications once published") if published_was
   end
 
   def send_notification

@@ -82,14 +82,26 @@ RSpec.describe 'Communications', type: :request do
     end
 
     context 'with recurrent communication' do
-      let(:communication) { create(:communication, recurrent_on: Time.zone.now) }
+      
 
       it 'updated succesfully' do
+        communication = create(:communication, recurrent_on: Time.zone.now, published:false)
         data = { 'communication': { 'title': 'Lala' } }
         put "/api/v1/admin/communications/#{communication.id}", headers: auth_headers, params: data
         expect(response).to have_http_status 200
-        bd_communication = Communication.first
-        expect(bd_communication.title).to eq 'Lala'
+        communication.reload
+        expect(communication.title).to eq 'Lala'
+      end
+
+      
+      it 'can not be updated when is published' do
+        communication = create(:communication, recurrent_on: Time.zone.now, published: true)
+        communication_title = communication.title
+        data = { 'communication': { 'title': 'Lala' } }
+        put "/api/v1/admin/communications/#{communication.id}", headers: auth_headers, params: data
+        expect(response).to have_http_status 403
+        communication.reload
+        expect(communication.title).to eq communication_title
       end
     end
 
