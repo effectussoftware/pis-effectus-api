@@ -39,7 +39,7 @@ class Communication < ApplicationRecord
   def create_recurrent_dummy
     return false if !recurrent_on || !published
 
-    new_communication = self.dup
+    new_communication = dup
     new_communication.image.attach(image.blob) if image.attached?
     new_communication.update(recurrent_on: nil, dummy: true)
   end

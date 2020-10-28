@@ -34,7 +34,7 @@ gem 'listen', '~> 3.2'
 gem 'fcm'
 
 # Scheaduling jobs
-gem "whenever", require: false
+gem 'whenever', require: false
 
 gem 'aws-sdk-s3', require: false
 

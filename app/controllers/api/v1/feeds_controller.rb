@@ -7,7 +7,6 @@ module Api
         start = params[:start] ? Time.zone.parse(params[:start]) : Time.zone.now
         with_include = params[:include] || false
         communications = communication_not_recurrent(start, with_include)
-        debugger
         @feeds = create_feed(communications)
       end
 
