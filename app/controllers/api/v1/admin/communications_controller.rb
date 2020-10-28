@@ -19,12 +19,15 @@ module Api
         def show; end
 
         def create
-          @communication = Communication.create!(communication_params)
+          @communication = Communication.new(communication_params)
+          handle_attachments
+          @communication.save!
           render :show
         end
 
         def update
           @communication.update!(communication_params)
+          handle_attachments
           render :show
         end
 
@@ -50,6 +53,10 @@ module Api
                          sort[0]
                        end
           @communications.order(order_sort)
+        end
+
+        def handle_attachments
+          @communication.image.attach(data: params[:communication][:image]) if params[:communication][:image]
         end
       end
     end

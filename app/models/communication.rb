@@ -1,10 +1,17 @@
 # frozen_string_literal: true
 
 class Communication < ApplicationRecord
+  include ActiveStorageSupport::SupportForBase64
+  include Rails.application.routes.url_helpers
+
   validates :title, presence: true
+  has_one_base64_attached :image
+
   validate :cant_update_if_published
   validate :cant_update_if_recurrent
   after_save :send_notification, if: :just_published
+
+  scope :published, -> { where(published: true) }
 
   scope :not_recurrent_from_date, lambda { |start_time, with_include|
     query = if with_include
@@ -29,6 +36,10 @@ class Communication < ApplicationRecord
             end
     where(query, start_time.month, start_time.month, start_time.day)
   }
+
+  def image_url
+    url_for image
+  end
 
   private
 

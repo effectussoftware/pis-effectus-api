@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       post '/auth/login', to: 'authentication#login'
       resource :feed, only: %i[show]
       resources :reviews, only: %i[index show]
+      resources :communications, only: %i[show]
       namespace :admin do
         resources :users, only: %i[index show update]
         resources :reviews, only: %i[index create show update destroy]
