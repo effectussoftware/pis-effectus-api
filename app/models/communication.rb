@@ -5,6 +5,7 @@ class Communication < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   validates :title, presence: true
+  validates :text, presence: true
   has_one_base64_attached :image
 
   validate :cant_update_if_published
@@ -27,15 +28,8 @@ class Communication < ApplicationRecord
 
     where(query, start_time)
   }
-  scope :recurrent_from_date, lambda { |start_time, with_include|
-    query = if with_include
-              "(extract(year from recurrent_on) < ?) OR
-               to_char(recurrent_on, 'MMDDHHMISSMS') <= to_char(?::TIMESTAMP, 'MMDDHHMISSMS')"
-            else
-              "(extract(year from recurrent_on) < ?) OR
-               to_char(recurrent_on, 'MMDDHHMISSMS') < to_char(?::TIMESTAMP, 'MMDDHHMISSMS')"
-            end
-    where(query, start_time.year, start_time)
+  scope :recurrent_from_date_hour, lambda { |requested_time|
+    where("to_char(recurrent_on, 'MMDDHH') = to_char(?::TIMESTAMP, 'MMDDHH')", requested_time)
   }
 
   def image_url
@@ -43,7 +37,7 @@ class Communication < ApplicationRecord
   end
 
   def create_recurrent_dummy
-    return false if !recurrent_on
+    return false if !recurrent_on || !published
 
     new_communication = self.dup
     new_communication.image.attach(image.blob) if image.attached?
