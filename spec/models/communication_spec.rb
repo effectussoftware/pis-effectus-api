@@ -15,8 +15,8 @@ RSpec.describe Communication, type: :model do
       expect(com.update(published: false)).to eq(false)
     end
 
-    it "can be updated if not published" do
-      com = create(:communication, recurrent_on: Time.zone.now, published:false)
+    it 'can be updated if not published' do
+      com = create(:communication, recurrent_on: Time.zone.now, published: false)
       expect(com.update(title: 'new title')).to eq(true)
       expect(com.title).to eq('new title')
     end
