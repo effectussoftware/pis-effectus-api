@@ -26,7 +26,7 @@ RSpec.describe 'Feed', type: :request do
             updated_at: f['updated_at']
           }
         end
-        
+
         response_expected = communications_not_reccurrent + communication_recurrent_dummy + reviews
         response_expected = response_expected.sort_by(&:updated_at)
                                              .reverse[0..9].as_json(only: %i[id text title comments updated_at])
