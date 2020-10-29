@@ -14,6 +14,15 @@ class Feed
         image: image)
   end
 
+  def self.from_review(review)
+    new(id: review.id,
+        title: review.title,
+        text: review.comments,
+        type: 'review',
+        updated_at: review.updated_at,
+        image: nil)
+  end
+
   def initialize(args)
     @id =  args[:id]
     @title = args[:title]

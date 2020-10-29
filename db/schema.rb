@@ -46,6 +46,29 @@ ActiveRecord::Schema.define(version: 2020_10_27_225045) do
     t.boolean "dummy", default: false
   end
 
+  create_table "review_action_items", force: :cascade do |t|
+    t.text "description"
+    t.boolean "completed"
+    t.integer "reviewer_review_id"
+    t.integer "user_review_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+
+    t.index ["reviewer_review_id"], name: "index_review_action_item_on_reviewer_review_id"
+    t.index ["user_review_id"], name: "index_review_action_item_user_review_id"
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.text "comments"
+    t.string "title"
+    t.bigint "reviewer_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["reviewer_id"], name: "index_reviews_on_reviewer_id"
+    t.index ["user_id"], name: "index_reviews_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
@@ -62,4 +85,6 @@ ActiveRecord::Schema.define(version: 2020_10_27_225045) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "reviews", "users"
+  add_foreign_key "reviews", "users", column: "reviewer_id"
 end
