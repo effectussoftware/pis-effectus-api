@@ -18,8 +18,9 @@ class Review < ApplicationRecord
   accepts_nested_attributes_for :reviewer_action_items
 
   validates :title, presence: true
-
   validate  :cant_save_if_reviewer_is_not_admin
+
+  after_create :send_notification
 
   def cant_save_if_reviewer_is_not_admin
     errors.add(:reviewer, 'the reviewer must be an admin') if !reviewer || !reviewer.is_admin
@@ -34,4 +35,14 @@ class Review < ApplicationRecord
 
     where(query, start_time, user_id)
   }
+
+  private
+
+  def send_notification
+    user.send_notification(
+      title,
+      'You have a new review available.',
+      { id: id, updated_at: updated_at, type: self.class.to_s }
+    )
+  end
 end
