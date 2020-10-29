@@ -30,7 +30,8 @@ class Communication < ApplicationRecord
     where(query, start_time)
   }
   scope :recurrent_from_date_hour, lambda { |requested_time|
-    where("to_char(recurrent_on, 'MMDDHH') = to_char(?::TIMESTAMP, 'MMDDHH')", requested_time)
+    where("to_char(communications.recurrent_on, 'MMDDHH24') = to_char(?::TIMESTAMP, 'MMDDHH24')  AND
+      communications.published = true", requested_time)
   }
 
   def image_url

@@ -14,6 +14,17 @@ class Feed
         image: image)
   end
 
+  def self.from_communication_recurrent(communication)
+    image = communication.image.attached? ? communication.image_url : nil
+
+    new(id: communication.id,
+        title: communication.title,
+        text: communication.text,
+        type: 'communication_recurrent',
+        updated_at: communication.recurrent_on.change(year: Date.today.year),  
+        image: image)
+  end
+
   def self.from_review(review)
     new(id: review.id,
         title: review.title,
