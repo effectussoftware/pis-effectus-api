@@ -3,15 +3,13 @@
 module Api
   module V1
     class FeedsController < Api::V1::ApiController
-
-
       def show
         start = params[:start] ? Time.zone.parse(params[:start]) : Time.zone.now
         with_include = params[:include] || false
         communications = communication_not_recurrent(start, with_include)
         communications_recurrent = communication_recurrent(start)
         reviews = reviews(start, with_include)
-        @feeds = create_feed(communications, communications_recurrent ,reviews)
+        @feeds = create_feed(communications, communications_recurrent, reviews)
       end
 
       private

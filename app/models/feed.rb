@@ -21,7 +21,7 @@ class Feed
         title: communication.title,
         text: communication.text,
         type: 'communication_recurrent',
-        updated_at: communication.recurrent_on.change(year: Date.today.year),  
+        updated_at: communication.recurrent_on.change(year: Date.today.year),
         image: image)
   end
 
