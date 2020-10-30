@@ -60,9 +60,9 @@ class Communication < ApplicationRecord
   end
 
   def send_notification
-    if !recurrent_on
-      User.active.send_notification(title, text, { id: id, updated_at: updated_at, type: self.class.to_s })
-    end
+    return false if recurrent_on
+
+    User.active.send_notification(title, text, { id: id, updated_at: updated_at, type: self.class.to_s })
   end
 
   def just_published
