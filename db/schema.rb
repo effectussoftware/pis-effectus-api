@@ -53,9 +53,6 @@ ActiveRecord::Schema.define(version: 2020_10_27_225045) do
     t.integer "user_review_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-
-    t.index ["reviewer_review_id"], name: "index_review_action_item_on_reviewer_review_id"
-    t.index ["user_review_id"], name: "index_review_action_item_user_review_id"
   end
 
   create_table "reviews", force: :cascade do |t|
