@@ -9,10 +9,12 @@ class Communication < ApplicationRecord
   has_one_base64_attached :image
 
   validate :cant_update_if_published
-  after_save :send_notification, if: :just_published
+  after_save :send_notification, if: :can_notify
   before_destroy :cant_destroy_if_published_not_recurrent
 
   scope :published, -> { where(published: true) }
+
+  scope :not_recurrent, -> { where(recurrent_on: nil) }
 
   scope :not_dummy, -> { where(dummy: false) }
 
@@ -63,5 +65,9 @@ class Communication < ApplicationRecord
 
   def just_published
     saved_change_to_published? && published?
+  end
+
+  def can_notify
+    just_published and !recurrent_on
   end
 end
