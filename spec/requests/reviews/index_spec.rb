@@ -64,7 +64,22 @@ RSpec.describe 'Post endpoint', type: :request do
         response_body = Oj.load(response.body)
         reviews_response = response_body['reviews'].map { |item| item.except('created_at') }
 
-        response_expected = Review.all.order(title: :desc).limit(per_page).map { |review| review_to_json(review) }
+        response_expected = Review.order(title: :desc).limit(per_page).map { |review| review_to_json(review) }
+        expect(reviews_response).to eq(response_expected)
+      end
+
+      it 'should return reviews filtered by user_id' do
+        per_page = 7
+        user = create(:user)
+        create(:review_with_action_items, user: user)
+        get api_v1_admin_reviews_path(per_page: per_page, user_id: user.id), headers: auth_headers
+        expect(response).to have_http_status(200)
+
+        response_body = Oj.load(response.body)
+        reviews_response = response_body['reviews'].map { |item| item.except('created_at') }
+
+        response_expected = Review.where(user_id: user.id).order(id: :desc).limit(per_page)
+                                  .map { |review| review_to_json(review) }
         expect(reviews_response).to eq(response_expected)
       end
     end

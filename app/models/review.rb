@@ -36,8 +36,6 @@ class Review < ApplicationRecord
     where(query, start_time, user_id)
   }
 
-  scope :user_id, -> { where('user_id = ?', user_id) }
-
   private
 
   def send_notification
