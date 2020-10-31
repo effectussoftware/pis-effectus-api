@@ -10,7 +10,7 @@ module Api
       private
 
       def set_communication
-        @communication = Communication.published.find(params[:id])
+        @communication = Communication.published_and_not_recurrent.find(params[:id])
       end
     end
   end

@@ -14,6 +14,8 @@ class Communication < ApplicationRecord
 
   scope :published, -> { where(published: true) }
 
+  scope :published_and_not_recurrent, -> { where(published: true, recurrent_on: nil) }
+
   scope :not_dummy, -> { where(dummy: false) }
 
   scope :not_recurrent_from_date, lambda { |start_time, with_include|
@@ -58,6 +60,8 @@ class Communication < ApplicationRecord
   end
 
   def send_notification
+    return false if recurrent_on
+
     User.active.send_notification(title, text, { id: id, updated_at: updated_at, type: self.class.to_s })
   end
 
