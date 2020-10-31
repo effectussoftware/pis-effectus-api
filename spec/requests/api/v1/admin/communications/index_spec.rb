@@ -44,8 +44,8 @@ RSpec.describe 'Communications index', type: :request do
         get '/api/v1/admin/communications?published=true', headers: auth_headers
         expect(response).to have_http_status 200
         response_body = Oj.load(response.body)
-        communications_published = communications.select(&:published)
-        expect(response_body['communications']).to eq(communications_published[0..19].reverse
+        communications_published = communications.select(&:published).reverse
+        expect(response_body['communications']).to eq(communications_published[0..19]
         .as_json(
           only: %i[id title text published recurrent_on created_at updated_at]
         ))
