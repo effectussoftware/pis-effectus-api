@@ -9,11 +9,11 @@ RSpec.describe 'Communications index', type: :request do
 
   describe 'GET api/v1/admin/communications' do
     context 'with authorization' do
-      it 'returns the first 20 communications' do
+      it 'returns the last 20 communications' do
         get '/api/v1/admin/communications', headers: auth_headers
         expect(response).to have_http_status 200
         response_body = Oj.load(response.body)
-        expect(response_body['communications']).to eq(communications[0..19]
+        expect(response_body['communications']).to eq(communications[20..39].reverse
         .as_json(
           only: %i[id title text published recurrent_on created_at updated_at]
         ))
@@ -23,7 +23,7 @@ RSpec.describe 'Communications index', type: :request do
         get '/api/v1/admin/communications?page=2', headers: auth_headers
         expect(response).to have_http_status 200
         response_body = Oj.load(response.body)
-        expect(response_body['communications']).to eq(communications[20..39]
+        expect(response_body['communications']).to eq(communications[0..19].reverse
         .as_json(
           only: %i[id title text published recurrent_on created_at updated_at]
         ))
@@ -33,7 +33,7 @@ RSpec.describe 'Communications index', type: :request do
         get '/api/v1/admin/communications?page=1&per_page=10', headers: auth_headers
         expect(response).to have_http_status 200
         response_body = Oj.load(response.body)
-        communications_expected = communications[0..9]
+        communications_expected = communications[30..39].reverse
         expect(response_body['communications']).to eq(communications_expected
         .as_json(
           only: %i[id title text published recurrent_on created_at updated_at]
@@ -45,7 +45,7 @@ RSpec.describe 'Communications index', type: :request do
         expect(response).to have_http_status 200
         response_body = Oj.load(response.body)
         communications_published = communications.select(&:published)
-        expect(response_body['communications']).to eq(communications_published[0..19]
+        expect(response_body['communications']).to eq(communications_published[0..19].reverse
         .as_json(
           only: %i[id title text published recurrent_on created_at updated_at]
         ))

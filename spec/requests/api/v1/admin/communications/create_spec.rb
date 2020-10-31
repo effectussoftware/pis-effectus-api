@@ -84,7 +84,7 @@ RSpec.describe 'Communications', type: :request do
         created_communication = Communication.first
         expect(created_communication.title).to eq 'Lala'
         expect(created_communication.text).to eq 'Lele'
-        expect(created_communication.recurrent_on).to eq '2020-10-28T19:18:36.662Z'
+        expect(created_communication.recurrent_on.to_s).to eq '2020-10-28'
       end
     end
 

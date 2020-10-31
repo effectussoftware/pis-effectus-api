@@ -60,7 +60,7 @@ module Api
         end
 
         def communications
-          Communication.not_dummy
+          Communication.includes([:image_attachment]).not_dummy.order(id: :desc)
         end
       end
     end
