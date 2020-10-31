@@ -1,4 +1,5 @@
-# README
+# effectus-api
+[![Maintainability](https://api.codeclimate.com/v1/badges/dd23e640b2ae8403e4a3/maintainability)](https://codeclimate.com/github/effectussoftware/pis-effectus-api/maintainability)
 
 This README would normally document whatever steps are necessary to get the
 application up and running.

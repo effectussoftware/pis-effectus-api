@@ -10,6 +10,6 @@
       }
     ],
     "scripts": {
-      "postdeploy": "bundle exec rails db:seed"
+      "postdeploy": "bundle exec rails db:migrate"
     }
 }

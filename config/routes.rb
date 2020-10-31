@@ -4,13 +4,19 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
+      resources :device_registrations, only: %i[create]
       mount_devise_token_auth_for 'User', at: 'auth'
       post '/auth/login', to: 'authentication#login'
+      resource :feed, only: %i[show]
+      resources :reviews, only: %i[index show]
+      resources :communications, only: %i[show]
       resources :events, only: %i[update show]
       namespace :admin do
-        resources :users, only: %i[index show update]
         resources :events, only: %i[index create show update]
+        resources :users, only: %i[index show update]
+        resources :reviews, only: %i[index create show update destroy]
         post '/auth/login', to: 'authentication_admin#login'
+        resources :communications, only: %i[index create show update destroy]
       end
     end
   end

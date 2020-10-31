@@ -20,13 +20,23 @@ gem 'devise', '~> 4.7.2'
 gem 'devise_token_auth', '~> 1.1.3'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
+
 gem 'google-id-token', git: 'https://github.com/google/google-id-token.git'
 gem 'oj', '~> 3.10.13'
+
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors', '~> 1.1.1'
 
 gem 'jbuilder'
 gem 'listen', '~> 3.2'
+
+# Push notifications
+gem 'fcm'
+
+# Scheaduling jobs
+gem 'whenever', require: false
+
+gem 'aws-sdk-s3', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -37,6 +47,7 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 6.1.0'
   gem 'faker', '~> 1.9'
   gem 'rspec-rails', '~> 4.0.1'
+  gem 'timecop', '~> 0.9.1'
 end
 
 group :development do
@@ -53,8 +64,13 @@ end
 group :test do
   gem 'database_cleaner', '~> 1.7'
   gem 'shoulda-matchers', '~> 3.1'
-  gem 'timecop', '~> 0.9.1'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+
+gem 'active_storage_base64', '~> 1.1'
+gem 'pagy', '~> 3.8'
+gem 'pagy_cursor', '~> 0.2.0'
+
+gem 'aws-sdk-rails', '~> 3.1'

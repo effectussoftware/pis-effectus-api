@@ -7,7 +7,7 @@ module Api
 
       included do
         rescue_from Exception do |e|
-          render json: { error: Rails.env.production? ? 'Unkown error' : e.message }, status: 500
+          render json: { error: Rails.env.production? ? 'Unknown error' : e.message }, status: 500
         end
 
         rescue_from ActiveRecord::RecordNotFound do |e|
@@ -16,6 +16,14 @@ module Api
 
         rescue_from ::UnauthorizedException do |e|
           render json: { error: e.message }, status: :unauthorized
+        end
+
+        rescue_from ActionController::BadRequest do |e|
+          render json: { error: e.message }, status: :bad_request
+        end
+
+        rescue_from ActiveRecord::RecordInvalid do |e|
+          render json: { error: e.message }, status: :forbidden
         end
       end
     end
