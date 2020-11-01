@@ -7,9 +7,10 @@ RSpec.describe 'Post endpoint', type: :request do
 
   let!(:user) { create(:user) }
 
-  let!(:review) { create(:review, reviewer_id: admin.id, user_id: user.id) }
+  let!(:review) { create(:review, user_id: user.id, reviewer_id: admin.id) }
 
   let!(:reviewer_action_item) { create(:reviewer_action_item, reviewer_review_id: review.id) }
+  let!(:reviewer_action_item2) { create(:reviewer_action_item, reviewer_review_id: review.id) }
 
   let!(:user_action_item) { create(:user_action_item, user_review_id: review.id) }
 
@@ -21,7 +22,24 @@ RSpec.describe 'Post endpoint', type: :request do
         user_id: review.user_id,
         reviewer_id: review.reviewer_id,
         reviewer_action_items_attributes: [
-          { id: reviewer_action_item.id, description: 'new description', completed: !reviewer_action_item.completed }
+          { id: reviewer_action_item.id, description: 'new description', completed: !reviewer_action_item.completed },
+          reviewer_action_item2.as_json(only: %i[id description completed])
+        ],
+        user_action_items_attributes: review.user_action_items.as_json(only: %i[id description completed])
+      }
+    }
+  end
+
+  let(:update_params_delete_ai) do
+    {
+      review: {
+        title: 'updated title',
+        comments: 'different comment',
+        user_id: review.user_id,
+        reviewer_id: review.reviewer_id,
+        reviewer_action_items_attributes: [
+          reviewer_action_item.as_json(only: %i[id description completed]),
+          { id: reviewer_action_item2.id, _destroy: '1' }
         ],
         user_action_items_attributes: review.user_action_items.as_json(only: %i[id description completed])
       }
@@ -49,8 +67,20 @@ RSpec.describe 'Post endpoint', type: :request do
 
           expected_review = update_params[:review].as_json
           expected_review['reviewer_id'] = admin.id
-
           expect(updated_review).to eq(expected_review)
+        end
+
+        it 'should delete action items' do
+          put api_v1_admin_review_path(review), params: update_params_delete_ai, headers: auth_headers
+          expect(response).to have_http_status 200
+
+          review.reload
+          reviewer_action_items = review.reviewer_action_items.as_json(only: %i[id description completed])
+          expect(reviewer_action_items.length).to eq(1)
+
+          expected_reviewer_action_items = update_params_delete_ai[:review]
+                                           .as_json['reviewer_action_items_attributes'][0, 1]
+          expect(reviewer_action_items).to eq(expected_reviewer_action_items)
         end
 
         it 'should show 404 if review does not exist' do
