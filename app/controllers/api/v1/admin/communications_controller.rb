@@ -19,15 +19,12 @@ module Api
         def show; end
 
         def create
-          @communication = communications.new(communication_params)
-          handle_attachments
-          @communication.save!
+          @communication = communications.create!(communication_params)
           render :show
         end
 
         def update
           @communication.update!(communication_params)
-          handle_attachments
           render :show
         end
 
@@ -42,7 +39,7 @@ module Api
         end
 
         def communication_params
-          params.require(:communication).permit(:title, :text, :published, :recurrent_on)
+          params.require(:communication).permit(:title, :text, :published, :recurrent_on, image: [:data])
         end
 
         def sort_communications
@@ -53,10 +50,6 @@ module Api
                          sort[0]
                        end
           @communications.order(order_sort)
-        end
-
-        def handle_attachments
-          @communication.image.attach(data: params[:communication][:image]) if params[:communication][:image]
         end
 
         def communications
