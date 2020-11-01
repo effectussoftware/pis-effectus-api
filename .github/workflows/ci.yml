@@ -46,3 +46,4 @@ jobs:
           RAILS_ENV: test
           POSTGRES_USERNAME: postgres
           POSTGRES_PASSWORD: postgres
+          DEFAULT_URL: localhost:3000

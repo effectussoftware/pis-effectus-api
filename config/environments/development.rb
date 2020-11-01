@@ -66,6 +66,6 @@ Rails.application.configure do
     Bullet.rails_logger = true
   end
 
-  Rails.application.routes.default_url_options = { host: ENV['DEFAULT_URL'] }
+  Rails.application.routes.default_url_options = { host: 'localhost:3000' }
 end
 # rubocop:enable Metrics/BlockLength
