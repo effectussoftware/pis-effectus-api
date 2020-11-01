@@ -11,5 +11,6 @@ class CreateInvitations < ActiveRecord::Migration[6.0]
 
       t.timestamps
     end
+    add_index :invitations, [:user_id, :event_id], unique: true
   end
 end

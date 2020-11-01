@@ -42,8 +42,33 @@ ActiveRecord::Schema.define(version: 2020_10_27_225045) do
     t.boolean "published", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.datetime "recurrent_on"
+    t.date "recurrent_on"
     t.boolean "dummy", default: false
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.integer "cost", default: 0
+    t.datetime "updated_event_at"
+    t.boolean "cancelled", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "invitations", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "event_id", null: false
+    t.boolean "attend"
+    t.boolean "confirmation", default: false
+    t.datetime "changed_last_seen"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["event_id"], name: "index_invitations_on_event_id"
+    t.index ["user_id", "event_id"], name: "index_invitations_on_user_id_and_event_id", unique: true
+    t.index ["user_id"], name: "index_invitations_on_user_id"
   end
 
   create_table "review_action_items", force: :cascade do |t|
@@ -53,9 +78,6 @@ ActiveRecord::Schema.define(version: 2020_10_27_225045) do
     t.integer "user_review_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-
-    t.index ["reviewer_review_id"], name: "index_review_action_item_on_reviewer_review_id"
-    t.index ["user_review_id"], name: "index_review_action_item_user_review_id"
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -84,36 +106,9 @@ ActiveRecord::Schema.define(version: 2020_10_27_225045) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
-
-
-  create_table "events", force: :cascade do |t|
-    t.string "name"
-    t.string "address"
-    t.datetime "start_time"
-    t.datetime "end_time"
-    t.integer "cost", default: 0
-    t.datetime "updated_event_at"
-    t.boolean "cancelled", default: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "invitations", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "event_id", null: false
-    t.boolean "attend"
-    t.boolean "confirmation", default: false
-    t.datetime "changed_last_seen"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["event_id"], name: "index_invitations_on_event_id"
-    t.index ["user_id"], name: "index_invitations_on_user_id"
-  end
-
-
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "invitations", "events"
   add_foreign_key "invitations", "users"
-  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "reviews", "users"
   add_foreign_key "reviews", "users", column: "reviewer_id"
 end
