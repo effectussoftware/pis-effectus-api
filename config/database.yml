@@ -37,7 +37,6 @@ production:
   username: <%= ENV.fetch('DATABASE_USERNAME', 'carl') %>
   password: <%= ENV.fetch('DATABASE_PASSWORD', '') %>
 
-
 staging:
   <<: *default
   database: pis_effectus_api_staging
