@@ -37,8 +37,8 @@ module Api
         def update_review_params
           params.require(:review)
                 .permit(:title, :comments,
-                        user_action_items_attributes: %i[id description completed],
-                        reviewer_action_items_attributes: %i[id description completed])
+                        user_action_items_attributes: %i[id description completed _destroy],
+                        reviewer_action_items_attributes: %i[id description completed _destroy])
         end
 
         def create_review_params
