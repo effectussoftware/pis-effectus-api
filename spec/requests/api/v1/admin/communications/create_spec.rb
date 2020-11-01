@@ -44,7 +44,7 @@ RSpec.describe 'Communications', type: :request do
       end
 
       it 'attaches a file to a communication on creation' do
-        data = { 'communication': { 'title': 'Lala', 'text': 'Lele', 'image': open_file_encoded('photo.jpg') } }
+        data = { 'communication': { 'title': 'Lala', 'text': 'Lele', 'image': { 'data': open_file_encoded('photo.jpg') } } }
         post '/api/v1/admin/communications', headers: auth_headers, params: data
         expect(response).to have_http_status 200
         created_communication = Communication.first
