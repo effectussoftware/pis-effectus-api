@@ -10,7 +10,8 @@ Rails.application.routes.draw do
       resource :feed, only: %i[show]
       resources :reviews, only: %i[index show]
       resources :communications, only: %i[show]
-      resources :events, only: %i[update show]
+      resources :events, only: %i[show]
+      resources :invitations, only: %i[update]
       namespace :admin do
         resources :events, only: %i[index create show update]
         resources :users, only: %i[index show update]
