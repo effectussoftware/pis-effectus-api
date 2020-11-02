@@ -9,7 +9,6 @@ RSpec.describe 'Event show endpoint', type: :request do
 
   let!(:auth_headers) { admin.create_new_auth_token }
   let!(:event) { create(:event) }
-  let!(:invitation) { create(:invitation, user: user, event: event) }
 
   describe 'GET /api/v1/admin/events/id' do
     context 'event with id' do
@@ -17,8 +16,8 @@ RSpec.describe 'Event show endpoint', type: :request do
         get api_v1_admin_event_path(event.id), headers: auth_headers
         expect(response).to have_http_status(200)
         events_response = Oj.load(response.body)['event']
-        expect(events_response.except('users')).to include(event.as_json.except('updated_at', 'created_at'))
-        expect(events_response['users'][0]['id']).to eq(invitation.as_json['user_id'])
+        expect(events_response.except('invitations')).to include(event.as_json.except('updated_at', 'created_at'))
+        expect(events_response['invitations']).to eq(event.invitations.as_json)
       end
 
       it 'returns not_found' do

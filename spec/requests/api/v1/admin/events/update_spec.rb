@@ -16,13 +16,18 @@ RSpec.describe 'Event update endpoint', type: :request do
       'event' =>
         {
           'name' => 'evento_update',
-          'address' => 'evento_update',
-          'cost' => 500,
+          'address' => 'testing_address333',
+          'cost' => 200,
           'start_time' => '2020-10-07T13:28:06.419Z',
           'end_time' => '2020-10-07T15:28:06.419Z',
-          'cancelled' => false
-        },
-      'user_ids' => [user.id]
+          'cancelled' => false,
+          'invitations_attributes' => [
+            {
+              'user_id' => user.id,
+              'attend' => false
+            }
+          ]
+        }
     }
   end
 
@@ -32,9 +37,17 @@ RSpec.describe 'Event update endpoint', type: :request do
         put api_v1_admin_event_path(event.id), params: event_data_update, headers: auth_headers
         expect(response).to have_http_status(200)
         event_response = Oj.load(response.body)['event']
-        expect(event_response.except('id', 'updated_event_at', 'users')).to include(event_data_update['event'])
-        expect(event_response['users'].map { |json| json['id'] }).to eq(event_data_update['user_ids'])
-        expect(event_response['id']).to eq(event.id)
+
+        expect(event_response.except('invitations', 'id')).to include(event_data_update['event']
+          .as_json
+          .except('invitations_attributes'))
+        invitations = event_response['invitations'].map do |iter|
+          {
+            'user_id' => iter['user_id'],
+            'attend' => iter['attend']
+          }
+        end
+        expect(invitations).to include(event_data_update['event']['invitations_attributes'][0])
       end
 
       it 'returns not_found' do

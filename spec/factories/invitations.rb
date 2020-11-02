@@ -3,7 +3,6 @@
 FactoryBot.define do
   factory :invitation do
     user { association :user }
-    event { association :event }
     attend { Faker::Boolean.boolean }
     confirmation { Faker::Boolean.boolean }
   end
