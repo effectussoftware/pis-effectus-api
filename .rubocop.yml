@@ -4,6 +4,7 @@ AllCops:
     - 'db/migrate/*'
     - 'bin/*'
     - 'config/initializers/pagy.rb'
+    - 'config/environments/*'
   NewCops: enable
 Metrics/BlockLength:
   Exclude:

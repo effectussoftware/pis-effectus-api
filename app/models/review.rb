@@ -14,8 +14,8 @@ class Review < ApplicationRecord
            class_name: 'ReviewActionItem',
            dependent: :delete_all
 
-  accepts_nested_attributes_for :user_action_items
-  accepts_nested_attributes_for :reviewer_action_items
+  accepts_nested_attributes_for :user_action_items, allow_destroy: true
+  accepts_nested_attributes_for :reviewer_action_items, allow_destroy: true
 
   validates :title, presence: true
   validate  :cant_save_if_reviewer_is_not_admin

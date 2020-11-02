@@ -5,7 +5,13 @@ module Api
     module Admin
       class ReviewsController < Api::V1::Admin::AdminApiController
         def index
-          @reviews = Review.all
+          @reviews = if params[:user_id]
+                       reviews.where(user_id: params[:user_id])
+                     else
+                       reviews
+                     end
+          @reviews = sort_reviews if params[:sort]
+          @pagy, @reviews = pagy(@reviews, items: params[:per_page])
         end
 
         def destroy
@@ -31,8 +37,8 @@ module Api
         def update_review_params
           params.require(:review)
                 .permit(:title, :comments,
-                        user_action_items_attributes: %i[id description completed],
-                        reviewer_action_items_attributes: %i[id description completed])
+                        user_action_items_attributes: %i[id description completed _destroy],
+                        reviewer_action_items_attributes: %i[id description completed _destroy])
         end
 
         def create_review_params
@@ -40,6 +46,20 @@ module Api
                 .permit(:title, :comments, :user_id,
                         user_action_items_attributes: %i[id description completed],
                         reviewer_action_items_attributes: %i[id description completed])
+        end
+
+        def sort_reviews
+          sort = Oj.load(params[:sort])
+          order_sort = if sort[1]
+                         "#{sort[0]} #{sort[1]}"
+                       else
+                         sort[0]
+                       end
+          @reviews.reorder(order_sort)
+        end
+
+        def reviews
+          Review.order(id: :desc)
         end
       end
     end
