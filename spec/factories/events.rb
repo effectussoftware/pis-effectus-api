@@ -16,10 +16,5 @@ FactoryBot.define do
     after(:build) do |event, evaluator|
       event.invitations << build_list(:invitation, evaluator.invitations_count, event: event)
     end
-    # factory :event_with_invitations do
-    #   invitation do
-    #     Array.new(rand(1..5)) { association(:invitation,event: event) }
-    #   end
-    # end
   end
 end
