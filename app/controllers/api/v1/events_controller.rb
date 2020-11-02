@@ -5,7 +5,7 @@ module Api
     class EventsController < Api::V1::ApiController
       def show
         @event = Event.find(params[:id])
-        @invitation = @event.invitations.find_by(user_id: current_api_v1_user.id)
+        @invitation = @event.invitations.find_by(user: current_api_v1_user)
         raise ActiveRecord::RecordNotFound, 'not found' unless @invitation
       end
 
@@ -14,7 +14,7 @@ module Api
         raise ActiveRecord::RecordNotFound, 'invitation not found' unless @invitation
 
         @invitation.confirmation = true
-        @invitation.changed_last_seen = Time.now
+        @invitation.changed_last_seen = Time.zone.now
         @invitation.update!(update_params)
       end
 

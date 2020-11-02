@@ -6,7 +6,7 @@ module Api
       class EventsController < Api::V1::Admin::AdminApiController
         def index
           @events = Event.all
-          @events = sort_envents if params[:sort]
+          @events = sort_events if params[:sort]
           @pagy, @events = pagy(@events, items: params[:per_page])
         end
 
@@ -20,19 +20,14 @@ module Api
 
         def update
           @event = Event.find(params[:id])
-          @event.update!(event_params)
-          @event.updated_event_at = Time.zone.now
+          @event.update!(event_params.merge(updated_event_at: Time.zone.now))
         end
 
         private
 
-        def sort_envents
+        def sort_events
           sort = Oj.load(params[:sort])
-          order_sort = if sort[1]
-                         "#{sort[0]} #{sort[1]}"
-                       else
-                         sort[0]
-                       end
+          order_sort = sort.join(' ')
           @events.order(order_sort)
         end
 
@@ -44,7 +39,7 @@ module Api
             :end_time,
             :cost,
             :cancelled,
-            invitations_attributes: %i[id user_id confitmation attend]
+            invitations_attributes: %i[user_id confirmation attend]
           )
         end
       end
