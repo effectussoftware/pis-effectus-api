@@ -5,7 +5,9 @@ module Api
     module Admin
       class EventsController < Api::V1::Admin::AdminApiController
         def index
-          @pagy, @events = pagy(Event.all.order('updated_at DESC'), items: params[:per_page])
+          @events = Event.all
+          @events = sort_envents if params[:sort]
+          @pagy, @events = pagy(@events, items: params[:per_page])
         end
 
         def create
@@ -23,6 +25,16 @@ module Api
         end
 
         private
+
+        def sort_envents
+          sort = Oj.load(params[:sort])
+          order_sort = if sort[1]
+                         "#{sort[0]} #{sort[1]}"
+                       else
+                         sort[0]
+                       end
+          @events.order(order_sort)
+        end
 
         def event_params
           params.require(:event).permit(
