@@ -18,7 +18,6 @@ class Event < ApplicationRecord
     joins(:invitations).where(query, start_time, user_id)
   }
 
-
   def invitations_not_empty
     errors.add(:invitations, 'the invitations cannot be empty') if invitations.empty?
   end
@@ -26,5 +25,4 @@ class Event < ApplicationRecord
   def end_time_must_be_greater_than_start_time
     errors.add(:start_time, 'end_time must be greater than start_time') if start_time >= end_time
   end
-
 end

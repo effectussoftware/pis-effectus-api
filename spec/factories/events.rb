@@ -6,7 +6,7 @@ FactoryBot.define do
     address { Faker::Address.street_address }
 
     start_time { Faker::Date.forward }
-    end_time { start_time +  rand(1..5).hour }
+    end_time { start_time + rand(1..5).hour }
     cost { Faker::Number.number(5) }
 
     transient do
