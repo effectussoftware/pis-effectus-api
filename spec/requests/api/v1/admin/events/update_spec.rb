@@ -18,8 +18,8 @@ RSpec.describe 'Event update endpoint', type: :request do
           'name' => 'evento_update',
           'address' => 'testing_address333',
           'cost' => 200,
-          'start_time' => '2020-10-07T13:28:06.419Z',
-          'end_time' => '2020-10-07T15:28:06.419Z',
+          'start_time' => (Time.zone.now + 2.hour),
+          'end_time' => (Time.zone.now + 5.hour),
           'cancelled' => false,
           'invitations_attributes' => [
             {
@@ -38,9 +38,11 @@ RSpec.describe 'Event update endpoint', type: :request do
         expect(response).to have_http_status(200)
         event_response = Oj.load(response.body)['event']
 
-        expect(event_response.except('invitations', 'id')).to include(event_data_update['event']
+        expect(event_response.except('invitations', 'id', 'start_time', 'end_time'))
+          .to include(event_data_update['event']
           .as_json
-          .except('invitations_attributes'))
+          .except('invitations_attributes', 'start_time', 'end_time'))
+
         invitations = event_response['invitations'].map do |iter|
           {
             'user_id' => iter['user_id'],

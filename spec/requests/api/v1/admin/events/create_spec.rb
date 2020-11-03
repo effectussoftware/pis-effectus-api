@@ -17,8 +17,8 @@ RSpec.describe 'Event create endpoint', type: :request do
           'name' => 'evento_testing',
           'address' => 'testing_address333',
           'cost' => 200,
-          'start_time' => '2020-10-07T13:28:06.419Z',
-          'end_time' => '2020-10-07T15:28:06.419Z',
+          'start_time' => (Time.zone.now + 2.hour),
+          'end_time' => (Time.zone.now + 5.hour),
           'cancelled' => false,
           'invitations_attributes' => [
             {
@@ -54,9 +54,10 @@ RSpec.describe 'Event create endpoint', type: :request do
         post api_v1_admin_events_path, params: event_to_create_with_user, headers: auth_headers
         expect(response).to have_http_status(200)
         events_response = Oj.load(response.body)['event']
-        expect(events_response.except('invitations', 'id')).to include(event_to_create_with_user['event']
+        expect(events_response.except('invitations', 'id', 'start_time', 'end_time'))
+          .to include(event_to_create_with_user['event']
           .as_json
-          .except('invitations_attributes'))
+          .except('invitations_attributes', 'start_time', 'end_time'))
         invitations = events_response['invitations'].map do |iter|
           {
             'user_id' => iter['user_id'],
