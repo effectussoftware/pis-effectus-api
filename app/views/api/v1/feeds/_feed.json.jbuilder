@@ -5,5 +5,8 @@ json.extract! feed,
               :title,
               :text,
               :type,
+              :address,
+              :start_time,
+              :end_time,
               :updated_at,
               :image

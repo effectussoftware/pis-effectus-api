@@ -7,7 +7,7 @@ RSpec.describe 'Event  update endpoint', type: :request do
   let!(:user_not_invited) { create(:user) }
 
   let!(:event) { create(:event) }
-  let!(:invitation) { create(:invitation, event_id: event.id, user_id: user.id)}
+  let!(:invitation) { create(:invitation, event_id: event.id, user_id: user.id) }
 
   let!(:auth_headers_user) { user.create_new_auth_token }
   let!(:auth_headers_user_not_invited) { user_not_invited.create_new_auth_token }
