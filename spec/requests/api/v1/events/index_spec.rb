@@ -12,6 +12,7 @@ RSpec.describe 'Event index endpoint', type: :request do
   let!(:invitation) { create(:invitation, user: user, event: event) }
 
   let!(:event) { create(:event, start_time: Time.zone.now + 60 * 60, end_time: Time.zone.now + 60 * 60 * 2) }
+
   let!(:invitation) { create(:invitation, user: user, event: event) }
 
   describe 'GET /api/v1/events/' do
@@ -30,7 +31,9 @@ RSpec.describe 'Event index endpoint', type: :request do
     context 'GET /api/v1/events/ with the current user not invited' do
       it 'returns error 404' do
         get '/api/v1/events', headers: auth_headers_user_not_invited
-        # expect(response).to have_http_status(404)
+        expect(response).to have_http_status(200)
+        calendar = Oj.load(response.body)['calendar']
+        expect(calendar.empty?).to be(true)
       end
     end
   end

@@ -26,8 +26,23 @@ RSpec.describe 'Event index endpoint', type: :request do
           .as_json
           .except('updated_at', 'created_at')
         )
-        expect(events_response[0]['invitations']).to eq(events[0].invitations.as_json)
-        expect(events_response[1]['invitations']).to eq(events[1].invitations.as_json)
+
+        invitations = events_response[0]['users'].map do |iter|
+          {
+            'user_id' => iter['id'],
+            'attend' => iter['attend'],
+            'confirmation' => iter['confirmation']
+          }
+        end
+        expect(invitations).to eq(events[0].invitations.as_json(only: %i[user_id attend confirmation]))
+        invitations = events_response[1]['users'].map do |iter|
+          {
+            'user_id' => iter['id'],
+            'attend' => iter['attend'],
+            'confirmation' => iter['confirmation']
+          }
+        end
+        expect(invitations).to eq(events[1].invitations.as_json(only: %i[user_id attend confirmation]))
       end
     end
 
@@ -47,8 +62,23 @@ RSpec.describe 'Event index endpoint', type: :request do
           .as_json
           .except('updated_at', 'created_at')
         )
-        expect(events_response[0]['invitations']).to eq(events[0].invitations.as_json)
-        expect(events_response[1]['invitations']).to eq(events[1].invitations.as_json)
+
+        invitations = events_response[0]['users'].map do |iter|
+          {
+            'user_id' => iter['id'],
+            'attend' => iter['attend'],
+            'confirmation' => iter['confirmation']
+          }
+        end
+        expect(invitations).to eq(events[0].invitations.as_json(only: %i[user_id attend confirmation]))
+        invitations = events_response[1]['users'].map do |iter|
+          {
+            'user_id' => iter['id'],
+            'attend' => iter['attend'],
+            'confirmation' => iter['confirmation']
+          }
+        end
+        expect(invitations).to eq(events[1].invitations.as_json(only: %i[user_id attend confirmation]))
       end
     end
 
@@ -69,8 +99,23 @@ RSpec.describe 'Event index endpoint', type: :request do
           .as_json
           .except('updated_at', 'created_at')
         )
-        expect(events_response[1]['invitations']).to eq(events[0].invitations.as_json)
-        expect(events_response[0]['invitations']).to eq(events[1].invitations.as_json)
+
+        invitations = events_response[1]['users'].map do |iter|
+          {
+            'user_id' => iter['id'],
+            'attend' => iter['attend'],
+            'confirmation' => iter['confirmation']
+          }
+        end
+        expect(invitations).to eq(events[0].invitations.as_json(only: %i[user_id attend confirmation]))
+        invitations = events_response[0]['users'].map do |iter|
+          {
+            'user_id' => iter['id'],
+            'attend' => iter['attend'],
+            'confirmation' => iter['confirmation']
+          }
+        end
+        expect(invitations).to eq(events[1].invitations.as_json(only: %i[user_id attend confirmation]))
       end
     end
     context 'without events' do

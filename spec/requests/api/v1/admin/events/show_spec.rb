@@ -17,7 +17,14 @@ RSpec.describe 'Event show endpoint', type: :request do
         expect(response).to have_http_status(200)
         events_response = Oj.load(response.body)['event']
         expect(events_response.except('invitations')).to include(event.as_json.except('updated_at', 'created_at'))
-        expect(events_response['invitations']).to eq(event.invitations.as_json)
+        invitations = events_response['users'].map do |iter|
+          {
+            'user_id' => iter['id'],
+            'attend' => iter['attend'],
+            'confirmation' => iter['confirmation']
+          }
+        end
+        expect(invitations).to eq(event.invitations.as_json(only: %i[user_id attend confirmation]))
       end
 
       it 'returns not_found' do

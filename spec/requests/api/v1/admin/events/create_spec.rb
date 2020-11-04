@@ -58,9 +58,9 @@ RSpec.describe 'Event create endpoint', type: :request do
           .to include(event_to_create_with_user['event']
           .as_json
           .except('invitations_attributes', 'start_time', 'end_time'))
-        invitations = events_response['invitations'].map do |iter|
+        invitations = events_response['users'].map do |iter|
           {
-            'user_id' => iter['user_id'],
+            'user_id' => iter['id'],
             'attend' => iter['attend']
           }
         end

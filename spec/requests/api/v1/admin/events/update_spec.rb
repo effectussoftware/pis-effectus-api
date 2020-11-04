@@ -43,9 +43,9 @@ RSpec.describe 'Event update endpoint', type: :request do
           .as_json
           .except('invitations_attributes', 'start_time', 'end_time'))
 
-        invitations = event_response['invitations'].map do |iter|
+        invitations = event_response['users'].map do |iter|
           {
-            'user_id' => iter['user_id'],
+            'user_id' => iter['id'],
             'attend' => iter['attend']
           }
         end
