@@ -9,6 +9,24 @@ RSpec.describe User, type: :model do
 
   let(:message) { 'message' }
 
+  describe 'before_saves' do
+    describe 'destroy_sessions' do
+      it 'destroys user sessions if account is deactivated' do
+        user = create(:user, is_active: true)
+        user.create_new_auth_token
+        expect(user.tokens).to_not eq({})
+        user.update(is_active: false)
+        expect(user.reload.tokens).to eq({})
+      end
+
+      it "can't create a new session if user is deactivated" do
+        user = create(:user, is_active: false)
+        user.create_new_auth_token
+        expect(user.reload.tokens).to eq({})
+      end
+    end
+  end
+
   describe '#send_notification' do
     before(:each) do
       allow(PushNotificationService).to receive(:send_notification).and_return(PUSH_NOTIFICATION_RESPONSE)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-json.reviews do
-  json.partial! 'review', collection: @reviews, as: :review
+json.events do
+  json.partial! 'event', collection: @events, as: :event
 end
 
 json.pagination do

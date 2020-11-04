@@ -44,7 +44,13 @@ RSpec.describe 'Communications', type: :request do
       end
 
       it 'attaches a file to a communication on creation' do
-        data = { 'communication': { 'title': 'Lala', 'text': 'Lele', 'image': open_file_encoded('photo.jpg') } }
+        data = { 'communication': {
+          'title': 'Lala',
+          'text': 'Lele',
+          'image': {
+            'data': open_file_encoded('photo.jpg')
+          }
+        } }
         post '/api/v1/admin/communications', headers: auth_headers, params: data
         expect(response).to have_http_status 200
         created_communication = Communication.first
@@ -84,7 +90,7 @@ RSpec.describe 'Communications', type: :request do
         created_communication = Communication.first
         expect(created_communication.title).to eq 'Lala'
         expect(created_communication.text).to eq 'Lele'
-        expect(created_communication.recurrent_on).to eq '2020-10-28T19:18:36.662Z'
+        expect(created_communication.recurrent_on).to eq Time.zone.parse('2020-10-28')
       end
     end
 

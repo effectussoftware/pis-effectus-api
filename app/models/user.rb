@@ -2,11 +2,14 @@
 
 class User < ActiveRecord::Base
   has_many :reviews
+  has_many :events, through: :invitations
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :rememberable, :trackable
   include DeviseTokenAuth::Concerns::User
   alias devise_create_token create_token
+
+  before_save :destroy_sessions, unless: :is_active?
 
   scope :active, -> { where(is_active: true) }
 
@@ -50,5 +53,9 @@ class User < ActiveRecord::Base
       push_notification_tokens << token['push_notification_token'] if token['push_notification_token']
     end
     push_notification_tokens
+  end
+
+  def destroy_sessions
+    self.tokens = {}
   end
 end

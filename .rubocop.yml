@@ -11,5 +11,10 @@ Metrics/BlockLength:
     - 'Rakefile'
     - '**/*.rake'
     - 'spec/**/*.rb'
+Layout/LineLength:
+  Exclude:
+    - 'app/views/api/v1/**/*.json.jbuilder'
+    - 'app/views/api/v1/**/**/*.json.jbuilder'
 Style/Documentation:
   Enabled: false
+
