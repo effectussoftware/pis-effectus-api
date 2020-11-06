@@ -42,4 +42,26 @@ RSpec.describe Event, type: :model do
                          'Validation failed: Start time end_time and start_time must be greater than now')
     end
   end
+
+  describe '.set_updated_event_at' do
+    it 'updates updated_event_at when public fields are changed' do
+      event = nil
+      Timecop.freeze(Date.today - 1.hour) do
+        event = create(:event, start_time: Time.zone.now + 1.hour, end_time: Time.zone.now + 2.hour)
+      end
+      Timecop.freeze(Date.today) do
+        expect { event.update(end_time: Time.zone.now + 3.hour) }.to change(event, :updated_event_at).to Time.zone.now
+      end
+    end
+
+    it 'does not update updated_event_at when only private fields are changed' do
+      event = nil
+      Timecop.freeze(Date.today - 1.hour) do
+        event = create(:event, cost: 800, start_time: Time.zone.now + 1.hour, end_time: Time.zone.now + 2.hour)
+      end
+      Timecop.freeze(Date.today) do
+        expect { event.update(cost: 100) }.to_not change(event, :updated_event_at)
+      end
+    end
+  end
 end

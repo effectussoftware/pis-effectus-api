@@ -57,6 +57,34 @@ RSpec.describe 'Event update endpoint', type: :request do
         put api_v1_admin_event_path(highest_id), params: event_data_update, headers: auth_headers
         expect(response).to have_http_status(404)
       end
+
+      it 'updates updated_event_at when public fields are changed' do
+        event = nil
+        Timecop.freeze(Date.today - 1.hour) do
+          event = create(:event, start_time: Time.zone.now + 1.hour, end_time: Time.zone.now + 2.hour)
+        end
+        Timecop.freeze(Date.today) do
+          params_update = { event: { end_time: Time.zone.now + 3.hour } }
+          put api_v1_admin_event_path(event.id), params: params_update, headers: auth_headers
+          event_response = Oj.load(response.body)['event']
+          expect(Time.zone.parse(event_response['updated_event_at'])).to eq(Time.zone.now)
+        end
+      end
+
+      it 'does not update updated_event_at when only private fields are changed' do
+        event = nil
+        time = nil
+        Timecop.freeze(Date.today - 1.hour) do
+          time = Time.zone.now
+          event = create(:event, cost: 200, start_time: Time.zone.now + 1.hour, end_time: Time.zone.now + 2.hour)
+        end
+        Timecop.freeze(Date.today) do
+          params_update = { event: { cost: 300 } }
+          put api_v1_admin_event_path(event.id), params: params_update, headers: auth_headers
+          event_response = Oj.load(response.body)['event']
+          expect(Time.zone.parse(event_response['updated_event_at'])).to eq(time)
+        end
+      end
     end
   end
 end

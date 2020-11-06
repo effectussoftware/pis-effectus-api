@@ -20,7 +20,7 @@ module Api
 
         def update
           @event = Event.find(params[:id])
-          @event.update!(event_params.merge(updated_event_at: Time.zone.now))
+          @event.update!(event_params)
         end
 
         private
