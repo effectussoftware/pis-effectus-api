@@ -9,8 +9,6 @@ RSpec.describe 'Event show endpoint', type: :request do
   let!(:auth_headers_user) { user.create_new_auth_token }
   let!(:auth_headers_user_not_invited) { user_not_invited.create_new_auth_token }
 
-  let!(:invitation) { create(:invitation, user: user, event: event) }
-
   let!(:event) { create(:event) }
   let!(:invitation) { create(:invitation, user: user, event: event) }
 
@@ -20,8 +18,7 @@ RSpec.describe 'Event show endpoint', type: :request do
         get api_v1_event_path(event), headers: auth_headers_user
         expect(response).to have_http_status(200)
         events_response = Oj.load(response.body)['event']
-        expect(events_response.except('users')).to include(event.as_json.except('updated_at', 'created_at', 'cost'))
-
+        expect(events_response['event']).to include(event.as_json.except('updated_at', 'created_at', 'cost'))
         emails = events_response['users'].map { |x| x['email'] }
         expect(emails).to include(user.email)
       end
