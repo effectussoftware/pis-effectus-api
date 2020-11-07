@@ -16,7 +16,10 @@ RSpec.describe 'Event  update endpoint', type: :request do
 
   let!(:invitation_update_attend_mobile) do
     {
-      'attend' => false
+      'invitation': {
+        'attend': false,
+        'confirmation': true
+      }
     }
   end
 
@@ -25,8 +28,8 @@ RSpec.describe 'Event  update endpoint', type: :request do
       it 'returns the value updated' do
         put api_v1_invitation_path(event.id), params: invitation_update_attend_mobile, headers: auth_headers_user
         expect(response).to have_http_status(200)
-        events_response = Oj.load(response.body)['invitation']
-        expect(events_response).to include(invitation_update_attend_mobile)
+        events_response = Oj.load(response.body)
+        expect(events_response).to eq(invitation_update_attend_mobile.as_json)
       end
     end
 
