@@ -3,6 +3,7 @@
 json.event do
   json.id event.id
   json.name event.name
+  json.description event.description
   json.address event.address
   json.start_time event.start_time
   json.end_time event.end_time
