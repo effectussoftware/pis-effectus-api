@@ -17,14 +17,14 @@ RSpec.describe 'Events Calendar index endpoint', type: :request do
   describe 'GET /api/v1/events_calendar/:date' do
     context 'with authentication' do
       it 'returns the events for current month where current user invited' do
-        get api_v1_events_calendar_path(event.start_time.strftime('%Y-%m-%d')), headers: auth_headers_user
+        get api_v1_events_calendar_path(event.start_time.strftime('%Y-%m')), headers: auth_headers_user
         expect(response).to have_http_status(200)
         events_response = Oj.load(response.body)
-        # Get date from created event
-        date = event.start_time.strftime('%Y-%m-%d')
-        # Response must have this key
-        expect(events_response).to include(date)
-        expect(events_response[date]).to include(event.as_json(except: %i[cost created_at updated_at]))
+
+        event_list = Event.on_month(event.start_time, user)
+        events = event_list.map { |e| e.as_json(except: %i[cost created_at updated_at]) }
+
+        expect(events_response['events']).to match(events)
       end
     end
 
@@ -33,7 +33,7 @@ RSpec.describe 'Events Calendar index endpoint', type: :request do
         get api_v1_events_calendar_path(event.start_time.strftime('%Y-%m-%d')), headers: auth_headers_user_not_invited
         expect(response).to have_http_status(200)
         events_response = Oj.load(response.body)
-        expect(events_response.keys).to match([])
+        expect(events_response['events']).to match([])
       end
     end
   end
