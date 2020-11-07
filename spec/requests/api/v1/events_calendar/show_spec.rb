@@ -24,6 +24,7 @@ RSpec.describe 'Events Calendar index endpoint', type: :request do
         date = event.start_time.strftime('%Y-%m-%d')
         # Response must have this key
         expect(events_response).to include(date)
+        expect(events_response[date]).to include(event.as_json(except: %i[cost created_at updated_at]))
       end
     end
 
