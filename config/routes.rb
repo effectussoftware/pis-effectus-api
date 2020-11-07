@@ -15,7 +15,6 @@ Rails.application.routes.draw do
       resources :invitations, only: %i[update] do
         put :update_change_last_seen, on: :member
       end
-
       namespace :admin do
         resources :events, only: %i[index create show update]
         resources :users, only: %i[index show update]
