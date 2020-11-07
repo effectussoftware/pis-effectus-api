@@ -11,8 +11,10 @@ Rails.application.routes.draw do
       resources :reviews, only: %i[index show]
       resources :communications, only: %i[show]
       resources :events, only: %i[show]
-      resources :events_by_month, only: %i[show]
-      resources :invitations, only: %i[update]
+      resources :events_by_month, only: %i[index]
+      resources :invitations, only: %i[update] do
+        put :update_change_last_seen, on: :member
+      end
       namespace :admin do
         resources :events, only: %i[index create show update]
         resources :users, only: %i[index show update]
