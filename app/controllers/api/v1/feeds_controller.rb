@@ -15,7 +15,7 @@ module Api
       private
 
       def events(start_time, with_include)
-        Event.from_date(start_time, with_include, current_user.id).order(start_time: :asc).limit(10)
+        Event.from_date(start_time, with_include, current_user.id).order(updated_at: :desc).limit(10)
       end
 
       def reviews(start_time, with_include)
