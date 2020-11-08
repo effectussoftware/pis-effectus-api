@@ -6,6 +6,8 @@
 # this file to always be loaded, without a need to explicitly require it in any
 # files.
 #
+require 'simplecov'
+SimpleCov.start
 require 'factory_bot_rails'
 
 # Given that it is always loaded, you are encouraged to keep this file as

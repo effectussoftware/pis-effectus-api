@@ -24,7 +24,8 @@ module Api
         end
 
         def update
-          @communication.update!(communication_params)
+          handle_attachments
+          @communication.update!(update_params)
           render :show
         end
 
@@ -33,6 +34,19 @@ module Api
         end
 
         private
+
+        def update_params
+          params.require(:communication).permit(:title, :text, :published, :recurrent_on)
+        end
+
+        def handle_attachments
+          return unless params[:communication][:image]
+
+          @communication.image.purge
+          return unless params[:communication][:image][:data] != '_destroy'
+
+          @communication.image.attach(data: params[:communication][:image][:data])
+        end
 
         def set_communication
           @communication = communications.find(params[:id])

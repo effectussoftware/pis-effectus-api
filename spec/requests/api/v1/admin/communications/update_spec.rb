@@ -42,13 +42,27 @@ RSpec.describe 'Communications', type: :request do
           expect(bd_communication.published).to eq true
         end
 
-        it 'attaches a file to a communication on creation' do
+        it 'attaches a file to a communication on update' do
           data = { 'communication': { 'title': 'Lala', 'image': { 'data': open_file_encoded('photo.jpg') } } }
           put "/api/v1/admin/communications/#{communication.id}", headers: auth_headers, params: data
           expect(response).to have_http_status 200
           bd_communication = Communication.first
           expect(bd_communication.title).to eq 'Lala'
           expect(bd_communication.image.attached?).to eq true
+        end
+
+        it 'deattaches a file to a communication on update' do
+          data = { 'communication': { 'title': 'Lala', 'image': { 'data': open_file_encoded('photo.jpg') } } }
+          put "/api/v1/admin/communications/#{communication.id}", headers: auth_headers, params: data
+          expect(response).to have_http_status 200
+          bd_communication = Communication.first
+          expect(bd_communication.title).to eq 'Lala'
+          expect(bd_communication.image.attached?).to eq true
+          data = { 'communication': { 'image': { 'data': '_destroy' } } }
+          put "/api/v1/admin/communications/#{communication.id}", headers: auth_headers, params: data
+          expect(response).to have_http_status 200
+          bd_communication = Communication.first
+          expect(bd_communication.image.attached?).to eq false
         end
 
         it 'Sends a notification to all users' do
