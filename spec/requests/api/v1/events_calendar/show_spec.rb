@@ -22,7 +22,13 @@ RSpec.describe 'Events Calendar index endpoint', type: :request do
         events_response = Oj.load(response.body)
 
         event_list = Event.on_month(event.start_time, user)
-        events = event_list.map { |e| e.as_json(except: %i[cost created_at updated_at]) }
+        events = event_list.map do |e|
+          invitation = e.invitations.find_by(user_id: user.id)
+          e.as_json(except: %i[cost created_at updated_at]).merge(
+            'attend' => invitation.attend,
+            'confirmation' => invitation.confirmation
+          )
+        end
 
         expect(events_response['events']).to match(events)
       end

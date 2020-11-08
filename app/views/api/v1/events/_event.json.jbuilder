@@ -10,6 +10,8 @@ json.event do
   json.updated_event_at event.updated_event_at
   json.cancelled event.cancelled
   json.changed_last_seen event.updated_event_at < invitation.changed_last_seen if invitation.try(:changed_last_seen)
+  json.attend invitation.attend
+  json.confirmation invitation.confirmation
 end
 
 json.users do
