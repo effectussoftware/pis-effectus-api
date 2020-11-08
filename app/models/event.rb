@@ -17,9 +17,9 @@ class Event < ApplicationRecord
 
   scope :from_date, lambda { |start_time, with_include, user_id|
     query = if with_include
-              'events.updated_at >= ? and invitations.user_id = ?'
+              'events.updated_at <= ? and invitations.user_id = ?'
             else
-              'events.updated_at > ? and invitations.user_id = ?'
+              'events.updated_at < ? and invitations.user_id = ?'
             end
     joins(:invitations).where(query, start_time, user_id)
   }
