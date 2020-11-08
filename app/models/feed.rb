@@ -37,7 +37,7 @@ class Feed
         end_time: event.end_time,
         text: nil,
         type: 'event',
-        updated_at: event.updated_at,
+        updated_at: event.updated_event_at,
         image: nil)
   end
 

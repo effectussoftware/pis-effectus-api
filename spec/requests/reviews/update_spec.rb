@@ -30,7 +30,7 @@ RSpec.describe 'Post endpoint', type: :request do
     }
   end
 
-  let(:update_params_delete_ai) do
+  let(:update_params_delete_action_item) do
     {
       review: {
         title: 'updated title',
@@ -71,14 +71,14 @@ RSpec.describe 'Post endpoint', type: :request do
         end
 
         it 'should delete action items' do
-          put api_v1_admin_review_path(review), params: update_params_delete_ai, headers: auth_headers
+          put api_v1_admin_review_path(review), params: update_params_delete_action_item, headers: auth_headers
           expect(response).to have_http_status 200
 
           review.reload
           reviewer_action_items = review.reviewer_action_items.as_json(only: %i[id description completed])
           expect(reviewer_action_items.length).to eq(1)
 
-          expected_reviewer_action_items = update_params_delete_ai[:review]
+          expected_reviewer_action_items = update_params_delete_action_item[:review]
                                            .as_json['reviewer_action_items_attributes'][0, 1]
           expect(reviewer_action_items).to eq(expected_reviewer_action_items)
         end
