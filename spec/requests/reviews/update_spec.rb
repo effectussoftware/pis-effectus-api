@@ -67,7 +67,11 @@ RSpec.describe 'Post endpoint', type: :request do
 
           expected_review = update_params[:review].as_json
           expected_review['reviewer_id'] = admin.id
-          expect(updated_review).to eq(expected_review)
+
+          expect(updated_review.except('reviewer_action_items_attributes'))
+            .to eq(expected_review.except('reviewer_action_items_attributes'))
+          expect(updated_review['reviewer_action_items_attributes'])
+            .to match_array(expected_review['reviewer_action_items_attributes'])
         end
 
         it 'should delete action items' do
