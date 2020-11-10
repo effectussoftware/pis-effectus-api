@@ -8,7 +8,7 @@ json.start_time event.start_time
 json.end_time event.end_time
 json.updated_event_at event.updated_event_at
 json.cancelled event.cancelled
-json.changed_last_seen event.updated_event_at < invitation.changed_last_seen if invitation.try(:changed_last_seen)
+json.changed_last_seen invitation.new_updates_since_last_seen?
 json.attend invitation.attend
 json.confirmation invitation.confirmation
 

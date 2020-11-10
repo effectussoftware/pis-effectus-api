@@ -30,8 +30,7 @@ RSpec.describe 'Events Calendar index endpoint', type: :request do
             'confirmation' => invitation.confirmation
           )
         end
-
-        expect(events_response['events']).to match(events)
+        expect(events_response['events'].map { |event| event.except('changed_last_seen') }).to match(events)
       end
     end
 
