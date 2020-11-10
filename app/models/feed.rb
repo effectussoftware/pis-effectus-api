@@ -31,7 +31,7 @@ class Feed
         changed_last_seen: nil)
   end
 
-  def self.from_event(event)
+  def self.from_event(event, invitation)
     new(id: event.id,
         title: event.name,
         address: event.address,
@@ -41,7 +41,7 @@ class Feed
         type: 'event',
         updated_at: event.updated_event_at,
         image: nil,
-        changed_last_seen: event.changed_last_seen)
+        changed_last_seen: invitation.changed_last_seen)
   end
 
   def initialize(args)

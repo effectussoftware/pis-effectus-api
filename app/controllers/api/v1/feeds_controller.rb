@@ -15,7 +15,8 @@ module Api
       private
 
       def events(start_time, with_include)
-        Event.from_date(start_time, with_include, current_user.id).order(updated_event_at: :desc).limit(10)
+        Event.from_date(start_time, with_include, current_user.id).order(updated_event_at: :desc).includes(:invitations)
+             .limit(10)
       end
 
       def reviews(start_time, with_include)
@@ -36,7 +37,7 @@ module Api
         end
 
         feed += events.map do |event|
-          Feed.from_event(event)
+          Feed.from_event(event, event.invitations.find_by(user: current_api_v1_user))
         end
 
         feed.sort_by(&:updated_at).reverse[0..9]
