@@ -5,9 +5,6 @@ module Api
     class InvitationsController < Api::V1::ApiController
       before_action :set_invitation
       def update
-        @invitation = Invitation.find_by!(event_id: params[:id], user_id: current_api_v1_user.id)
-        raise ActiveRecord::RecordNotFound, 'invitation not found' unless @invitation
-
         @invitation.update!(update_params)
       end
 

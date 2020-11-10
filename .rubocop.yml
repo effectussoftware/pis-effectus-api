@@ -11,6 +11,9 @@ Metrics/BlockLength:
     - 'Rakefile'
     - '**/*.rake'
     - 'spec/**/*.rb'
+Metrics/MethodLength:
+  Exclude:
+    - 'app/models/feed.rb'
 Layout/LineLength:
   Exclude:
     - 'app/views/api/v1/**/*.json.jbuilder'
