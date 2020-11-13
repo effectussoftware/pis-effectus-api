@@ -13,7 +13,8 @@ class Event < ApplicationRecord
   validate :end_time_must_be_greater_than_start_time
   validate :end_time_and_start_time_must_be_greater_than_now
 
-  before_save :set_updated_event_at, if: :public_fields_updated?
+  before_save :set_updated_event_at, if: :public_fields_would_update?
+  after_update :notify_invited_users, if: :public_fields_updated?
 
   scope :from_date, lambda { |start_time, with_include, user_id|
     query = if with_include
@@ -55,8 +56,17 @@ class Event < ApplicationRecord
     self.updated_event_at = Time.zone.now
   end
 
-  def public_fields_updated?
-    name_changed? || address_changed? || address_changed? ||
+  def public_fields_would_update?
+    name_changed? || address_changed? ||
       start_time_changed? || end_time_changed? || cancelled_changed?
+  end
+
+  def public_fields_updated?
+    saved_change_to_name? || saved_change_to_address? ||
+      saved_change_to_start_time? || saved_change_to_end_time? || saved_change_to_cancelled?
+  end
+
+  def notify_invited_users
+    invitations.each(&:send_update_notification)
   end
 end

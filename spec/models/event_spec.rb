@@ -64,4 +64,25 @@ RSpec.describe Event, type: :model do
       end
     end
   end
+
+  describe 'after an event is modified' do
+    it 'sends notification if public fields are updated' do
+      Timecop.freeze(Time.zone.local(2020))
+      ev = create(:event)
+      user = create(:user)
+      expect(user).to_not receive(:send_notification)
+
+      new_name = 'Nuevo titulo'
+      ev.invitations.each do |invitation|
+        allow(invitation.user).to receive(:send_notification).and_return(true)
+        expect(invitation.user).to receive(:send_notification)
+          .with(new_name,
+                'An event has been updated.',
+                { id: invitation.id, updated_event_at: ev.updated_event_at, event: ev.id, start_time: ev.start_time,
+                  type: Invitation.to_s })
+      end
+      expect(ev.update(name: new_name)).to eq(true)
+      Timecop.return
+    end
+  end
 end
