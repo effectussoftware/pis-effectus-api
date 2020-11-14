@@ -77,8 +77,8 @@ RSpec.describe Event, type: :model do
         allow(invitation.user).to receive(:send_notification).and_return(true)
         expect(invitation.user).to receive(:send_notification)
           .with(new_name,
-                'An event has been updated.',
-                { id: invitation.id, updated_event_at: ev.updated_event_at, event: ev.id, start_time: ev.start_time,
+                'Un evento ha sido modificado.',
+                { id: invitation.id, updated_at: ev.updated_event_at, event: ev.id, start_time: ev.start_time,
                   type: Invitation.to_s })
       end
       expect(ev.update(name: new_name)).to eq(true)

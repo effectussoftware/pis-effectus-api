@@ -29,7 +29,7 @@ module Api
         end
 
         def destroy
-          @communication.destroy
+          @communication.destroy!
         end
 
         private

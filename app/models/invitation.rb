@@ -10,20 +10,20 @@ class Invitation < ApplicationRecord
   end
 
   def send_update_notification
-    send_notification('An event has been updated.')
+    send_notification('Un evento ha sido modificado.')
   end
 
   private
 
   def send_new_event_notification
-    send_notification('You are invited to an event.')
+    send_notification('Tienes una nueva invitación a un evento.')
   end
 
   def send_notification(message)
     user.send_notification(
       event.name,
       message,
-      { id: id, updated_event_at: event.updated_event_at, event: event.id, start_time: event.start_time,
+      { id: id, updated_at: event.updated_event_at, event: event.id, start_time: event.start_time,
         type: self.class.to_s }
     )
   end

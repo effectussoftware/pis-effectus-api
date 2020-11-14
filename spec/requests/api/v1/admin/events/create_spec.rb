@@ -16,7 +16,7 @@ RSpec.describe 'Event create endpoint', type: :request do
         {
           'name' => 'evento_testing',
           'address' => 'testing_address333',
-          'cost' => 200,
+          'cost' => '200.0',
           'start_time' => (Time.zone.now + 2.hour),
           'end_time' => (Time.zone.now + 5.hour),
           'cancelled' => false,
@@ -40,7 +40,7 @@ RSpec.describe 'Event create endpoint', type: :request do
         {
           'name' => 'evento_testing',
           'address' => 'testing_address',
-          'cost' => 200,
+          'cost' => '200.0',
           'start_time' => '2020-10-07T13:28:06.419Z',
           'end_time' => '2020-10-07T15:28:06.419Z',
           'cancelled' => false

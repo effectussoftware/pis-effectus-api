@@ -23,6 +23,10 @@ RSpec.describe 'Event  update endpoint', type: :request do
     }
   end
 
+  before(:each) do
+    allow_any_instance_of(Invitation).to receive(:send_notification).and_return(true)
+  end
+
   describe 'update value for attend' do
     context 'PUT /api/v1/invitations/:id with the current user invited' do
       it 'returns the value updated' do
