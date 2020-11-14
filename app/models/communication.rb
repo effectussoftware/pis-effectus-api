@@ -52,7 +52,7 @@ class Communication < ApplicationRecord
 
   def cant_destroy_if_published_not_recurrent
     # rubocop:disable Layout/LineLength
-    throw ActiveRecord::RecordInvalid, "can't delete published non recurrent communications" if published_was && !recurrent_on_was
+    throw :abort, "can't delete published non recurrent communications" if published_was && !recurrent_on_was
     # rubocop:enable Layout/LineLength
   end
 
