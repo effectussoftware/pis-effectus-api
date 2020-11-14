@@ -26,7 +26,7 @@ class Invitation < ApplicationRecord
     user.send_notification(
       event.name,
       message,
-      { id: id, updated_event_at: event.updated_event_at, event: event.id, start_time: event.start_time,
+      { id: id, updated_at: event.updated_event_at, event: event.id, start_time: event.start_time,
         type: self.class.to_s }
     )
   end
