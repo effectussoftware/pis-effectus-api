@@ -5,6 +5,9 @@ class Invitation < ApplicationRecord
   belongs_to :event
   after_create :send_new_event_notification
 
+  scope :not_confirmed, -> { where(confirmation: false) }
+  scope :confirmed, -> { where(confirmation: true) }
+
   def new_updates_since_last_seen?
     changed_last_seen.present? && event.updated_event_at > changed_last_seen
   end
@@ -12,6 +15,10 @@ class Invitation < ApplicationRecord
   def send_update_notification
     message = event.cancelled ? 'Un evento ha sido cancelado.' : 'Un evento ha sido modificado.'
     send_notification(message)
+  end
+
+  def send_48_hour_reminder
+    send_notification('Confirma tu asistencia al evento.')
   end
 
   private

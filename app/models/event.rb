@@ -30,6 +30,15 @@ class Event < ApplicationRecord
     joins(:invitations).where(query, date, user_id).order(:start_time)
   }
 
+  scope :on_year, lambda { |date|
+    query = "to_char(events.start_time, 'YYYY') = to_char(?::TIMESTAMP,'YYYY')"
+    where(query, date)
+  }
+
+  scope :on_day, lambda { |day|
+    where("to_char(start_time, 'YYYYMMDD') = to_char(?::TIMESTAMP, 'YYYYMMDD')", day)
+  }
+
   def invitations_not_empty
     errors.add(:invitations, 'the invitations cannot be empty') if invitations.empty?
   end
