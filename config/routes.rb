@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         put :update_change_last_seen, on: :member
       end
       namespace :admin do
+        resource :cost_summary, only: %i[show]
         resources :events, only: %i[index create show update]
         resources :users, only: %i[index show update]
         resources :reviews, only: %i[index create show update destroy]
