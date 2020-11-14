@@ -17,7 +17,7 @@ RSpec.describe 'Event update endpoint', type: :request do
         {
           'name' => 'evento_update',
           'address' => 'testing_address333',
-          'cost' => 200,
+          'cost' => '200.55',
           'start_time' => (Time.zone.now + 2.hour),
           'end_time' => (Time.zone.now + 5.hour),
           'cancelled' => false,
