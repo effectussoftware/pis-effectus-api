@@ -24,7 +24,7 @@ RSpec.describe 'Event show endpoint', type: :request do
           year = summary['date']
           cost = summary['cost']
 
-          expect(cost).to be expected_costs[year]
+          expect(cost).to eq expected_costs[year].to_s
         end
       end
 
@@ -41,7 +41,7 @@ RSpec.describe 'Event show endpoint', type: :request do
         summary_response.each do |summary|
           month = summary['date']
           cost = summary['cost']
-          expect(cost).to be expected_costs[month]
+          expect(cost).to eq expected_costs[month].to_s
         end
       end
     end

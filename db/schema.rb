@@ -42,8 +42,8 @@ ActiveRecord::Schema.define(version: 2020_11_14_212609) do
     t.boolean "published", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.boolean "dummy", default: false
     t.datetime "recurrent_on"
+    t.boolean "dummy", default: false
   end
 
   create_table "events", force: :cascade do |t|

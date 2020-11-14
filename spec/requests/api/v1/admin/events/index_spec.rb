@@ -16,6 +16,7 @@ RSpec.describe 'Event index endpoint', type: :request do
         get api_v1_admin_events_path, headers: auth_headers
         expect(response).to have_http_status(200)
         events_response = Oj.load(response.body)['events']
+        events = Event.all
         expect(events_response[0].except('invitations')).to include(
           events[0]
           .as_json
