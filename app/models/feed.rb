@@ -1,34 +1,25 @@
 # frozen_string_literal: true
 
 class Feed
-  attr_reader :id, :type, :address, :start_time, :end_time, :text, :title, :updated_at, :image, :changed_last_seen
+  attr_reader :id, :type, :address, :start_time, :end_time, :text, :title, :updated_at, :image, :changed_last_seen, :attend, :confirmation
 
   def self.from_communication(communication)
     image = communication.image.attached? ? communication.image_url : nil
 
     new(id: communication.id,
         title: communication.title,
-        address: nil,
-        start_time: nil,
-        end_time: nil,
         text: communication.text,
         type: 'communication',
         updated_at: communication.updated_at,
-        image: image,
-        changed_last_seen: nil)
+        image: image)
   end
 
   def self.from_review(review)
     new(id: review.id,
         title: review.title,
-        address: nil,
-        start_time: nil,
-        end_time: nil,
         text: review.comments,
         type: 'review',
-        updated_at: review.updated_at,
-        image: nil,
-        changed_last_seen: nil)
+        updated_at: review.updated_at)
   end
 
   def self.from_event(event, invitation)
@@ -40,8 +31,10 @@ class Feed
         text: event.description,
         type: 'event',
         updated_at: event.updated_event_at,
-        image: nil,
-        changed_last_seen: invitation.new_updates_since_last_seen?)
+        changed_last_seen: invitation.new_updates_since_last_seen?,
+        attend: invitation.attend,
+        confirmation: invitation.confirmation)
+        
   end
 
   def initialize(args)
@@ -55,5 +48,8 @@ class Feed
     @updated_at = args[:updated_at]
     @image = args[:image]
     @changed_last_seen = args[:changed_last_seen]
+    @attend = args[:attend]
+    @confirmation = args[:confirmation]
+    
   end
 end
