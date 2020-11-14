@@ -34,6 +34,10 @@ class Event < ApplicationRecord
     where(query, date)
   }
 
+  scope :on_day, lambda { |day|
+    where("to_char(start_time, 'YYYYMMDD') = to_char(?::TIMESTAMP, 'YYYYMMDD')", day)
+  }
+
   def invitations_not_empty
     errors.add(:invitations, 'the invitations cannot be empty') if invitations.empty?
   end
