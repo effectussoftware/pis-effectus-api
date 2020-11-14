@@ -15,8 +15,6 @@ class Event < ApplicationRecord
 
   before_save :set_updated_event_at, if: :public_fields_updated?
 
-  after_update :send_notification
-
   scope :from_date, lambda { |start_time, with_include, user_id|
     query = if with_include
               'events.updated_event_at <= ? and invitations.user_id = ?'
@@ -60,15 +58,5 @@ class Event < ApplicationRecord
   def public_fields_updated?
     name_changed? || address_changed? || address_changed? ||
       start_time_changed? || end_time_changed? || cancelled_changed?
-  end
-
-  def send_notification
-    invitations do |invitation|
-      invitation.user.send_notification(
-         name,
-        'Event has change.',
-        {updated_at: updated_at, id: id, start_time: start_time, type: self.class.to_s }
-      )
-    end
   end
 end

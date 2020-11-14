@@ -14,7 +14,7 @@ class Invitation < ApplicationRecord
   def send_notification
     user.send_notification(
       event.name,
-      'You have a new event invitation.',
+      'Tienes una nueva invitación a un evento.',
       { id: id, updated_at: updated_at, event: event.id, start_time: event.start_time, type: self.class.to_s }
     )
   end
