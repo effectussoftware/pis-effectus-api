@@ -22,7 +22,7 @@ module Api
           render json: { error: e.message }, status: :bad_request
         end
 
-        rescue_from ActiveRecord::RecordInvalid do |e|
+        rescue_from ActiveRecord::RecordInvalid, ActiveRecord::RecordNotDestroyed do |e|
           render json: { error: e.message }, status: :forbidden
         end
       end
