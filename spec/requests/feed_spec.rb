@@ -20,19 +20,35 @@ RSpec.describe 'Feed', type: :request do
         expect(response).to have_http_status 200
 
         feed = Oj.load(response.body)['feed']
-        feed_map = feed.map { |f| f.as_json(only: %w[id text title updated_at]) }
+        feed_map = feed.as_json
 
         user_events = invitations.map(&:event)
         response_expected = communications_not_reccurrent + communication_recurrent_dummy + reviews + user_events
-        response_expected = response_expected.sort_by(&:updated_at).reverse[0..9]
-                                             .as_json(only: %w[id text title name comments updated_at event_updated_at])
+        response_expected = response_expected.sort_by(&:updated_at)
+                                             .reverse[0..9]
 
         response_expected_map = response_expected.map do |item|
+          class_type = item.class.to_s
+          item = item.as_json
+          if class_type == 'Event'
+            invitation = Invitation.find_by(event_id: item['id'], user_id: user.id)
+            item['attend'] = invitation.attend
+            item['confirmation'] = invitation.confirmation
+            item['changed_last_seen'] = invitation.new_updates_since_last_seen?
+          end
           {
             id: item['id'],
             text: item['text'] || item['comments'],
             title: item['title'] || item['name'],
-            updated_at: item['event_updated_at'] || item['updated_at']
+            type: class_type,
+            image: item['image'],
+            updated_at: item['event_updated_at'] || item['updated_at'],
+            address: item['address'],
+            attend: item['attend'],
+            end_time: item['end_time'],
+            changed_last_seen: item['changed_last_seen'],
+            start_time: item['start_time'],
+            confirmation: item['confirmation']
           }.as_json
         end
         expect(feed_map).to eq(response_expected_map)

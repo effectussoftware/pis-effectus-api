@@ -1,7 +1,18 @@
 # frozen_string_literal: true
 
 class Feed
-  attr_reader :id, :type, :address, :start_time, :end_time, :text, :title, :updated_at, :image, :changed_last_seen, :attend, :confirmation
+  attr_reader :id,
+              :type,
+              :address,
+              :start_time,
+              :end_time,
+              :text,
+              :title,
+              :updated_at,
+              :image,
+              :changed_last_seen,
+              :attend,
+              :confirmation
 
   def self.from_communication(communication)
     image = communication.image.attached? ? communication.image_url : nil
@@ -9,7 +20,7 @@ class Feed
     new(id: communication.id,
         title: communication.title,
         text: communication.text,
-        type: 'communication',
+        type: communication.class.to_s,
         updated_at: communication.updated_at,
         image: image)
   end
@@ -18,7 +29,7 @@ class Feed
     new(id: review.id,
         title: review.title,
         text: review.comments,
-        type: 'review',
+        type: review.class.to_s,
         updated_at: review.updated_at)
   end
 
@@ -29,12 +40,11 @@ class Feed
         start_time: event.start_time,
         end_time: event.end_time,
         text: event.description,
-        type: 'event',
+        type: event.class.to_s,
         updated_at: event.updated_event_at,
         changed_last_seen: invitation.new_updates_since_last_seen?,
         attend: invitation.attend,
         confirmation: invitation.confirmation)
-        
   end
 
   def initialize(args)
@@ -50,6 +60,5 @@ class Feed
     @changed_last_seen = args[:changed_last_seen]
     @attend = args[:attend]
     @confirmation = args[:confirmation]
-    
   end
 end
