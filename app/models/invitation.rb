@@ -12,6 +12,11 @@ class Invitation < ApplicationRecord
     changed_last_seen.present? && event.updated_event_at > changed_last_seen
   end
 
+  def send_update_notification
+    message = event.cancelled ? 'Un evento ha sido cancelado.' : 'Un evento ha sido modificado.'
+    send_notification(message)
+  end
+
   def send_48_hour_reminder
     send_notification('Confirma tu asistencia al evento.')
   end
