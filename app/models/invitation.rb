@@ -10,7 +10,8 @@ class Invitation < ApplicationRecord
   end
 
   def send_update_notification
-    send_notification('Un evento ha sido modificado.')
+    message = event.cancelled ? 'Un evento ha sido cancelado.' : 'Un evento ha sido modificado.'
+    send_notification(message)
   end
 
   private

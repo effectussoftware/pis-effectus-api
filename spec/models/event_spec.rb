@@ -73,11 +73,12 @@ RSpec.describe Event, type: :model do
       expect(user).to_not receive(:send_notification)
 
       new_name = 'Nuevo titulo'
+      message = ev.cancelled ? 'Un evento ha sido cancelado.' : 'Un evento ha sido modificado.'
       ev.invitations.each do |invitation|
         allow(invitation.user).to receive(:send_notification).and_return(true)
         expect(invitation.user).to receive(:send_notification)
           .with(new_name,
-                'Un evento ha sido modificado.',
+                message,
                 { id: invitation.id, updated_at: ev.updated_event_at, event: ev.id, start_time: ev.start_time,
                   type: Invitation.to_s })
       end
