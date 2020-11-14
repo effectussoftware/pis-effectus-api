@@ -13,13 +13,13 @@ class Invitation < ApplicationRecord
   end
 
   def send_48_hour_reminder
-    send_notification('Please confirm your attendance to the event.')
+    send_notification('Confirma tu asistencia al evento.')
   end
 
   private
 
   def send_new_event_notification
-    send_notification('You are invited to an event.')
+    send_notification('Tienes una nueva invitación a un evento.')
   end
 
   def send_notification(message)

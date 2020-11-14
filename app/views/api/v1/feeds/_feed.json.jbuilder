@@ -10,4 +10,6 @@ json.extract! feed,
               :end_time,
               :updated_at,
               :image,
-              :changed_last_seen
+              :changed_last_seen,
+              :attend,
+              :confirmation
