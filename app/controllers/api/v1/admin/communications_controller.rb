@@ -43,7 +43,7 @@ module Api
           return unless params[:communication][:image]
 
           @communication.image.purge
-          return unless params[:communication][:image][:data] != '_destroy'
+          return if params[:communication][:image][:_destroy]
 
           @communication.image.attach(data: params[:communication][:image][:data])
         end

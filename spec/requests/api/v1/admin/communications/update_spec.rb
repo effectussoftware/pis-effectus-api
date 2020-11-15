@@ -58,7 +58,7 @@ RSpec.describe 'Communications', type: :request do
           bd_communication = Communication.first
           expect(bd_communication.title).to eq 'Lala'
           expect(bd_communication.image.attached?).to eq true
-          data = { 'communication': { 'image': { 'data': '_destroy' } } }
+          data = { 'communication': { 'image': { '_destroy': true } } }
           put "/api/v1/admin/communications/#{communication.id}", headers: auth_headers, params: data
           expect(response).to have_http_status 200
           bd_communication = Communication.first
