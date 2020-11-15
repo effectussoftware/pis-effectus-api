@@ -4,7 +4,11 @@ module Api
   module V1
     class EventsController < Api::V1::ApiController
       def index
-        date = params[:filters][:date] ? Time.zone.strptime(params[:filters][:date], '%Y-%m') : Time.zone.now
+        date = if params[:filters] && params[:filters][:date]
+                 Time.zone.strptime(params[:filters][:date], '%Y-%m')
+               else
+                 Time.zone.now
+               end
         @events = Event.on_month(date, current_api_v1_user).includes(:invitations)
       end
 
