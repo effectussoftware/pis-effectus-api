@@ -11,6 +11,7 @@ class Feed
               :updated_at,
               :image,
               :changed_last_seen,
+              :cancelled,
               :attend,
               :confirmation
 
@@ -43,11 +44,12 @@ class Feed
         type: event.class.to_s,
         updated_at: event.updated_event_at,
         changed_last_seen: invitation.new_updates_since_last_seen?,
+        cancelled: event.cancelled,
         attend: invitation.attend,
         confirmation: invitation.confirmation)
   end
 
-  def initialize(args)
+  def initialize(args) # rubocop:disable Metrics/AbcSize
     @id =  args[:id]
     @title = args[:title]
     @address = args[:address]
@@ -58,6 +60,7 @@ class Feed
     @updated_at = args[:updated_at]
     @image = args[:image]
     @changed_last_seen = args[:changed_last_seen]
+    @cancelled = args[:cancelled]
     @attend = args[:attend]
     @confirmation = args[:confirmation]
   end

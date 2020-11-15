@@ -48,7 +48,8 @@ RSpec.describe 'Feed', type: :request do
             end_time: item['end_time'],
             changed_last_seen: item['changed_last_seen'],
             start_time: item['start_time'],
-            confirmation: item['confirmation']
+            confirmation: item['confirmation'],
+            cancelled: item['cancelled']
           }.as_json
         end
         expect(feed_map).to eq(response_expected_map)

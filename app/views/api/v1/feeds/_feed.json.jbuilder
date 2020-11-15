@@ -11,5 +11,6 @@ json.extract! feed,
               :updated_at,
               :image,
               :changed_last_seen,
+              :cancelled,
               :attend,
               :confirmation
