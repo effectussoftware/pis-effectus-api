@@ -36,7 +36,7 @@ module Api
         private
 
         def update_params
-          params.require(:communication).permit(:title, :text, :published, :recurrent_on)
+          params.require(:communication).permit(:title, :text, :published)
         end
 
         def handle_attachments
