@@ -1,25 +1,30 @@
 # effectus-api
 [![Maintainability](https://api.codeclimate.com/v1/badges/dd23e640b2ae8403e4a3/maintainability)](https://codeclimate.com/github/effectussoftware/pis-effectus-api/maintainability)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Installation guide.
 
-Things you may want to cover:
+1 - Set up the environment.
+The variables you need are:
+```
+DATABASE_USERNAME # username for the database
+DATABASE_PASSWORD # password for the database
+GOOGLE_CLIENT_ID  # google app id you can create this on google dev console
+#AWS
+AWS_ACCESS_KEY    # Amazon access Key
+AWS_ACCESS_KEY_ID # Amazon acces key id
+AWS_BUCKET        # Amazon S3 Bucket name
+AWS_REGION        # Amazon S3 Bucket region 
 
-* Ruby version
+DEFAULT_URL       # Site base url eg. http://localhost:5000 or https://example.com
+```
 
-* System dependencies
+2 - Install dependencies
+in the project root run `bundle install`
 
-* Configuration
+3 - Create and migrate the database
+in the project root run:
+`rake db:create && rake db:migrate`
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Running the test suite
+you can run all the existing locally tests with `$ rspec`
+you can run the linters locally with `$ rubocop`
