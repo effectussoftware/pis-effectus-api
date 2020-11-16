@@ -11,7 +11,7 @@ class Event < ApplicationRecord
   validates :cost, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validate :invitations_not_empty
   validate :end_time_must_be_greater_than_start_time
-  validate :end_time_and_start_time_must_be_greater_than_now
+  # validate :end_time_and_start_time_must_be_greater_than_now
 
   before_save :set_updated_event_at, if: :public_fields_would_update?
   after_update :notify_invited_users, if: :public_fields_updated?
