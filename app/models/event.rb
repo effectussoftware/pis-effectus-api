@@ -45,6 +45,7 @@ class Event < ApplicationRecord
 
   def end_time_must_be_greater_than_start_time
     return unless check_end_time_and_start_time && public_fields_would_update?
+
     errors.add(:start_time, 'end_time must be greater than start_time')
   end
 
