@@ -43,6 +43,18 @@ RSpec.describe Event, type: :model do
     end
   end
 
+  describe 'updates the privates fields without check the start_time and end_time validations' do
+    it 'updates the event cost with start_time < Time.zone.now' do
+      event = nil
+      Timecop.freeze(Date.today - 1.hour) do
+        event = create(:event, cost: 100, start_time: Time.zone.now, end_time: Time.zone.now + 2.hour)
+      end
+      Timecop.freeze(Date.today) do
+        expect { event.update(cost: 200) }.to change(event, :cost).to 200
+      end
+    end
+  end
+
   describe '.set_updated_event_at' do
     it 'updates updated_event_at when public fields are changed' do
       event = nil
