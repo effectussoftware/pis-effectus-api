@@ -24,7 +24,7 @@ RSpec.describe 'Event show endpoint', type: :request do
             'confirmation' => iter['confirmation']
           }
         end
-        expect(invitations).to eq(event.invitations.as_json(only: %i[user_id attend confirmation]))
+        expect(invitations).to match_array(event.invitations.as_json(only: %i[user_id attend confirmation]))
       end
 
       it 'returns not_found' do

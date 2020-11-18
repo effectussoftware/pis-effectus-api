@@ -9,13 +9,19 @@ module Api
                else
                  Time.zone.now
                end
-        @events = Event.on_month(date, current_api_v1_user).includes(:invitations)
+        @events = events.on_month(date, current_api_v1_user).includes(:invitations)
       end
 
       def show
-        @event = Event.find(params[:id])
-        @invitation = @event.invitations.find_by(user: current_api_v1_user)
+        @event = events.find(params[:id])
+        @invitation = @event.invitations.find_by!(user: current_api_v1_user)
         raise ActiveRecord::RecordNotFound, 'not found' unless @invitation
+      end
+
+      private
+
+      def events
+        Event.published
       end
     end
   end

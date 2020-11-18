@@ -14,6 +14,7 @@ class Event < ApplicationRecord
   validate :end_time_and_start_time_must_be_greater_than_now
 
   before_save :set_updated_event_at, if: :public_fields_would_update?
+  after_save :send_notification, if: :just_published
   after_update :notify_invited_users, if: :public_fields_updated?
 
   scope :from_date, lambda { |start_time, with_include, user_id|
@@ -38,6 +39,8 @@ class Event < ApplicationRecord
   scope :on_day, lambda { |day|
     where("to_char(start_time, 'YYYYMMDD') = to_char(?::TIMESTAMP, 'YYYYMMDD')", day)
   }
+
+  scope :published, -> { where(published: true) }
 
   def invitations_not_empty
     errors.add(:invitations, 'the invitations cannot be empty') if invitations.empty?
@@ -77,5 +80,13 @@ class Event < ApplicationRecord
 
   def notify_invited_users
     invitations.each(&:send_update_notification)
+  end
+
+  def just_published
+    saved_change_to_published? && published?
+  end
+
+  def send_notification
+    invitations.each(&:send_new_event_notification)
   end
 end

@@ -21,13 +21,19 @@ class Invitation < ApplicationRecord
     send_notification('Confirma tu asistencia al evento.')
   end
 
-  private
-
   def send_new_event_notification
+    return if notification_sent
+
     send_notification('Tienes una nueva invitación a un evento.')
+
+    update(notification_sent: true)
   end
 
+  private
+
   def send_notification(message)
+    return unless user.is_active
+
     user.send_notification(
       event.name,
       message,
