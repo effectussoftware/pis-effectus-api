@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       mount_devise_token_auth_for 'User', at: 'auth'
       post '/auth/login', to: 'authentication#login'
       resource :feed, only: %i[show]
+      resource :priority_feed, only: %i[show]
       resources :reviews, only: %i[index show]
       resources :communications, only: %i[show]
       resources :events, only: %i[index show]
