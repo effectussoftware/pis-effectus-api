@@ -37,8 +37,8 @@ RSpec.describe Invitation, type: :model do
     it 'sends notification when created' do
       Timecop.freeze(Time.zone.local(2020))
       allow_any_instance_of(User).to receive(:send_notification).and_return(true)
-      event = create(:event)
-      user = create(:user)
+      event = create(:event, published: true)
+      user = create(:user, is_active: true)
       invitation = build(:invitation, event: event, user: user)
       expect(user).to receive(:send_notification)
         .with(event.name,

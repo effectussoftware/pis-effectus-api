@@ -3,7 +3,7 @@
 class Invitation < ApplicationRecord
   belongs_to :user
   belongs_to :event
-  after_create :send_new_event_notification
+  after_create :send_new_event_notification, if: :event_is_published
 
   scope :not_confirmed, -> { where(confirmation: false) }
   scope :confirmed, -> { where(confirmation: true) }
@@ -21,13 +21,22 @@ class Invitation < ApplicationRecord
     send_notification('Confirma tu asistencia al evento.')
   end
 
+  def send_new_event_notification
+    return if notification_sent
+
+    send_notification('Tienes una nueva invitación a un evento.')
+    update(notification_sent: true)
+  end
+
   private
 
-  def send_new_event_notification
-    send_notification('Tienes una nueva invitación a un evento.')
+  def event_is_published
+    event.published
   end
 
   def send_notification(message)
+    return unless user.is_active
+
     user.send_notification(
       event.name,
       message,

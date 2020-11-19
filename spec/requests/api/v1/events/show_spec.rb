@@ -3,13 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe 'Event show endpoint', type: :request do
-  let!(:user) { create(:user) }
+  let!(:user) { create(:user, is_active: true) }
   let!(:user_not_invited) { create(:user) }
 
   let!(:auth_headers_user) { user.create_new_auth_token }
   let!(:auth_headers_user_not_invited) { user_not_invited.create_new_auth_token }
 
-  let!(:event) { create(:event) }
+  let!(:event) { create(:event, published: true) }
   let!(:invitation) { create(:invitation, user: user, event: event) }
 
   describe 'GET /api/v1/events/:id' do
@@ -18,7 +18,7 @@ RSpec.describe 'Event show endpoint', type: :request do
         get api_v1_event_path(event), headers: auth_headers_user
         expect(response).to have_http_status(200)
         events_response = Oj.load(response.body)['event']
-        expect(events_response).to include(event.as_json.except('updated_at', 'created_at', 'cost'))
+        expect(events_response).to include(event.as_json.except('updated_at', 'created_at', 'cost', 'published'))
         emails = events_response['users'].map { |x| x['email'] }
         expect(emails).to include(user.email)
       end

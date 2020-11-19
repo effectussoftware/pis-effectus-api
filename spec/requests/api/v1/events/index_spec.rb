@@ -11,7 +11,12 @@ RSpec.describe 'Events Calendar index endpoint', type: :request do
 
   let!(:invitation) { create(:invitation, user: user, event: event) }
 
-  let!(:event) { create(:event, start_time: Time.zone.now + 60 * 60, end_time: Time.zone.now + 60 * 60 * 2) }
+  let!(:event) do
+    create(:event,
+           start_time: Time.zone.now + 60 * 60,
+           end_time: Time.zone.now + 60 * 60 * 2,
+           published: true)
+  end
   let!(:invitation) { create(:invitation, user: user, event: event) }
 
   describe 'GET /api/v1/events' do
@@ -25,12 +30,13 @@ RSpec.describe 'Events Calendar index endpoint', type: :request do
         event_list = Event.on_month(event.start_time, user)
         events = event_list.map do |e|
           invitation = e.invitations.find_by(user_id: user.id)
-          e.as_json(except: %i[cost created_at updated_at]).merge(
+          e.as_json(except: %i[cost created_at updated_at published]).merge(
             'attend' => invitation.attend,
             'confirmation' => invitation.confirmation
           )
         end
-        expect(events_response['events'].map { |event| event.except('changed_last_seen') }).to match(events)
+        expect(events_response['events'].map { |event| event.except('changed_last_seen', 'published') })
+          .to match(events)
       end
     end
 

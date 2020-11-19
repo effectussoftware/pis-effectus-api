@@ -12,6 +12,7 @@ FactoryBot.define do
     transient do
       invitations_count { rand(1..5) }
     end
+    published { Faker::Boolean.boolean }
     after(:build) do |event, evaluator|
       event.invitations << build_list(:invitation, evaluator.invitations_count, event: event)
     end

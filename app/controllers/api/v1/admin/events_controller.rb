@@ -31,7 +31,7 @@ module Api
           @events.order(order_sort)
         end
 
-        def event_params
+        def event_params # rubocop:disable Metrics/MethodLength
           params.require(:event).permit(
             :name,
             :description,
@@ -40,6 +40,7 @@ module Api
             :end_time,
             :cost,
             :cancelled,
+            :published,
             invitations_attributes: %i[user_id confirmation attend]
           )
         end
