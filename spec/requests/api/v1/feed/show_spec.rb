@@ -42,7 +42,7 @@ RSpec.describe 'Feed', type: :request do
             title: item['title'] || item['name'],
             type: class_type,
             image: item['image'],
-            updated_at: item['event_updated_at'] || item['updated_at'],
+            updated_at: item['updated_event_at'] || item['updated_at'],
             address: item['address'],
             attend: item['attend'],
             end_time: item['end_time'],
