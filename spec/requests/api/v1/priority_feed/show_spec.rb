@@ -11,14 +11,16 @@ RSpec.describe 'Feed', type: :request do
     context 'with authorization' do
       it 'lists the events' do
         create(:invitation, confirmation: true, user_id: user.id, event: create(
-          :event, start_time: Time.zone.now + 1.day
+          :event, start_time: Time.zone.now + 1.day, published: true
         ))
         invitation = create(:invitation, confirmation: false, user_id: user.id, event: create(
-          :event, start_time: Time.zone.now + 1.day
+          :event, start_time: Time.zone.now + 1.day, published: true
         ))
         Timecop.freeze(Time.zone.now - 1.day) do
-          create(:invitation, confirmation: true, user_id: user.id, event: create(:event, start_time: Time.zone.now))
-          create(:invitation, confirmation: false, user_id: user.id, event: create(:event, start_time: Time.zone.now))
+          create(:invitation, confirmation: true, user_id: user.id, event: create(:event, start_time: Time.zone.now,
+                                                                                          published: true))
+          create(:invitation, confirmation: false, user_id: user.id, event: create(:event, start_time: Time.zone.now,
+                                                                                           published: true))
         end
 
         get '/api/v1/priority_feed', headers: auth_headers

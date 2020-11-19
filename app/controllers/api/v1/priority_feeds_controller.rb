@@ -10,7 +10,7 @@ module Api
       private
 
       def events
-        Event.future.joins(:invitations).where(
+        Event.future.published.joins(:invitations).where(
           'invitations.user_id = ? AND NOT invitations.confirmation', current_user.id
         ).order(
           start_time: :desc
