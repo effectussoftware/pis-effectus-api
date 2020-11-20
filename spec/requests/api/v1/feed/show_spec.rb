@@ -22,7 +22,7 @@ RSpec.describe 'Feed', type: :request do
         feed = Oj.load(response.body)['feed']
         feed_map = feed.as_json
 
-        user_events = invitations.map(&:event)
+        user_events = invitations.map(&:event).select(&:published)
         response_expected = communications_not_reccurrent + communication_recurrent_dummy + reviews + user_events
         response_expected = response_expected.sort_by(&:updated_at)
                                              .reverse[0..9]

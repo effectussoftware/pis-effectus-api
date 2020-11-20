@@ -9,10 +9,11 @@ FactoryBot.define do
     end_time { start_time + rand(1..5).hour }
     cost { Faker::Number.number(5) }
     updated_event_at { Time.zone.now }
+    published { Faker::Boolean.boolean }
     transient do
       invitations_count { rand(1..5) }
     end
-    published { Faker::Boolean.boolean }
+
     after(:build) do |event, evaluator|
       event.invitations << build_list(:invitation, evaluator.invitations_count, event: event)
     end
