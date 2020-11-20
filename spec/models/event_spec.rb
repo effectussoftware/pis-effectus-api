@@ -21,7 +21,8 @@ RSpec.describe Event, type: :model do
           start_time: Time.now + 2.hour,
           end_time: Time.now + 3.hour
         )
-      end.to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Invitations the invitations cannot be empty')
+      end.to raise_error(ActiveRecord::RecordInvalid,
+                         'Validation failed: Invitations Debe haber al menos una invitación')
     end
   end
 
@@ -30,7 +31,7 @@ RSpec.describe Event, type: :model do
       expect do
         create(:event, start_time: Time.zone.now + 2.hour, end_time: Time.zone.now + 1.hour)
       end.to raise_error(ActiveRecord::RecordInvalid,
-                         'Validation failed: Start time end_time must be greater than start_time')
+                         'Validation failed: Start time La fecha de fin debe ser más grande que la fecha de inicio')
     end
   end
 
@@ -39,7 +40,7 @@ RSpec.describe Event, type: :model do
       expect do
         create(:event, start_time: Time.zone.now, end_time: Time.zone.now + 1.hour)
       end.to raise_error(ActiveRecord::RecordInvalid,
-                         'Validation failed: Start time end_time and start_time must be greater than now')
+                         'Validation failed: Start time Las fechas de fin e inicio deben estar en el futuro')
     end
   end
 

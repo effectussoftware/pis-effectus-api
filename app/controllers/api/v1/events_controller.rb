@@ -15,7 +15,7 @@ module Api
       def show
         @event = events.find(params[:id])
         @invitation = @event.invitations.find_by!(user: current_api_v1_user)
-        raise ActiveRecord::RecordNotFound, 'not found' unless @invitation
+        raise ActiveRecord::RecordNotFound, 'No encontrado' unless @invitation
       end
 
       private

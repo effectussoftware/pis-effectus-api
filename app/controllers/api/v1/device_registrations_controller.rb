@@ -4,7 +4,9 @@ module Api
   module V1
     class DeviceRegistrationsController < Api::V1::ApiController
       def create
-        raise ActionController::BadRequest.new, 'device token is required' if params[:device].try(:[], :token).nil?
+        if params[:device].try(:[], :token).nil?
+          raise ActionController::BadRequest.new, 'Debe mandar el token del dispositivo'
+        end
 
         save_push_notification_token
         head :ok

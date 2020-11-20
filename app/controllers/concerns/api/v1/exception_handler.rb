@@ -7,7 +7,7 @@ module Api
 
       included do
         rescue_from Exception do |e|
-          render json: { error: Rails.env.production? ? 'Unknown error' : e.message }, status: 500
+          render json: { error: Rails.env.production? ? 'Error desconocido' : e.message }, status: 500
         end
 
         rescue_from ActiveRecord::RecordNotFound do |e|

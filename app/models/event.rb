@@ -44,19 +44,19 @@ class Event < ApplicationRecord
   scope :published, -> { where(published: true) }
 
   def invitations_not_empty
-    errors.add(:invitations, 'the invitations cannot be empty') if invitations.empty?
+    errors.add(:invitations, 'Debe haber al menos una invitación') if invitations.empty?
   end
 
   def end_time_must_be_greater_than_start_time
     return unless check_end_time_and_start_time && public_fields_would_update?
 
-    errors.add(:start_time, 'end_time must be greater than start_time')
+    errors.add(:start_time, 'La fecha de fin debe ser más grande que la fecha de inicio')
   end
 
   def end_time_and_start_time_must_be_greater_than_now
     return unless start_time_end_time_greater_than_now && public_fields_would_update?
 
-    errors.add(:start_time, 'end_time and start_time must be greater than now')
+    errors.add(:start_time, 'Las fechas de fin e inicio deben estar en el futuro')
   end
 
   def check_end_time_and_start_time
