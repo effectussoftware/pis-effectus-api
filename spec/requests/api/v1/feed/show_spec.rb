@@ -11,14 +11,14 @@ RSpec.describe 'Feed', type: :request do
   let!(:reviews) { create_list(:review_with_action_items, 5, user_id: user.id) }
   let!(:communication_recurrent_dummy) { create_list(:communication_recurrent_dummy, 5) }
   let!(:events) { create_list(:event, 5) }
-  let!(:invitations) { (1..3).map { create(:invitation, user_id: user.id, event: create(:event)) } }
+  let!(:invitations) { (1..3).map { create(:invitation, user_id: user.id, confirmation: true, event: create(:event)) } }
 
   describe 'GET api/v1/feed' do
     context 'with authorization' do
       it 'lists the communications, reviews and events' do
         get '/api/v1/feed', headers: auth_headers
-        expect(response).to have_http_status 200
 
+        expect(response).to have_http_status 200
         feed = Oj.load(response.body)['feed']
         feed_map = feed.as_json
 
@@ -26,7 +26,6 @@ RSpec.describe 'Feed', type: :request do
         response_expected = communications_not_reccurrent + communication_recurrent_dummy + reviews + user_events
         response_expected = response_expected.sort_by(&:updated_at)
                                              .reverse[0..9]
-
         response_expected_map = response_expected.map do |item|
           class_type = item.class.to_s
           item = item.as_json

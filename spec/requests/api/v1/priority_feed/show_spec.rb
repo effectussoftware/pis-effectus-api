@@ -13,6 +13,10 @@ RSpec.describe 'Feed', type: :request do
         create(:invitation, confirmation: true, user_id: user.id, event: create(
           :event, start_time: Time.zone.now + 1.day, published: true
         ))
+
+        create(:invitation, confirmation: true, user_id: user.id, event: create(
+          :event, start_time: Time.zone.now + 1.day, published: true, cancelled: true
+        ))
         invitation = create(:invitation, confirmation: false, user_id: user.id, event: create(
           :event, start_time: Time.zone.now + 1.day, published: true
         ))

@@ -17,13 +17,17 @@ class Event < ApplicationRecord
   after_save :send_new_event_notification, if: :just_published
   after_update :notify_invited_users, if: %i[public_fields_updated? published]
 
-  scope :from_date, lambda { |start_time, with_include, user_id|
+  scope :user_event_from_date_confirmed, lambda { |start_time, with_include, user_id|
     query = if with_include
-              'events.updated_event_at <= ? and invitations.user_id = ?'
+              'events.updated_event_at <= ? AND
+              invitations.user_id = ? AND
+              (invitations.confirmation OR events.cancelled OR events.start_time < ?)'
             else
-              'events.updated_event_at < ? and invitations.user_id = ?'
+              'events.updated_event_at < ? AND
+              invitations.user_id = ? AND
+              (invitations.confirmation OR events.cancelled OR events.start_time < ?)'
             end
-    joins(:invitations).where(query, start_time, user_id)
+    joins(:invitations).where(query, start_time, user_id, Time.zone.now)
   }
 
   scope :future, -> { where('start_time > ?', Time.zone.now) }
