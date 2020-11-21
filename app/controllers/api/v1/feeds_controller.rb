@@ -15,7 +15,7 @@ module Api
       private
 
       def events(start_time, with_include)
-        Event.published.from_date(
+        Event.published.user_event_from_date_confirmed(
           start_time, with_include, current_user.id
         ).order(updated_event_at: :desc).includes(:invitations)
              .limit(10)
