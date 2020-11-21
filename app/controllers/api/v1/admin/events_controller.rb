@@ -20,7 +20,8 @@ module Api
 
         def update
           @event = Event.find(params[:id])
-          @event.update!(event_params)
+          @event.update!(event_params.except(:invitations_attributes))
+          @event.update!(event_params.slice(:invitations_attributes))
         end
 
         private

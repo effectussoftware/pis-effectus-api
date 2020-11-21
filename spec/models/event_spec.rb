@@ -79,9 +79,9 @@ RSpec.describe Event, type: :model do
   end
 
   describe 'after an event is modified' do
-    it 'sends notification if public fields are updated' do
+    it 'sends notification if public fields are updated and the event is published' do
       Timecop.freeze(Time.zone.local(2020))
-      ev = create(:event)
+      ev = create(:event, published: true)
       user = create(:user)
       expect(user).to_not receive(:send_notification)
 
@@ -97,6 +97,15 @@ RSpec.describe Event, type: :model do
       end
       expect(ev.update(name: new_name)).to eq(true)
       Timecop.return
+    end
+
+    it 'must not send notification with a event not published' do
+      Timecop.freeze(Time.zone.local(2020))
+      ev = create(:event, published: false)
+      user = User.find(ev.invitations.first.user_id)
+      new_name = 'Nuevo titulo Editado'
+      expect(user).to_not receive(:send_notification)
+      expect(ev.update(name: new_name)).to eq true
     end
   end
 end

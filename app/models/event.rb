@@ -14,8 +14,8 @@ class Event < ApplicationRecord
   validate :end_time_and_start_time_must_be_greater_than_now
 
   before_save :set_updated_event_at, if: :public_fields_would_update?
-  after_save :send_notification, if: :just_published
-  after_update :notify_invited_users, if: :public_fields_updated?
+  after_save :send_new_event_notification, if: :just_published
+  after_update :notify_invited_users, if: %i[public_fields_updated? published]
 
   scope :from_date, lambda { |start_time, with_include, user_id|
     query = if with_include
@@ -91,7 +91,7 @@ class Event < ApplicationRecord
     saved_change_to_published? && published?
   end
 
-  def send_notification
+  def send_new_event_notification
     invitations.each(&:send_new_event_notification)
   end
 end
