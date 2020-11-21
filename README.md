@@ -32,4 +32,4 @@ you can run the linters locally with `$ rubocop`
 ## Querying the api.
 To register an user that user needs to have an effectus software account.
 The user needs to log in first into the app and then if that user is admin it will be allowed to log in to the dashboard.
-You can check the full api spec [here](https://app.swaggerhub.com/apis/effectus-software/pis-effectus_development/1.0)
+You can check the full api spec [here](https://app.swaggerhub.com/apis-docs/effectus-software/pis-effectus_development/1.1)
