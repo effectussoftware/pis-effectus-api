@@ -10,7 +10,7 @@ RSpec.describe Review, type: :model do
     it "can't crate a review with a user reviewer" do
       user = create(:user)
       expect { create(:review, reviewer: user) }
-        .to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Reviewer the reviewer must be an admin')
+        .to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Reviewer El reviewer debe ser administrador')
     end
   end
 
@@ -23,7 +23,7 @@ RSpec.describe Review, type: :model do
       rev = build(:review, user: user_review)
       expect(user_review).to receive(:send_notification)
         .with(rev.title,
-              'You have a new review available.',
+              'Tienes una nueva 1o1',
               { id: Review.last.id + 1, updated_at: Time.zone.now, type: rev.class.to_s })
       expect(rev.save).to eq(true)
       Timecop.return

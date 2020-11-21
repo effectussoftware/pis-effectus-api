@@ -23,7 +23,7 @@ class Review < ApplicationRecord
   after_create :send_notification
 
   def cant_save_if_reviewer_is_not_admin
-    errors.add(:reviewer, 'the reviewer must be an admin') if !reviewer || !reviewer.is_admin
+    errors.add(:reviewer, 'El reviewer debe ser administrador') if !reviewer || !reviewer.is_admin
   end
 
   scope :from_date, lambda { |start_time, with_include, user_id|
@@ -41,7 +41,7 @@ class Review < ApplicationRecord
   def send_notification
     user.send_notification(
       title,
-      'You have a new review available.',
+      'Tienes una nueva 1o1',
       { id: id, updated_at: updated_at, type: self.class.to_s }
     )
   end

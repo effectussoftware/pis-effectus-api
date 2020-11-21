@@ -23,7 +23,7 @@ RSpec.describe 'DeviceRegistrations', type: :request do
         auth_headers = user.create_new_auth_token
         post api_v1_device_registrations_path, headers: auth_headers
         expect(response).to have_http_status(400)
-        expect(Oj.load(response.body)['error']).to eq('device token is required')
+        expect(Oj.load(response.body)['error']).to eq('Debe mandar el token del dispositivo')
       end
     end
   end

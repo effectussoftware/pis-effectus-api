@@ -21,7 +21,7 @@ module Api
         # update token, generate updated auth headers for response
         @user = User.where(email: user_from_google['email'])
                     .first_or_create!(create_params(user_from_google))
-        raise ::UnauthorizedException, 'Invalid User' unless @user[:is_active]
+        raise ::UnauthorizedException, 'Usuario inválido' unless @user[:is_active]
       end
 
       def create_params(user)
