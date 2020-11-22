@@ -12,10 +12,12 @@ class Event < ApplicationRecord
   validate :invitations_not_empty
   validate :end_time_must_be_greater_than_start_time
   validate :end_time_and_start_time_must_be_greater_than_now
+  before_update :cant_update_if_cancelled_event
 
   before_save :set_updated_event_at, if: :public_fields_would_update?
   after_save :send_new_event_notification, if: :just_published
   after_update :notify_invited_users, if: %i[public_fields_updated? published]
+  
 
   scope :user_event_from_date_confirmed, lambda { |start_time, with_include, user_id|
     query = if with_include
@@ -72,6 +74,10 @@ class Event < ApplicationRecord
   end
 
   private
+
+  def cant_update_if_cancelled_event
+    throw :abort, "can't update cancelledevent" if cancelled_was
+  end
 
   def set_updated_event_at
     self.updated_event_at = Time.zone.now
