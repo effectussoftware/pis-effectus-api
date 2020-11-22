@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_17_215104) do
+ActiveRecord::Schema.define(version: 2020_11_22_221426) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,7 +51,7 @@ ActiveRecord::Schema.define(version: 2020_11_17_215104) do
     t.string "address"
     t.datetime "start_time"
     t.datetime "end_time"
-    t.decimal "cost", precision: 7, scale: 2, default: "0.0"
+    t.decimal "cost", precision: 9, scale: 2, default: "0.0"
     t.datetime "updated_event_at"
     t.boolean "cancelled", default: false
     t.datetime "created_at", precision: 6, null: false
