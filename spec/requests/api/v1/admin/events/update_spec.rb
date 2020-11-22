@@ -85,6 +85,15 @@ RSpec.describe 'Event update endpoint', type: :request do
           expect(Time.zone.parse(event_response['updated_event_at'])).to eq(time)
         end
       end
+      
+      it 'does not update a cancelled event' do
+        cancelled_event = create(:event, cancelled: true)
+        put api_v1_admin_event_path(cancelled_event.id), params: event_data_update, headers: auth_headers
+        expect(response).to have_http_status(403)
+        expect(Oj.load(response.body)['error']).to match('No es posible actualizar un evento cancelado')
+        cancelled_event.reload
+        expect(cancelled_event.cancelled).to eq(true)
+      end
     end
   end
 end

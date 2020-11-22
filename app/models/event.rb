@@ -12,7 +12,7 @@ class Event < ApplicationRecord
   validate :invitations_not_empty
   validate :end_time_must_be_greater_than_start_time
   validate :end_time_and_start_time_must_be_greater_than_now
-  before_update :cant_update_if_cancelled_event
+  validate :cant_update_if_cancelled_event
 
   before_save :set_updated_event_at, if: :public_fields_would_update?
   after_save :send_new_event_notification, if: :just_published
@@ -75,7 +75,7 @@ class Event < ApplicationRecord
   private
 
   def cant_update_if_cancelled_event
-    throw :abort, "can't update cancelledevent" if cancelled_was
+    errors.add(:cancelled, 'No es posible actualizar un evento cancelado') if cancelled_was
   end
 
   def set_updated_event_at
