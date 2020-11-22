@@ -17,7 +17,6 @@ class Event < ApplicationRecord
   before_save :set_updated_event_at, if: :public_fields_would_update?
   after_save :send_new_event_notification, if: :just_published
   after_update :notify_invited_users, if: %i[public_fields_updated? published]
-  
 
   scope :user_event_from_date_confirmed, lambda { |start_time, with_include, user_id|
     query = if with_include
@@ -85,7 +84,7 @@ class Event < ApplicationRecord
 
   def public_fields_would_update?
     name_changed? || address_changed? ||
-      start_time_changed? || end_time_changed? || cancelled_changed?
+      start_time_changed? || end_time_changed? || cancelled_changed? || published_changed?
   end
 
   def public_fields_updated?
