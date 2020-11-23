@@ -13,7 +13,7 @@ module Api
         Event.future.published.joins(:invitations).where(
           'invitations.user_id = ? AND NOT invitations.confirmation AND NOT cancelled', current_user.id
         ).order(
-          start_time: :desc
+          start_time: :asc
         ).includes(:invitations)
       end
 
