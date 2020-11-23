@@ -11,7 +11,7 @@ RSpec.describe Communication, type: :model do
     it "can't be updated once published" do
       com = create(:communication, published: true)
       expect(com.update(title: 'new title')).to eq(false)
-      expect(com.errors[:published]).to include("can't update communications once published")
+      expect(com.errors[:published]).to include('No es posible actualizar un comunicado publicado')
       expect(com.update(published: false)).to eq(false)
     end
 

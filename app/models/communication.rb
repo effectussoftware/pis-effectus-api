@@ -51,11 +51,11 @@ class Communication < ApplicationRecord
   private
 
   def cant_destroy_if_published_not_recurrent
-    throw :abort, "can't delete published non recurrent communications" if published_was && !recurrent_on_was
+    throw :abort, 'No es posible borrar un comunicado no recurrente ya publicado' if published_was && !recurrent_on_was
   end
 
   def cant_update_if_published
-    errors.add(:published, "can't update communications once published") if published_was
+    errors.add(:published, 'No es posible actualizar un comunicado publicado') if published_was
   end
 
   def send_notification

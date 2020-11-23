@@ -12,6 +12,8 @@ class Event < ApplicationRecord
   validate :invitations_not_empty
   validate :end_time_must_be_greater_than_start_time
   validate :end_time_and_start_time_must_be_greater_than_now
+  validate :cant_update_if_cancelled_event
+  validate :can_update_published_field
 
   before_save :set_updated_event_at, if: :public_fields_would_update?
   after_save :send_new_event_notification, if: :just_published
@@ -73,13 +75,23 @@ class Event < ApplicationRecord
 
   private
 
+  def cant_update_if_cancelled_event
+    errors.add(:cancelled, 'No es posible actualizar un evento cancelado') if cancelled_was
+  end
+
+  def can_update_published_field
+    return unless published_was && will_save_change_to_published?
+
+    errors.add(:published, 'No es posible cambiar el campo publicado del evento')
+  end
+
   def set_updated_event_at
     self.updated_event_at = Time.zone.now
   end
 
   def public_fields_would_update?
     name_changed? || address_changed? ||
-      start_time_changed? || end_time_changed? || cancelled_changed?
+      start_time_changed? || end_time_changed? || cancelled_changed? || published_changed?
   end
 
   def public_fields_updated?

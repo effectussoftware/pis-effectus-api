@@ -89,7 +89,7 @@ RSpec.describe 'Communications', type: :request do
         communication_title = communication.title
         put "/api/v1/admin/communications/#{communication.id}", headers: auth_headers, params: data
         expect(response).to have_http_status 403
-        expect(Oj.load(response.body)['error']).to match("can't update communications once published")
+        expect(Oj.load(response.body)['error']).to match('No es posible actualizar un comunicado publicado')
         communication.reload
         expect(communication.title).to eq(communication_title)
       end
