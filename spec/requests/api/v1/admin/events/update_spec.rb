@@ -85,7 +85,7 @@ RSpec.describe 'Event update endpoint', type: :request do
           expect(Time.zone.parse(event_response['updated_event_at'])).to eq(time)
         end
       end
-      
+
       it 'does not update a cancelled event' do
         cancelled_event = create(:event, cancelled: true)
         put api_v1_admin_event_path(cancelled_event.id), params: event_data_update, headers: auth_headers
@@ -93,6 +93,16 @@ RSpec.describe 'Event update endpoint', type: :request do
         expect(Oj.load(response.body)['error']).to match('No es posible actualizar un evento cancelado')
         cancelled_event.reload
         expect(cancelled_event.cancelled).to eq(true)
+      end
+
+      it 'does not update a published event to unpublished' do
+        published_event = create(:event, published: true)
+        params_update = { 'event' => { 'published' => false } }
+        put api_v1_admin_event_path(published_event.id), params: params_update, headers: auth_headers
+        expect(response).to have_http_status(403)
+        expect(Oj.load(response.body)['error']).to match('No es posible cambiar el campo publicado del evento')
+        published_event.reload
+        expect(published_event.published).to eq(true)
       end
     end
   end
