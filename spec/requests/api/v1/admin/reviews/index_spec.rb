@@ -14,7 +14,7 @@ RSpec.describe 'Post endpoint', type: :request do
   end
 
   def review_to_json(review)
-    rev = review.as_json(only: %i[id comments title reviewer_id user_id])
+    rev = review.as_json(only: %i[id comments title reviewer_id user_id updated_at])
 
     user_items = review.user_action_items.map { |x| action_item_to_json(x) }
     reviewer_items = review.reviewer_action_items.map { |x| action_item_to_json(x) }

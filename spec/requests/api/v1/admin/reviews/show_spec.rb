@@ -21,7 +21,7 @@ RSpec.describe 'Post endpoint', type: :request do
 
         response_body = Oj.load(response.body)
 
-        response_expected = review.as_json(only: %i[id comments title reviewer_id user_id])
+        response_expected = review.as_json(only: %i[id comments title reviewer_id user_id created_at updated_at])
         response_expected = response_expected.merge(
           'user_action_items' => [user_action_item.as_json(only: %i[id description completed])]
         ).merge(
