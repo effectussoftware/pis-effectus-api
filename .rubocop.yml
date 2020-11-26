@@ -18,6 +18,9 @@ Layout/LineLength:
   Exclude:
     - 'app/views/api/v1/**/*.json.jbuilder'
     - 'app/views/api/v1/**/**/*.json.jbuilder'
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - "spec/**/*"
 Style/Documentation:
   Enabled: false
 

@@ -3,12 +3,14 @@
 class Event < ApplicationRecord
   has_many :invitations, dependent: :delete_all
   has_many :users, through: :invitations
-  accepts_nested_attributes_for :invitations
+  accepts_nested_attributes_for :invitations, allow_destroy: true
 
   validates :name, presence: true
   validates :start_time, presence: true
   validates :end_time, presence: true
   validates :cost, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :currency, presence: true, acceptance: { accept: %w[pesos dolares] }
+
   validate :invitations_not_empty
   validate :end_time_must_be_greater_than_start_time
   validate :end_time_and_start_time_must_be_greater_than_now
@@ -50,7 +52,9 @@ class Event < ApplicationRecord
   scope :published, -> { where(published: true) }
 
   def invitations_not_empty
-    errors.add(:invitations, 'Debe haber al menos una invitación') if invitations.empty?
+    return unless invitations.empty? && published?
+
+    errors.add(:invitations, 'Debe haber al menos una invitación si el evento esta publicado')
   end
 
   def end_time_must_be_greater_than_start_time
