@@ -17,14 +17,26 @@ RSpec.describe 'Event show endpoint', type: :request do
         get api_v1_admin_cost_summary_path, headers: auth_headers
         expect(response).to have_http_status(200)
 
-        expected_costs = Event.group("to_char(events.start_time, 'YYYY')").sum('cost')
+        expected_costs_pesos = Event.where(currency: 'pesos')
+                                    .group("to_char(events.start_time, 'YYYY')")
+                                    .sum('cost')
+        expected_costs_dolares = Event.where(currency: 'dolares')
+                                      .group("to_char(events.start_time, 'YYYY')")
+                                      .sum('cost')
 
-        summary_response = Oj.load(response.body)['cost_summary']
-        summary_response.each do |summary|
+        summary_response_pesos = Oj.load(response.body)['cost_summary']['pesos']
+        summary_response_dolares = Oj.load(response.body)['cost_summary']['dolares']
+
+        summary_response_pesos.each do |summary|
           year = summary['date']
           cost = summary['cost']
+          expect(cost).to eq expected_costs_pesos[year].to_s
+        end
 
-          expect(cost).to eq expected_costs[year].to_s
+        summary_response_dolares.each do |summary|
+          year = summary['date']
+          cost = summary['cost']
+          expect(cost).to eq expected_costs_dolares[year].to_s
         end
       end
 
@@ -33,15 +45,25 @@ RSpec.describe 'Event show endpoint', type: :request do
         get api_v1_admin_cost_summary_path, headers: auth_headers, params: { 'year': year }
         expect(response).to have_http_status(200)
 
-        summary_response = Oj.load(response.body)['cost_summary']
-        expected_costs = Event.on_year(Time.zone.strptime(year, '%Y'))
-                              .group("to_char(events.start_time, 'YYYYMM')")
-                              .sum('cost')
+        summary_response_pesos = Oj.load(response.body)['cost_summary']['pesos']
+        expected_costs_pesos = Event.where(currency: 'pesos').on_year(Time.zone.strptime(year, '%Y'))
+                                    .group("to_char(events.start_time, 'YYYYMM')")
+                                    .sum('cost')
 
-        summary_response.each do |summary|
+        summary_response_dolares = Oj.load(response.body)['cost_summary']['dolares']
+        expected_costs_dolares = Event.where(currency: 'dolares').on_year(Time.zone.strptime(year, '%Y'))
+                                      .group("to_char(events.start_time, 'YYYYMM')")
+                                      .sum('cost')
+
+        summary_response_pesos.each do |summary|
           month = summary['date']
           cost = summary['cost']
-          expect(cost).to eq expected_costs[month].to_s
+          expect(cost).to eq expected_costs_pesos[month].to_s
+        end
+        summary_response_dolares.each do |summary|
+          month = summary['date']
+          cost = summary['cost']
+          expect(cost).to eq expected_costs_dolares[month].to_s
         end
       end
     end

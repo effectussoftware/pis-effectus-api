@@ -10,6 +10,7 @@ FactoryBot.define do
     cost { Faker::Number.number(5) }
     updated_event_at { Time.zone.now }
     published { Faker::Boolean.boolean }
+    currency { %w[pesos dolares].sample }
     transient do
       invitations_count { rand(1..5) }
     end

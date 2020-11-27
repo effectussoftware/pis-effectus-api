@@ -86,13 +86,24 @@ RSpec.describe 'Event update endpoint', type: :request do
         end
       end
 
-      it 'does not update a cancelled event' do
+      it 'does not update public fields on cancelled event' do
         cancelled_event = create(:event, cancelled: true)
         put api_v1_admin_event_path(cancelled_event.id), params: event_data_update, headers: auth_headers
         expect(response).to have_http_status(403)
-        expect(Oj.load(response.body)['error']).to match('No es posible actualizar un evento cancelado')
+        expect(Oj.load(response.body)['error']).to match('Failed to save the record')
         cancelled_event.reload
         expect(cancelled_event.cancelled).to eq(true)
+      end
+
+      it 'updates cost on cancelled event' do
+        cancelled_event = create(:event, cancelled: true)
+        put api_v1_admin_event_path(cancelled_event.id),
+            params: { 'event' => { 'cost' => '123456.00' } },
+            headers: auth_headers
+        expect(response).to have_http_status(200)
+        expect(cancelled_event.cancelled).to eq(true)
+        cancelled_event.reload
+        expect(cancelled_event.cost).to eq(123_456.00)
       end
 
       it 'does not update a published event to unpublished' do

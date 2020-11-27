@@ -99,13 +99,9 @@ class Event < ApplicationRecord
   end
 
   def can_only_update_cost
-    public_attributes = self.class.attribute_names.reject { |attribute| attribute == 'cost' }
+    public_attributes = self.class.attribute_names.reject { |attribute| %w[cost updated_at].include?(attribute) }
     public_attributes.map! { |attribute| "will_save_change_to_#{attribute}?" }
-    found = false
-    public_attributes.each do |attribute_changed|
-      found ||= send(attribute_changed.to_sym)
-      break if found
-    end
+    found = public_attributes.reduce(false) { |sum, p_attr| sum || send(p_attr.to_sym) }
     throw :abort if found
   end
 
