@@ -33,6 +33,22 @@ RSpec.describe Invitation, type: :model do
     end
   end
 
+  describe 'remove event invitations' do
+    it 'destroy one invitation' do
+      event = create(:event, published: false)
+      invitation = create(:invitation, event: event)
+      expect { invitation.destroy }.to change { event.invitations.count }.by(-1)
+      expect(invitation.destroyed?).to eq(true)
+    end
+
+    it 'does not destroy one invitation' do
+      event = create(:event, published: true)
+      invitation = create(:invitation, event: event)
+      expect { invitation.destroy }.to_not change { event.invitations.count }
+      expect(invitation.destroyed?).to eq(false)
+    end
+  end
+
   describe 'send notifications' do
     it 'sends notification when created' do
       Timecop.freeze(Time.zone.local(2020))

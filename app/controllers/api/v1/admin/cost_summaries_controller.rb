@@ -9,7 +9,12 @@ module Api
           @events = filter_events if params[:year]
           date_format = 'YYYY'
           date_format += 'MM' if params[:year]
-          @costs = @events.group("to_char(events.start_time, '#{date_format}')").sum('cost')
+          @costs_pesos = @events.where(currency: 'pesos')
+                                .group("to_char(events.start_time, '#{date_format}')")
+                                .sum('cost')
+          @costs_dolares = @events.where(currency: 'dolares')
+                                  .group("to_char(events.start_time, '#{date_format}')")
+                                  .sum('cost')
         end
 
         private

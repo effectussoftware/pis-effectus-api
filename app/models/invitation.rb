@@ -5,6 +5,8 @@ class Invitation < ApplicationRecord
   belongs_to :event
   after_create :send_new_event_notification, if: :event_is_published
 
+  before_destroy :abort_if_event_is_published
+
   scope :not_confirmed, -> { where(confirmation: false) }
   scope :confirmed, -> { where(confirmation: true) }
 
@@ -29,6 +31,10 @@ class Invitation < ApplicationRecord
   end
 
   private
+
+  def abort_if_event_is_published
+    throw :abort, 'No es posible eliminar una invitacion de un evento publicado' if event.published
+  end
 
   def event_is_published
     event.published

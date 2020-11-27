@@ -14,16 +14,19 @@ RSpec.describe Event, type: :model do
   end
   describe 'invitations must be required' do
     it 'validate presence of invitations' do
+      # rubocop:disable Layout/LineLength
       expect do
         Event.create!(
           name: 'test',
           cost: 200,
           start_time: Time.now + 2.hour,
-          end_time: Time.now + 3.hour
+          end_time: Time.now + 3.hour,
+          published: true
         )
       end.to raise_error(ActiveRecord::RecordInvalid,
-                         'Validation failed: Invitations Debe haber al menos una invitación')
+                         'Validation failed: Invitations Debe haber al menos una invitación si el evento esta publicado')
     end
+    # rubocop:enable Layout/LineLength
   end
 
   describe 'end_time must be greater than start_time' do

@@ -3,21 +3,24 @@
 class Event < ApplicationRecord
   has_many :invitations, dependent: :delete_all
   has_many :users, through: :invitations
-  accepts_nested_attributes_for :invitations
+  accepts_nested_attributes_for :invitations, allow_destroy: true
 
   validates :name, presence: true
   validates :start_time, presence: true
   validates :end_time, presence: true
   validates :cost, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :currency, presence: true, acceptance: { accept: %w[pesos dolares] }
+
   validate :invitations_not_empty
   validate :end_time_must_be_greater_than_start_time
   validate :end_time_and_start_time_must_be_greater_than_now
-  validate :cant_update_if_cancelled_event
+  # validate :cant_update_if_cancelled_event
   validate :can_update_published_field
 
   before_save :set_updated_event_at, if: :public_fields_would_update?
   after_save :send_new_event_notification, if: :just_published
   after_update :notify_invited_users, if: %i[public_fields_updated? published]
+  before_update :can_only_update_cost, if: :cancelled_or_cancelled_was
 
   scope :user_event_from_date_confirmed, lambda { |start_time, with_include, user_id|
     query = if with_include
@@ -50,7 +53,9 @@ class Event < ApplicationRecord
   scope :published, -> { where(published: true) }
 
   def invitations_not_empty
-    errors.add(:invitations, 'Debe haber al menos una invitación') if invitations.empty?
+    return unless invitations.empty? && published?
+
+    errors.add(:invitations, 'Debe haber al menos una invitación si el evento esta publicado')
   end
 
   def end_time_must_be_greater_than_start_time
@@ -75,8 +80,12 @@ class Event < ApplicationRecord
 
   private
 
-  def cant_update_if_cancelled_event
-    errors.add(:cancelled, 'No es posible actualizar un evento cancelado') if cancelled_was
+  # def cant_update_if_cancelled_event
+  #   errors.add(:cancelled, 'No es posible actualizar un evento cancelado') if cancelled_was
+  # end
+
+  def cancelled_or_cancelled_was
+    cancelled || cancelled_was
   end
 
   def can_update_published_field
@@ -87,6 +96,13 @@ class Event < ApplicationRecord
 
   def set_updated_event_at
     self.updated_event_at = Time.zone.now
+  end
+
+  def can_only_update_cost
+    public_attributes = self.class.attribute_names.reject { |attribute| %w[cost updated_at].include?(attribute) }
+    public_attributes.map! { |attribute| "will_save_change_to_#{attribute}?" }
+    found = public_attributes.reduce(false) { |sum, p_attr| sum || send(p_attr.to_sym) }
+    throw :abort if found
   end
 
   def public_fields_would_update?

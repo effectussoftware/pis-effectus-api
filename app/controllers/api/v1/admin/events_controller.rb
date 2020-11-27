@@ -44,7 +44,8 @@ module Api
             :cost,
             :cancelled,
             :published,
-            invitations_attributes: %i[user_id confirmation attend]
+            :currency,
+            invitations_attributes: %i[id user_id confirmation attend _destroy]
           )
         end
       end

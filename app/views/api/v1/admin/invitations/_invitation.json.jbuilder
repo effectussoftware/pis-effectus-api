@@ -8,3 +8,4 @@ unless local_assigns[:without_event].present? && without_event
 end
 json.attend invitation.attend
 json.confirmation invitation.confirmation
+json.invitation_id invitation.id
