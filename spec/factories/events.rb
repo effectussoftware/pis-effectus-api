@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :event do
     name { Faker::Lorem.sentence }
     address { Faker::Address.street_address }
-
+    cancelled { false }
     start_time { Faker::Date.forward }
     end_time { start_time + rand(1..5).hour }
     cost { Faker::Number.number(5) }

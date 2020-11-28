@@ -21,6 +21,9 @@ Layout/LineLength:
 Lint/AmbiguousBlockAssociation:
   Exclude:
     - "spec/**/*"
+Metrics/ClassLength:
+  Exclude:
+    - 'app/models/event.rb'
 Style/Documentation:
   Enabled: false
 
