@@ -4,7 +4,7 @@ class Invitation < ApplicationRecord
   belongs_to :user
   belongs_to :event
   after_create :send_new_event_notification, if: :event_is_published
-
+  before_update :abort_if_event_is_published
   before_destroy :abort_if_event_is_published
 
   scope :not_confirmed, -> { where(confirmation: false) }
