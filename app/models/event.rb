@@ -14,13 +14,13 @@ class Event < ApplicationRecord
   validate :invitations_not_empty
   validate :end_time_must_be_greater_than_start_time
   validate :end_time_and_start_time_must_be_greater_than_now
-  # validate :cant_update_if_cancelled_event
-  validate :can_update_published_field
+  validate :cannot_be_cancelled, on: :create
 
   before_save :set_updated_event_at, if: :public_fields_would_update?
   after_save :send_new_event_notification, if: :just_published
   after_update :notify_invited_users, if: %i[public_fields_updated? published]
   before_update :can_only_update_cost, if: :cancelled_or_cancelled_was
+  before_update :can_update_published_field
 
   scope :user_event_from_date_confirmed, lambda { |start_time, with_include, user_id|
     query = if with_include
@@ -64,6 +64,12 @@ class Event < ApplicationRecord
     errors.add(:start_time, 'La fecha de fin debe ser más grande que la fecha de inicio')
   end
 
+  def cannot_be_cancelled
+    return unless cancelled
+
+    errors.add(:cancelled, 'No se puede crear eventos cancelados')
+  end
+
   def end_time_and_start_time_must_be_greater_than_now
     return unless start_time_end_time_greater_than_now && public_fields_would_update?
 
@@ -80,10 +86,6 @@ class Event < ApplicationRecord
 
   private
 
-  # def cant_update_if_cancelled_event
-  #   errors.add(:cancelled, 'No es posible actualizar un evento cancelado') if cancelled_was
-  # end
-
   def cancelled_or_cancelled_was
     cancelled || cancelled_was
   end
@@ -92,6 +94,7 @@ class Event < ApplicationRecord
     return unless published_was && will_save_change_to_published?
 
     errors.add(:published, 'No es posible cambiar el campo publicado del evento')
+    throw :abort
   end
 
   def set_updated_event_at
@@ -99,7 +102,12 @@ class Event < ApplicationRecord
   end
 
   def can_only_update_cost
-    public_attributes = self.class.attribute_names.reject { |attribute| %w[cost updated_at].include?(attribute) }
+    attributes_to_remove = if cancelled_was
+                             %w[cost updated_at]
+                           else
+                             %w[cost updated_at cancelled updated_event_at]
+                           end
+    public_attributes = self.class.attribute_names.reject { |attribute| attributes_to_remove.include?(attribute) }
     public_attributes.map! { |attribute| "will_save_change_to_#{attribute}?" }
     found = public_attributes.reduce(false) { |sum, p_attr| sum || send(p_attr.to_sym) }
     throw :abort if found

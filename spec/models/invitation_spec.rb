@@ -49,6 +49,18 @@ RSpec.describe Invitation, type: :model do
     end
   end
 
+  describe 'add invitations to cancelled event' do
+    it 'does not create a new invitation' do
+      event = create(:event)
+      event.update(cancelled: true)
+      user = create(:user)
+      invitation = Invitation.create(user_id: user.id, event_id: event.id)
+      error_message = 'No es posible crear una invitacion de un evento cancelado'
+      expect(invitation.id).to eq(nil)
+      expect(invitation.errors.first).to eq([:event_id, error_message])
+    end
+  end
+
   describe 'send notifications' do
     it 'sends notification when created' do
       Timecop.freeze(Time.zone.local(2020))

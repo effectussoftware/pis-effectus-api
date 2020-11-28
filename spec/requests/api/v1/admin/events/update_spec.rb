@@ -87,8 +87,10 @@ RSpec.describe 'Event update endpoint', type: :request do
       end
 
       it 'does not update public fields on cancelled event' do
-        cancelled_event = create(:event, cancelled: true)
-        put api_v1_admin_event_path(cancelled_event.id), params: event_data_update, headers: auth_headers
+        cancelled_event = create(:event)
+        cancelled_event.update(cancelled: true)
+        params_update = { event: { name: 'cambio de nombre', cost: 300 } }
+        put api_v1_admin_event_path(cancelled_event.id), params: params_update, headers: auth_headers
         expect(response).to have_http_status(403)
         expect(Oj.load(response.body)['error']).to match('Failed to save the record')
         cancelled_event.reload
@@ -96,7 +98,8 @@ RSpec.describe 'Event update endpoint', type: :request do
       end
 
       it 'updates cost on cancelled event' do
-        cancelled_event = create(:event, cancelled: true)
+        cancelled_event = create(:event)
+        cancelled_event.update(cancelled: true)
         put api_v1_admin_event_path(cancelled_event.id),
             params: { 'event' => { 'cost' => '123456.00' } },
             headers: auth_headers
@@ -111,7 +114,7 @@ RSpec.describe 'Event update endpoint', type: :request do
         params_update = { 'event' => { 'published' => false } }
         put api_v1_admin_event_path(published_event.id), params: params_update, headers: auth_headers
         expect(response).to have_http_status(403)
-        expect(Oj.load(response.body)['error']).to match('No es posible cambiar el campo publicado del evento')
+        expect(Oj.load(response.body)['error']).to match('Failed to save the record')
         published_event.reload
         expect(published_event.published).to eq(true)
       end
