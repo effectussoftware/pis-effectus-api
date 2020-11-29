@@ -59,6 +59,17 @@ RSpec.describe Event, type: :model do
     end
   end
 
+  describe 'modificacion of cancelled events' do
+    it 'updates the event cost and currency if event is cancelled' do
+      event = create(:event, cost: 100, currency: 'pesos')
+      event.update(cancelled: false)
+      event.reload
+      expect { event.update(cost: 200, currency: 'dolares') }
+        .to change(event, :cost).to(200)
+                                .and change(event, :currency).to('dolares')
+    end
+  end
+
   describe '.set_updated_event_at' do
     it 'updates updated_event_at when public fields are changed' do
       event = nil
