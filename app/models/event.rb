@@ -103,9 +103,9 @@ class Event < ApplicationRecord
 
   def can_only_update_cost
     attributes_to_remove = if cancelled_was
-                             %w[cost updated_at]
+                             %w[cost updated_at currency]
                            else
-                             %w[cost updated_at cancelled updated_event_at]
+                             %w[cost updated_at cancelled updated_event_at currency]
                            end
     public_attributes = self.class.attribute_names.reject { |attribute| attributes_to_remove.include?(attribute) }
     public_attributes.map! { |attribute| "will_save_change_to_#{attribute}?" }

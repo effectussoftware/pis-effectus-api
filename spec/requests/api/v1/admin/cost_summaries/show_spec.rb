@@ -66,6 +66,29 @@ RSpec.describe 'Event show endpoint', type: :request do
           expect(cost).to eq expected_costs_dolares[month].to_s
         end
       end
+
+      it 'returns costs ordered by month' do
+        year = (Time.zone.now + 1.year).strftime('%Y')
+        get api_v1_admin_cost_summary_path, headers: auth_headers, params: { 'year': year }
+        expect(response).to have_http_status(200)
+
+        summary_response_pesos = Oj.load(response.body)['cost_summary']['pesos']
+        summary_response_dolares = Oj.load(response.body)['cost_summary']['dolares']
+
+        expect(summary_response_pesos).to eq(summary_response_pesos.sort_by { |x| x['date'] })
+        expect(summary_response_dolares).to eq(summary_response_dolares.sort_by { |x| x['date'] })
+      end
+
+      it 'returns costs ordered by year' do
+        get api_v1_admin_cost_summary_path, headers: auth_headers
+        expect(response).to have_http_status(200)
+
+        summary_response_pesos = Oj.load(response.body)['cost_summary']['pesos']
+        summary_response_dolares = Oj.load(response.body)['cost_summary']['dolares']
+
+        expect(summary_response_pesos).to eq(summary_response_pesos.sort_by { |x| x['date'] })
+        expect(summary_response_dolares).to eq(summary_response_dolares.sort_by { |x| x['date'] })
+      end
     end
   end
 end
