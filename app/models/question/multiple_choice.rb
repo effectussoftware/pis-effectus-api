@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Question::MultipleChoice < Question
-    validates :options, presence: true
+  validates :options, presence: true
 end
