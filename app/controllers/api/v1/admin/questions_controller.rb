@@ -4,8 +4,8 @@ module Api
   module V1
     module Admin
       class QuestionsController < Api::V1::Admin::AdminApiController
-        before_action :set_question, only: %i[show update destroy]
-        before_action :create_question, only: [:create]
+        before_action :retrieve_question, only: %i[show update destroy]
+        before_action :retrieve_question_params, only: [:create]
 
         def index
           survey = get_survey(params[:survey_id])
@@ -19,10 +19,10 @@ module Api
         end
 
         def create
-          @question = Question.create(type: @question_type, survey_id: @survey.id,
-                                      name: question_params[:name], max_range: question_params[:max_range],
-                                      min_range: question_params[:min_range],
-                                      options: question_params[:question_options])
+          @question = Question.create!(type: @question_type, survey_id: @survey.id,
+                                       name: question_params[:name], max_range: question_params[:max_range],
+                                       min_range: question_params[:min_range],
+                                       options: question_params[:question_options])
         end
 
         def destroy
@@ -41,12 +41,12 @@ module Api
 
         private
 
-        def create_question
+        def retrieve_question_params
           @question_type = get_type(params[:question][:question_type])
           @survey = get_survey(params[:question][:survey_id])
         end
 
-        def set_question
+        def retrieve_question
           @question = Question.find(params[:id])
         end
 
@@ -66,7 +66,7 @@ module Api
         end
 
         def get_survey(survey_id)
-          Survey.find_by(id: survey_id)
+          Survey.find(survey_id)
         end
       end
     end

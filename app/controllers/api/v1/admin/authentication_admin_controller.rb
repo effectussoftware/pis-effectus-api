@@ -13,7 +13,6 @@ module Api
             raise ::UnauthorizedException
           end
 
-          # @user = User.find_by id:1
           new_auth_header = @user.create_new_auth_token
           # update response with the header that will be required by the next request
           response.headers.merge!(new_auth_header)

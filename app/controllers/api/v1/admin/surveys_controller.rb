@@ -4,7 +4,7 @@ module Api
   module V1
     module Admin
       class SurveysController < Api::V1::Admin::AdminApiController
-        before_action :set_survey, only: %i[show update destroy]
+        before_action :retrieve_surveys, only: %i[show update destroy]
 
         def index
           @surveys = Survey.all
@@ -29,7 +29,7 @@ module Api
 
         private
 
-        def set_survey
+        def retrieve_surveys
           @survey = Survey.find(params[:id])
         end
 
