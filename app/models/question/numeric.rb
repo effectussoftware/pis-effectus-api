@@ -1,3 +1,4 @@
 # frozen_string_literal: true
-class Question::Numeric < Question  
+# rubocop:disable all
+class Question::Numeric < Question
 end

@@ -8,6 +8,7 @@ AllCops:
   NewCops: enable
 Metrics/BlockLength:
   Exclude:
+    - 'config/routes.rb'
     - 'Rakefile'
     - '**/*.rake'
     - 'spec/**/*.rb'

@@ -17,11 +17,11 @@ module Api
 
       def setup_google_user
         # Rises UnauthorizedException if token isn't valid
-        #user_from_google = GoogleValidationTokenService.validate_token(params[:token])
+        user_from_google = GoogleValidationTokenService.validate_token(params[:token])
         # update token, generate updated auth headers for response
-        #@user = User.where(email: user_from_google['email'])
-        #            .first_or_create!(create_params(user_from_google))
-        @user = User.find_by id:1 
+        @user = User.where(email: user_from_google['email'])
+                    .first_or_create!(create_params(user_from_google))
+        # @user = User.find_by id:1
         raise ::UnauthorizedException, 'Usuario inválido' unless @user[:is_active]
       end
 

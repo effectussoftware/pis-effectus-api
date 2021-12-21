@@ -4,37 +4,39 @@ module Api
   module V1
     module Admin
       class SurveysController < Api::V1::Admin::AdminApiController
+        before_action :set_survey, only: %i[show update destroy]
+
         def index
           @surveys = Survey.all
-          # @surveys = sort_surveys if params[:sort]
           @pagy, @surveys = pagy(@surveys, items: params[:per_page])
         end
+
         def create
           @survey = Survey.create!(survey_params)
         end
-        def show
-          @survey = Survey.find(params[:id])
-        end
+
+        def show; end
+
         def destroy
-          @survey = Survey.find(params[:id])
           @survey.destroy!
         end
+
         def update
-          @survey = Survey.find(params[:id])
           ActiveRecord::Base.transaction do
             @survey.update!(survey_params)
           end
         end
+
         private
-        def sort_surveys
-          sort = Oj.load(params[:sort])
-          order_sort = sort.join(' ')
-          @surveys.order(order_sort)
+
+        def set_survey
+          @survey = Survey.find(params[:id])
         end
-        def survey_params # rubocop:disable Metrics/MethodLength
+
+        def survey_params
           params.require(:survey).permit(
-              :name,
-              :description,
+            :name,
+            :description
           )
         end
       end

@@ -33,7 +33,6 @@ gem 'listen', '~> 3.2'
 # Push notifications
 gem 'fcm'
 
-
 # Scheaduling jobs
 gem 'whenever', require: false
 
