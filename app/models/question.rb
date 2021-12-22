@@ -15,10 +15,7 @@ class Question < ApplicationRecord
     errors.add(:max_range, 'El rango maximo debe ser más grande que el rango minimo')
   end
 
-
   def check_max_range_and_min_range
     (!max_range || !min_range) || (max_range <= min_range)
   end
-
-
 end

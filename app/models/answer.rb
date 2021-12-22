@@ -3,7 +3,7 @@
 class Answer < ApplicationRecord
   belongs_to :question
   belongs_to :user
-  
+
   validates :value, presence: true
 
   validate :numerical_answer
