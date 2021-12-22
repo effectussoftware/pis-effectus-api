@@ -4,7 +4,7 @@ module Api
   module V1
     module Admin
       class AnswersController < Api::V1::Admin::AdminApiController
-        before_action :set_answer, only: %i[show update destroy]
+        before_action :answer, only: %i[show update destroy]
 
         def index
           retrieve_answers
@@ -19,9 +19,7 @@ module Api
         def show; end
 
         def update
-          ActiveRecord::Base.transaction do
-            @answer.update!(answer_params)
-          end
+          @answer.update!(answer_params)
         end
 
         def destroy
@@ -31,19 +29,19 @@ module Api
         private
 
         def retrieve_answers
-          @answers = Answer.all
           if params[:question_id].present?
             question = Question.find(params[:question_id])
             @answers = question.answers
+          elsif params[:user_id].present?
+            user = User.find(params[:user_id])
+            @answers = user.answers
+          else
+            @answers = Answer.all
           end
-          return unless params[:user_id].present?
-
-          user = User.find(params[:user_id])
-          @answers = user.answers
         end
 
-        def set_answer
-          @answer = Answer.find(params[:id])
+        def answer
+          @answer ||= Answer.find(params[:id])
         end
 
         def answer_params

@@ -3,21 +3,24 @@
 class Answer < ApplicationRecord
   belongs_to :question
   belongs_to :user
+  
+  validates :value, presence: true
+
   validate :numerical_answer
   validate :range_answer
 
   def numerical_answer
+    return if question.nil?
+
     return unless question.type == 'Question::Numeric'
-    return if begin
-                Integer(value)
-              rescue StandardError
-                nil
-              end
+    return if value.is_a?(Integer)
 
     errors.add(:base, :invalid_numeric_value)
   end
 
   def range_answer
+    return if question.nil?
+
     answer_value = begin
                      Integer(value)
                    rescue StandardError
