@@ -23,6 +23,7 @@ module Api
                                        name: question_params[:name], max_range: question_params[:max_range],
                                        min_range: question_params[:min_range],
                                        options: question_params[:question_options])
+          create_options_answers(@question.id, @question.options)
         end
 
         def destroy
@@ -61,12 +62,20 @@ module Api
           )
         end
 
+        def create_options_answers(question_id, question_options)
+          return if @question.options.nil?
+
+          question_options.each do |option|
+            MultipleChoiceAnswer.create!(value: option, question_id: question_id)
+          end
+        end
+
         def get_type(question_type)
           "Question::#{question_type.camelize}"
         end
 
         def get_survey(survey_id)
-          Survey.find(survey_id)
+          Survey.find_by(id: survey_id)
         end
       end
     end

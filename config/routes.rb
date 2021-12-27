@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       resource :feed, only: %i[show]
       resource :priority_feed, only: %i[show]
       resources :reviews, only: %i[index show]
+      resources :answers, only: %i[index create show update destroy]
       resources :communications, only: %i[show]
       resources :events, only: %i[index show]
       resources :invitations, only: %i[update] do
@@ -22,7 +23,6 @@ Rails.application.routes.draw do
         resources :reviews, only: %i[index create show update destroy]
         resources :surveys, only: %i[index create show update destroy]
         resources :questions, only: %i[index create show update destroy]
-        resources :answers, only: %i[index create show update destroy]
         resources :multiple_choice_questions, only: %i[index create show update]
         post '/auth/login', to: 'authentication_admin#login'
         resources :communications, only: %i[index create show update destroy]

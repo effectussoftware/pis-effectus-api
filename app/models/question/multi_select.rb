@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # rubocop:disable all
-class Question::MultipleChoice < Question
+class Question::MultiSelect < Question
   validates :options, presence: true
 
   validate :more_than_one_option
