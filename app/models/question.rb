@@ -10,8 +10,8 @@ class Question < ApplicationRecord
   validate :max_range_must_be_greater_than_min_range
 
   def max_range_must_be_greater_than_min_range
-    return unless type == "Question::Range"
-    
+    return unless type == 'Question::Range'
+
     return unless check_max_range_and_min_range
 
     errors.add(:max_range, 'El rango maximo debe ser más grande que el rango minimo')
