@@ -12,7 +12,7 @@ RSpec.describe Question, type: :model do
   describe 'max_range must be greater than min_range' do
     it 'validate the value of max_range and min_range' do
       expect do
-        create(:question, max_range: rand(1..5), min_range: rand(6..10))
+        create(:question, max_range: rand(1..5), min_range: rand(6..10), type: "Question::Range")
       end.to raise_error(ActiveRecord::RecordInvalid,
                          'Validation failed: Max range El rango maximo debe ser más grande que el rango minimo')
     end
