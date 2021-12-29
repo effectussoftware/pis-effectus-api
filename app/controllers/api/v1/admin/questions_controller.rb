@@ -4,11 +4,11 @@ module Api
   module V1
     module Admin
       class QuestionsController < Api::V1::Admin::AdminApiController
-        before_action :retrieve_question, only: %i[show update destroy]
-        before_action :retrieve_question_params, only: [:create]
+        before_action :question, only: %i[show update destroy]
+        before_action :question_info, only: [:create]
 
         def index
-          survey = get_survey(params[:survey_id])
+          survey = survey(params[:survey_id])
           @questions = if survey.nil?
                          Question.all
                        else
@@ -23,31 +23,29 @@ module Api
                                        name: question_params[:name], max_range: question_params[:max_range],
                                        min_range: question_params[:min_range],
                                        options: question_params[:question_options])
-          create_options_answers(@question.id, @question.options)
+          options_answers(@question.id, @question.options)
         end
 
         def destroy
-          @question.destroy!
+          question.destroy!
         end
 
         def show
-          @question
+          question
         end
 
         def update
-          ActiveRecord::Base.transaction do
-            @question.update!(question_params)
-          end
+          question.update!(question_params)
         end
 
         private
 
-        def retrieve_question_params
-          @question_type = get_type(params[:question][:question_type])
-          @survey = get_survey(params[:question][:survey_id])
+        def question_info
+          @question_type = type(params[:question][:question_type])
+          @survey = survey(params[:question][:survey_id])
         end
 
-        def retrieve_question
+        def question
           @question = Question.find(params[:id])
         end
 
@@ -62,7 +60,7 @@ module Api
           )
         end
 
-        def create_options_answers(question_id, question_options)
+        def options_answers(question_id, question_options)
           return if @question.options.nil?
 
           question_options.each do |option|
@@ -70,11 +68,11 @@ module Api
           end
         end
 
-        def get_type(question_type)
+        def type(question_type)
           "Question::#{question_type.camelize}"
         end
 
-        def get_survey(survey_id)
+        def survey(survey_id)
           Survey.find_by(id: survey_id)
         end
       end

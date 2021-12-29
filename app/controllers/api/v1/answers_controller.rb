@@ -6,7 +6,7 @@ module Api
       before_action :answer, only: %i[show update destroy]
 
       def index
-        retrieve_answers
+        answers
         @answers
       end
 
@@ -17,11 +17,11 @@ module Api
       def show; end
 
       def update
-        @answer.update!(answer_params)
+        answer.update!(answer_params)
       end
 
       def destroy
-        @answer.destroy!
+        answer.destroy!
       end
 
       private
@@ -33,7 +33,7 @@ module Api
         end
       end
 
-      def retrieve_answers
+      def answers
         if params[:question_id].present?
           question = Question.find(params[:question_id])
           @answers = question.answers

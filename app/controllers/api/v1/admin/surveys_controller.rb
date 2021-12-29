@@ -4,7 +4,7 @@ module Api
   module V1
     module Admin
       class SurveysController < Api::V1::Admin::AdminApiController
-        before_action :retrieve_surveys, only: %i[show update destroy]
+        before_action :survey, only: %i[show update destroy]
 
         def index
           @surveys = Survey.all
@@ -18,19 +18,17 @@ module Api
         def show; end
 
         def destroy
-          @survey.destroy!
+          survey.destroy!
         end
 
         def update
-          ActiveRecord::Base.transaction do
-            @survey.update!(survey_params)
-          end
+          survey.update!(survey_params)
         end
 
         private
 
-        def retrieve_surveys
-          @survey = Survey.find(params[:id])
+        def survey
+          @survey ||= Survey.find(params[:id])
         end
 
         def survey_params
