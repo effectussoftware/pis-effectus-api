@@ -4,7 +4,6 @@ module Api
   module V1
     module Admin
       class QuestionsController < Api::V1::Admin::AdminApiController
-        before_action :question, only: %i[show update destroy]
         before_action :question_info, only: [:create]
 
         def index
@@ -46,7 +45,7 @@ module Api
         end
 
         def question
-          @question = Question.find(params[:id])
+          @question ||= Question.find(params[:id])
         end
 
         def question_params

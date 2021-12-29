@@ -3,8 +3,6 @@
 module Api
   module V1
     class AnswersController < Api::V1::ApiController
-      before_action :answer, only: %i[show update destroy]
-
       def index
         answers
         @answers

@@ -4,8 +4,6 @@ module Api
   module V1
     module Admin
       class SurveysController < Api::V1::Admin::AdminApiController
-        before_action :survey, only: %i[show update destroy]
-
         def index
           @surveys = Survey.all
           @pagy, @surveys = pagy(@surveys, items: params[:per_page])
