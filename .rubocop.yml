@@ -8,6 +8,7 @@ AllCops:
   NewCops: enable
 Metrics/BlockLength:
   Exclude:
+    - 'config/routes.rb'
     - 'Rakefile'
     - '**/*.rake'
     - 'spec/**/*.rb'
@@ -26,4 +27,13 @@ Metrics/ClassLength:
     - 'app/models/event.rb'
 Style/Documentation:
   Enabled: false
+Style/ClassAndModuleChildren:
+  Exclude:
+    - app/models/question/multi_select.rb
+    - app/models/question/multiple_choice.rb
+    - app/models/question/numeric.rb
+    - app/models/question/text.rb
+    - app/models/question/range.rb
+
+
 
